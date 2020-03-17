@@ -15,6 +15,22 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_oqs_KEMs_max_1number_1KEMs
   (JNIEnv *, jclass);
 
+/*
+ * Class:     oqs_KEMs
+ * Method:    is_KEM_enabled
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_oqs_KEMs_is_1KEM_1enabled
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     oqs_KEMs
+ * Method:    get_KEM_name
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_oqs_KEMs_get_1KEM_1name
+  (JNIEnv *, jclass, jlong);
+
 #ifdef __cplusplus
 }
 #endif
