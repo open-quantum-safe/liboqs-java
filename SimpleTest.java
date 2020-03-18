@@ -1,4 +1,4 @@
-import oqs.*;
+import src.java.oqs.*;
 import java.util.ArrayList;
 
 public class SimpleTest {

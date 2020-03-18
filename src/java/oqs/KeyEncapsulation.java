@@ -1,7 +1,4 @@
-package oqs;
-
-import oqs.*;
-
+package src.java.oqs;
 
 /**
  * \class MechanismNotSupportedError

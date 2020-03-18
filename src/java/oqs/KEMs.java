@@ -1,5 +1,6 @@
-package oqs;
+package src.java.oqs;
 
+// import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,12 @@ import java.util.ArrayList;
  */
 public class KEMs {
     
-    static { System.loadLibrary("oqs-jni"); }
+    static {
+        // File lib = new File("src/c/" + System.mapLibraryName("oqs-jni"));
+        // System.load(lib.getAbsolutePath());
+
+        System.loadLibrary("oqs-jni");
+    }
 
     /**
      * Wrapper for OQS_API int OQS_KEM_alg_count(void);
