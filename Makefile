@@ -15,7 +15,7 @@ oqs_KEMs.o: oqs_KEMs.c oqs_KEMs.h
 	gcc -fPIC -c oqs_KEMs.c $(JAVA_INCLUDES)
 
 run:
-	java -classpath . SimpleTest
+	java -classpath . -Djava.library.path=. SimpleTest
 
 clean:
 	$(RM) *.o *.so *.class oqs/*.class
