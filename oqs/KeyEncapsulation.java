@@ -46,43 +46,29 @@ public class KeyEncapsulation {
      */
     class KeyEncapsulationDetails {
         
-        String name;
-        String version;
-        long claimed_nist_level;
-        boolean is_ind_cca;
+        String method_name;
+        String alg_version;
+        byte claimed_nist_level;
+        boolean ind_cca;
         long length_public_key;
         long length_secret_key;
         long length_ciphertext;
         long length_shared_secret;
         
         /**
-         * \brief KEM algorithm details constructor
-         */
-        KeyEncapsulationDetails(String name, String version, long claimed_nist_level, boolean is_ind_cca, long length_public_key, long length_secret_key, long length_ciphertext, long length_shared_secret) {
-            this.name = name;
-            this.version = version;
-            this.claimed_nist_level = claimed_nist_level;
-            this.is_ind_cca = is_ind_cca;
-            this.length_public_key = length_public_key;
-            this.length_secret_key = length_secret_key;
-            this.length_ciphertext = length_ciphertext;
-            this.length_shared_secret = length_shared_secret;
-        }
-        
-        /**
          * \brief OutputStream extraction operator for the KEM algorithm details
          * \param os Output stream
          */
         void printKeyEncapsulation() {
-            System.out.println("Key encapsulation mechanism: " + this.name);
-            System.out.println("Name: " + this.name + "\n");
-            System.out.println("Version: " + this.version + "\n");
-            System.out.println("Claimed NIST level: " + this.claimed_nist_level + "\n");
-            System.out.println("Is IND_CCA: " + this.is_ind_cca + "\n");
-            System.out.println("Length public key (bytes): " + this.length_public_key + "\n");
-            System.out.println("Length secret key (bytes): " + this.length_secret_key + "\n");
-            System.out.println("Length ciphertext (bytes): " + this.length_ciphertext + "\n");
-            System.out.println("Length shared secret (bytes): " + this.length_shared_secret);
+            System.out.println("Key Encapsulation Details:");
+            System.out.println("\tMethod name: " + this.method_name);
+            System.out.println("\tVersion: " + this.alg_version);
+            System.out.println("\tClaimed NIST level: " + this.claimed_nist_level);
+            System.out.println("\tIs IND_CCA: " + this.ind_cca);
+            System.out.println("\tLength public key (bytes): " + this.length_public_key);
+            System.out.println("\tLength secret key (bytes): " + this.length_secret_key);
+            System.out.println("\tLength ciphertext (bytes): " + this.length_ciphertext);
+            System.out.println("\tLength shared secret (bytes): " + this.length_shared_secret);
         }
         
     }
@@ -93,7 +79,7 @@ public class KeyEncapsulation {
     
     /**
      * \brief Constructs an instance of oqs::KeyEncapsulation
-     * \param alg_name Cryptographic algorithm name
+     * \param alg_name Cryptographic algorithm method_name
      */
     public KeyEncapsulation(String alg_name) throws RuntimeException {
         this(alg_name, null);
@@ -101,7 +87,7 @@ public class KeyEncapsulation {
     
     /**
      * \brief Constructs an instance of oqs::KeyEncapsulation
-     * \param alg_name Cryptographic algorithm name
+     * \param alg_name Cryptographic algorithm method_name
      * \param secret_key Secret key
      */
     public KeyEncapsulation(String alg_name, byte[] secret_key) throws RuntimeException {
@@ -116,26 +102,19 @@ public class KeyEncapsulation {
                 throw new MechanismNotSupportedError(alg_name);
             }
         }
-    
-        // kem_.reset(C::OQS_KEM_new(alg_name.c_str()));
-
-        // alg_details_ = new KeyEncapsulationDetails();
-        // alg_details_.name = kem_->method_name;
-        // alg_details_.version = kem_->alg_version;
-        // alg_details_.claimed_nist_level = kem_->claimed_nist_level;
-        // alg_details_.is_ind_cca = kem_->ind_cca;
-        // alg_details_.length_public_key = kem_->length_public_key;
-        // alg_details_.length_secret_key = kem_->length_secret_key;
-        // alg_details_.length_ciphertext = kem_->length_ciphertext;
-        // alg_details_.length_shared_secret = kem_->length_shared_secret;
+        alg_details_ = create_KEM_new(alg_name);
     }
-    
+        
     /**
-     * \brief KEM algorithm details
-     * \return KEM algorithm details
+     * Wrapper for OQS_API OQS_KEM *OQS_KEM_new(const char *method_name);
+     *
+     * \brief Callers should always check whether the return value is `NULL`, which indicates either than an
+     * invalid algorithm method_name was provided, or that the requested algorithm was disabled at compile-time.
+     *
+     * \param method_name Name of the desired algorithm; one of the names in `OQS_KEM_algs`.
+     * \return An OQS_KEM for the particular algorithm, or `NULL` if the algorithm has been disabled at compile-time.
      */
-    public KeyEncapsulationDetails get_details() { return alg_details_; }
-
+    public native KeyEncapsulationDetails create_KEM_new(String method_name);
     
     /**
      * \brief Generate public key/secret key pair
@@ -160,8 +139,15 @@ public class KeyEncapsulation {
      * \param os Output stream
      * \param ke KeyEncapsulation instance
      */
-    public void printKeyEncapsulation() {
-        System.out.println("Key encapsulation mechanism: " + this.alg_details_.name);
+    public void print_KeyEncapsulation() {
+        System.out.println("Key encapsulation mechanism: " + this.alg_details_.method_name);
+    }
+
+    /**
+     * \brief print KEM algorithm details
+     */
+    public void print_details() { 
+        alg_details_.printKeyEncapsulation();
     }
 
 }

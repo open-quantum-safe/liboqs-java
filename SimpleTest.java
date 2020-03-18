@@ -1,4 +1,4 @@
-import oqs.KEMs;
+import oqs.*;
 import java.util.ArrayList;
 
 public class SimpleTest {
@@ -46,6 +46,11 @@ public class SimpleTest {
         ArrayList<String> enabled_KEMs = KEMs.get_enabled_KEMs();
         print_list(enabled_KEMs);
         System.out.println();
+    
+        // Create new KeyEncapsulation
+        KeyEncapsulation ke = new KeyEncapsulation("Kyber768");
+        ke.print_KeyEncapsulation();
+        ke.print_details();
         
     }
 
