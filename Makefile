@@ -1,17 +1,17 @@
-LIBRARY := src/c/liboqs-jni.so
+LIBRARY := src/main/c/liboqs-jni.so
 
-all: SimpleTest
+all: KEM_Test
 
-SimpleTest: $(LIBRARY)
-	javac SimpleTest.java
+KEM_Test: $(LIBRARY)
+	javac -classpath src/main/java/ src/test/java/org/openquantumsafe/KEM_Test.java
 
 $(LIBRARY):
-	$(MAKE) -C src/c
+	$(MAKE) -C src/main/c
 
 run:
-	java -classpath . -Djava.library.path=./src/c/. SimpleTest
+	java -classpath src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.KEM_Test
 
 clean:
-	$(MAKE) -C src/c clean
-	$(MAKE) -C src/java/oqs clean
-	$(RM) -f *.class
+	$(MAKE) -C src/main/c clean
+	$(MAKE) -C src/main/java/org/openquantumsafe clean
+	$(MAKE) -C src/test/java/org/openquantumsafe clean

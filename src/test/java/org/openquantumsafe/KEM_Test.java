@@ -1,7 +1,9 @@
-import src.java.oqs.*;
+package org.openquantumsafe;
+ 
+import org.openquantumsafe.*;
 import java.util.ArrayList;
 
-public class SimpleTest {
+public class KEM_Test {
     
     public static <E, T extends Iterable<E>> void print_list(T list){
         for (Object element : list){

@@ -1,23 +1,23 @@
 #include <oqs/oqs.h>
-#include "src_java_oqs_KeyEncapsulation.h"
+#include "org_openquantumsafe_KeyEncapsulation.h"
 
 /*
- * Class:     src_java_oqs_KeyEncapsulation
+ * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    get_new_KEM
  * Signature: (Ljava/lang/String;)Loqs/KeyEncapsulation/KeyEncapsulationDetails;
  */
-JNIEXPORT jobject JNICALL Java_src_java_oqs_KeyEncapsulation_create_1KEM_1new
+JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1new
   (JNIEnv *env, jobject obj, jstring java_str)
 {
-    jclass cls = (*env)->FindClass(env, "src/java/oqs/KeyEncapsulation$KeyEncapsulationDetails");
+    jclass cls = (*env)->FindClass(env, "org/openquantumsafe/KeyEncapsulation$KeyEncapsulationDetails");
     if (cls == NULL) { fprintf(stderr, "\nCould not find class\n"); return NULL; }
     
     // Get the Method ID of the constructor
-    jmethodID src_java_oqs_oqs_ = (*env)->GetMethodID(env, cls, "<init>", "(Lsrc/java/oqs/KeyEncapsulation;)V");
-    if (NULL == src_java_oqs_oqs_) { fprintf(stderr, "\nCould not initialize class\n"); return NULL; }
+    jmethodID org_openquantumsafe_oqs_ = (*env)->GetMethodID(env, cls, "<init>", "(Lorg/openquantumsafe/KeyEncapsulation;)V");
+    if (NULL == org_openquantumsafe_oqs_) { fprintf(stderr, "\nCould not initialize class\n"); return NULL; }
     
     // Call back constructor to allocate a new instance, with an int argument
-    jobject _nativeKED = (*env)->NewObject(env, cls, src_java_oqs_oqs_);
+    jobject _nativeKED = (*env)->NewObject(env, cls, org_openquantumsafe_oqs_);
     
     // Create get a liboqs::OQS_KEM pointer 
     const char *_nativeString = (*env)->GetStringUTFChars(env, java_str, 0);

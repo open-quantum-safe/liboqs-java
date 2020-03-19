@@ -1,4 +1,4 @@
-package src.java.oqs;
+package org.openquantumsafe;
 
 /**
  * \class MechanismNotSupportedError
