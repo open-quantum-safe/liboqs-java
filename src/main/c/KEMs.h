@@ -2,8 +2,8 @@
 #include <jni.h>
 /* Header for class org_openquantumsafe_KEMs */
 
-#ifndef _Included_org_openquantumsafe_KEMs
-#define _Included_org_openquantumsafe_KEMs
+#ifndef _KEMS_H_INCLUDED_
+#define _KEMS_H_INCLUDED_
 #ifdef __cplusplus
 extern "C" {
 #endif

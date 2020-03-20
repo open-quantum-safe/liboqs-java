@@ -1,5 +1,5 @@
 #include <oqs/oqs.h>
-#include "org_openquantumsafe_KEMs.h"
+#include "KEMs.h"
 
 /*
  * Class:     org_openquantumsafe_KEMs

@@ -1,5 +1,7 @@
 package org.openquantumsafe;
 
+import java.util.Arrays;
+
 /**
  * \class MechanismNotSupportedError
  * \brief Cryptographic scheme not supported
@@ -42,7 +44,7 @@ public class KeyEncapsulation {
      * \brief KEM algorithm details
      */
     class KeyEncapsulationDetails {
-        
+    
         String method_name;
         String alg_version;
         byte claimed_nist_level;
@@ -51,7 +53,7 @@ public class KeyEncapsulation {
         long length_secret_key;
         long length_ciphertext;
         long length_shared_secret;
-        
+    
         /**
          * \brief OutputStream extraction operator for the KEM algorithm details
          * \param os Output stream
@@ -67,9 +69,13 @@ public class KeyEncapsulation {
             System.out.println("\tLength ciphertext (bytes): " + this.length_ciphertext);
             System.out.println("\tLength shared secret (bytes): " + this.length_shared_secret);
         }
-        
+    
     }
-
+    
+    // Java object remember which C++ object it is managing.
+    // hold a value that (on the native side of the fence) will be interpreted as a pointer to the C++ object on the heap, and (on the Java side) will be an opaque integer value.
+    private long nativeHandle;
+    
     private KeyEncapsulationDetails alg_details_;
     
     private byte[] secret_key_;
@@ -88,8 +94,9 @@ public class KeyEncapsulation {
      * \param secret_key Secret key
      */
     public KeyEncapsulation(String alg_name, byte[] secret_key) throws RuntimeException {
-        secret_key_ = secret_key;
-        
+        if (secret_key != null) {
+            secret_key_ = Arrays.copyOf(secret_key, secret_key.length);
+        }
         // KEM not enabled
         if (!KEMs.is_KEM_enabled(alg_name)) {
             // perhaps it's supported
@@ -99,7 +106,10 @@ public class KeyEncapsulation {
                 throw new MechanismNotSupportedError(alg_name);
             }
         }
-        alg_details_ = create_KEM_new(alg_name);
+        // alg_details_ = create_KEM_new(alg_name);
+        create_KEM_new(alg_name);
+        
+        System.out.println("handle has : " + nativeHandle);
     }
         
     /**
@@ -111,7 +121,10 @@ public class KeyEncapsulation {
      * \param method_name Name of the desired algorithm; one of the names in `OQS_KEM_algs`.
      * \return An OQS_KEM for the particular algorithm, or `NULL` if the algorithm has been disabled at compile-time.
      */
-    public native KeyEncapsulationDetails create_KEM_new(String method_name);
+    // public native KeyEncapsulationDetails create_KEM_new(String method_name);
+    public native void create_KEM_new(String method_name);
+    
+    public native KeyEncapsulationDetails get_KEM_details();
     
     /**
      * \brief Generate public key/secret key pair
@@ -137,13 +150,19 @@ public class KeyEncapsulation {
      * \param ke KeyEncapsulation instance
      */
     public void print_KeyEncapsulation() {
-        System.out.println("Key encapsulation mechanism: " + this.alg_details_.method_name);
+        if (alg_details_ == null) {
+            alg_details_ = get_KEM_details();
+        }
+        System.out.println("Key Encapsulation Mechanism: " + alg_details_.method_name);
     }
 
     /**
      * \brief print KEM algorithm details
      */
-    public void print_details() { 
+    public void print_details() {
+        if (alg_details_ == null) {
+            alg_details_ = get_KEM_details();
+        }
         alg_details_.printKeyEncapsulation();
     }
 

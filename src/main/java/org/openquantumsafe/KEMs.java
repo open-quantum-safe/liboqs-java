@@ -12,7 +12,22 @@ public class KEMs {
     static {
         System.loadLibrary("oqs-jni");
     }
+    
+    private static KEMs single_instance = null; 
 
+    private KEMs() {}
+
+    /**
+     * \brief Singleton instance
+     * \return Singleton instance
+     */
+    public static synchronized KEMs get_instance() { 
+        if (single_instance == null) {
+            single_instance = new KEMs(); 
+        }
+        return single_instance; 
+    }
+    
     /**
      * Wrapper for OQS_API int OQS_KEM_alg_count(void);
      *
