@@ -3,7 +3,6 @@ package org.openquantumsafe;
 import java.util.Arrays;
 
 /**
- * \class MechanismNotSupportedError
  * \brief Cryptographic scheme not supported
  */
 class MechanismNotSupportedError extends RuntimeException {
@@ -19,7 +18,6 @@ class MechanismNotSupportedError extends RuntimeException {
 }
 
 /**
- * \class oqs::MechanismNotEnabledError
  * \brief Cryptographic scheme not enabled
  */
 class MechanismNotEnabledError extends RuntimeException {
@@ -35,8 +33,7 @@ class MechanismNotEnabledError extends RuntimeException {
 }
 
 /**
- * \class KeyEncapsulation
- * \brief Key encapsulation mechanisms
+ * \brief Key Encapsulation Mechanisms
  */
 public class KeyEncapsulation {
 
@@ -55,8 +52,7 @@ public class KeyEncapsulation {
         long length_shared_secret;
     
         /**
-         * \brief OutputStream extraction operator for the KEM algorithm details
-         * \param os Output stream
+         * \brief Print KEM algorithm details
          */
         void printKeyEncapsulation() {
             System.out.println("Key Encapsulation Details:");
@@ -72,12 +68,20 @@ public class KeyEncapsulation {
     
     }
     
-    // Java object remember which C++ object it is managing.
-    // hold a value that (on the native side of the fence) will be interpreted as a pointer to the C++ object on the heap, and (on the Java side) will be an opaque integer value.
-    private long nativeHandle;
+    /**
+     * Keep native pointer for Java to remember which C OQS_KEM struct it is managing.
+     */
+    private long native_handle_;
     
+    /**
+     * Private object that has the KEM details.
+     */
     private KeyEncapsulationDetails alg_details_;
     
+    /**
+     * Secret key
+     * TODO: not sure if we need that here or just in C. TBD
+     */
     private byte[] secret_key_;
     
     /**
@@ -106,48 +110,24 @@ public class KeyEncapsulation {
                 throw new MechanismNotSupportedError(alg_name);
             }
         }
-        // alg_details_ = create_KEM_new(alg_name);
         create_KEM_new(alg_name);
-        
-        System.out.println("handle has : " + nativeHandle);
     }
         
     /**
-     * Wrapper for OQS_API OQS_KEM *OQS_KEM_new(const char *method_name);
-     *
-     * \brief Callers should always check whether the return value is `NULL`, which indicates either than an
-     * invalid algorithm method_name was provided, or that the requested algorithm was disabled at compile-time.
-     *
-     * \param method_name Name of the desired algorithm; one of the names in `OQS_KEM_algs`.
-     * \return An OQS_KEM for the particular algorithm, or `NULL` if the algorithm has been disabled at compile-time.
+     * \brief Wrapper for OQS_API OQS_KEM *OQS_KEM_new(const char *method_name).
+     * Calls OQS_KEM_new and stores return value to native_handle_.
      */
-    // public native KeyEncapsulationDetails create_KEM_new(String method_name);
     public native void create_KEM_new(String method_name);
     
-    public native KeyEncapsulationDetails get_KEM_details();
-    
     /**
-     * \brief Generate public key/secret key pair
-     * \return Public key
+     * \brief Initialize and fill a KeyEncapsulationDetails object from the native
+     * C struct pointed by native_handle_. 
      */
-    public byte[] generate_keypair() throws RuntimeException {
-        // byte[] public_key(alg_details_.length_public_key, 0);
-        // secret_key_ = byte[](alg_details_.length_secret_key, 0);
-        // 
-        // OQS_STATUS rv_ = C::OQS_KEM_keypair(kem_.get(), public_key.data(),
-        //                                     secret_key_.data());
-        // if (rv_ != OQS_STATUS::OQS_SUCCESS) {
-        //     throw std::runtime_error("Can not generate keypair");
-        // }
-        // 
-        // return public_key;
-        return null;
-    }
+    private native KeyEncapsulationDetails get_KEM_details();
     
     /**
-     * \brief OutputStream extraction operator for KeyEncapsulation
-     * \param os Output stream
-     * \param ke KeyEncapsulation instance
+     * \brief Print KeyEncapsulation. If a KeyEncapsulationDetails object is not
+     * initialized, initialize it and fill it using native C code.
      */
     public void print_KeyEncapsulation() {
         if (alg_details_ == null) {
@@ -157,7 +137,8 @@ public class KeyEncapsulation {
     }
 
     /**
-     * \brief print KEM algorithm details
+     * \brief print KEM algorithm details. If a KeyEncapsulationDetails object is
+     * not initialized, initialize it and fill it using native C code.
      */
     public void print_details() {
         if (alg_details_ == null) {

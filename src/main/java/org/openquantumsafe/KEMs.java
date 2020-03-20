@@ -3,9 +3,8 @@ package org.openquantumsafe;
 import java.util.ArrayList;
 
 /**
- * \class oqs::KEMs
- * \brief Singleton class, contains details about supported/enabled key exchange
- * mechanisms (KEMs)
+ * \brief Key Encapsulation Mechanisms Singleton class.
+ * Contains details about supported/enabled key exchange echanisms (KEMs)
  */
 public class KEMs {
     
@@ -13,12 +12,15 @@ public class KEMs {
         System.loadLibrary("oqs-jni");
     }
     
+    /**
+     * The single KEMs class instance.
+     */
     private static KEMs single_instance = null; 
 
     private KEMs() {}
 
     /**
-     * \brief Singleton instance
+     * \brief Make sure that at most one istance is generated.
      * \return Singleton instance
      */
     public static synchronized KEMs get_instance() { 
@@ -29,26 +31,21 @@ public class KEMs {
     }
     
     /**
-     * Wrapper for OQS_API int OQS_KEM_alg_count(void);
-     *
-     * \brief Maximum number of supported KEM algorithms
+     * \brief Wrapper for OQS_API int OQS_KEM_alg_count(void);
      * \return Maximum number of supported KEM algorithms
      */
     public static native int max_number_KEMs();
 
     /**
-     * Wrapper for OQS_API int OQS_KEM_alg_is_enabled(const char *method_name);
-     *
-     * \brief Checks whether the KEM algorithm \a alg_name is enabled
+     * \brief Wrapper for OQS_API int OQS_KEM_alg_is_enabled(const char *method_name);
+     * Checks whether the KEM algorithm alg_name is enabled
      * \param alg_name Cryptographic algorithm name
      * \return True if the KEM algorithm is enabled, false otherwise
      */
     public static native boolean is_KEM_enabled(String alg_name);
 
     /**
-     * Wrapper for OQS_API const char *OQS_KEM_alg_identifier(size_t i);
-     * 
-     * \brief KEM algorithm name
+     * \brief Wrapper for OQS_API const char *OQS_KEM_alg_identifier(size_t i);
      * \param alg_id Cryptographic algorithm numerical id
      * \return KEM algorithm name
      */

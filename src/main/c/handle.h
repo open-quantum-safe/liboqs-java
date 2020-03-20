@@ -5,7 +5,7 @@
 
 jfieldID getHandleField(JNIEnv *env, jobject obj) {
     jclass c = (*env)->GetObjectClass(env, obj);
-    return (*env)->GetFieldID(env, c, "nativeHandle", "J");
+    return (*env)->GetFieldID(env, c, "native_handle_", "J");
 }
 
 // use long to store pointer
