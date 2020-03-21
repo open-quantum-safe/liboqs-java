@@ -13,8 +13,8 @@ liboqs-java depends on the [liboqs](https://github.com/open-quantum-safe/liboqs)
 First, you must build the master branch of liboqs according to the [liboqs building instructions](https://github.com/open-quantum-safe/liboqs#linuxmacos) with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
 
 
-#### SimpleTest
-The file [SimpleTest.java](./SimpleTest.java) invokes the `max_number_KEMs` method which is a Java wrapper for `OQS_KEM_alg_count`.
+#### KEM_Test
+The file [KEM_Test.java](./src/test/java/org/openquantumsafe/KEM_Test.java) invokes the `max_number_KEMs` method which is a Java wrapper for `OQS_KEM_alg_count`.
 
 ```
 $ make
