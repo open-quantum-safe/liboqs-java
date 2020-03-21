@@ -114,6 +114,17 @@ public class KeyEncapsulation {
     private native byte[] export_secret_key(long length_secret_key);
     
     /**
+     * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem, uint8_t *ciphertext, 
+     *                                      uint8_t *shared_secret, const uint8_t *public_key);
+     * \param Pair <ciphertext, shared secret>
+     * \param Public key
+     * \param length_ciphertext
+     * \param length_shared_secret
+     * \return Status
+     */
+    private native int encap_secret(Pair<byte[], byte[]> pair, byte[] public_key, long length_ciphertext, long length_shared_secret);
+    
+    /**
      * \brief Invoke native generate_keypair method using the PK and SK lengths form 
      * alg_details_. Check return value and if != 0 throw RuntimeException. 
      */
@@ -140,6 +151,21 @@ public class KeyEncapsulation {
     }
     
     /**
+     * \brief Invoke native encap_secret method
+     * \param Public key
+     * \return Pair <ciphertext, shared secret>
+     */
+    public Pair<byte[], byte[]> encap_secret(byte[] public_key) throws RuntimeException {
+        if (public_key.length != alg_details_.length_public_key) {
+            throw new RuntimeException("Incorrect public key length");        
+        }
+        Pair<byte[], byte[]> pair = new Pair<>(new byte[(int) alg_details_.length_ciphertext], new byte[(int) alg_details_.length_shared_secret]);
+        int rv_= encap_secret(pair, public_key, alg_details_.length_ciphertext, alg_details_.length_shared_secret);
+        if (rv_ != 0) throw new RuntimeException("Cannot encapsulate secret");
+        return pair;
+    }
+
+    /**
      * \brief Print KeyEncapsulation. If a KeyEncapsulationDetails object is not
      * initialized, initialize it and fill it using native C code.
      */
@@ -160,5 +186,5 @@ public class KeyEncapsulation {
         }
         alg_details_.printKeyEncapsulation();
     }
-
+    
 }

@@ -15,8 +15,7 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1ne
     OQS_KEM *kem = OQS_KEM_new(_nativeString);
     (*env)->ReleaseStringUTFChars(env, java_str, _nativeString);
     // Stow the native OQS_KEM pointer in the Java handle.
-    char kem_handle_field_[] = "native_kem_handle_";
-    setHandle(env, obj, kem, kem_handle_field_);
+    setHandle(env, obj, kem, "native_kem_handle_");
 }
 
 /*
@@ -37,8 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
     // Call back constructor to allocate a new instance, with an int argument
     jobject _nativeKED = (*env)->NewObject(env, cls, org_openquantumsafe_oqs_);
     
-    char kem_handle_field_[] = "native_kem_handle_";
-    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, kem_handle_field_);
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
     
     // Copy fields from C struct to Java class
     // String method_name;
@@ -86,20 +84,16 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypair
   (JNIEnv *env, jobject obj, jlong length_public_key, jlong length_secret_key)
 {
-    // Allocate space for the public key
+    // Allocate space for the public key and stow it inside the java class
     uint8_t *public_key = (uint8_t *) calloc(length_public_key, sizeof(uint8_t));
-    // Stow it inside the java class
-    char public_key_handle_field_[] = "native_public_key_handle_";
-    setHandle(env, obj, public_key, public_key_handle_field_);
+    setHandle(env, obj, public_key, "native_public_key_handle_");
     
-    // Allocate space for the secret key
+    // Allocate space for the secret key and stow it inside the java class
     uint8_t *secret_key = (uint8_t *) calloc(length_secret_key, sizeof(uint8_t));
-    char secret_key_handle_field_[] = "native_secret_key_handle_";
-    setHandle(env, obj, secret_key, secret_key_handle_field_);
+    setHandle(env, obj, secret_key, "native_secret_key_handle_");
     
     // Get pointer to KEM
-    char kem_handle_field_[] = "native_kem_handle_";
-    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, kem_handle_field_);
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
     
     // Invoke liboqs KEM keypair generation function
     OQS_STATUS rv_ = OQS_KEM_keypair(kem, public_key, secret_key);
@@ -115,8 +109,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1p
   (JNIEnv *env, jobject obj, jlong length_public_key)
 {
     // retrieve C pointer to the public key
-    char publiv_key_handle_field_[] = "native_public_key_handle_";
-    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, publiv_key_handle_field_);
+    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_public_key_handle_");
 
     // create a byte array for the public key that will be passed back to Java
     jbyteArray jpublic_key = (jbyteArray)(*env)->NewByteArray(env, length_public_key);
@@ -136,8 +129,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1s
   (JNIEnv *env, jobject obj, jlong length_secret_key)
 {
     // retrieve C pointer to the secret key
-    char secret_key_handle_field_[] = "native_secret_key_handle_";
-    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, secret_key_handle_field_);
+    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
 
     // create a byte array for the secret key that will be passed back to Java
     jbyteArray jsecret_key = (jbyteArray)(*env)->NewByteArray(env, length_secret_key);
@@ -146,4 +138,43 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1s
     (*env)->SetByteArrayRegion(env, jsecret_key, 0, length_secret_key, (jbyte*) secret_key);
 
     return jsecret_key;
+}
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    encap_secret
+ * Signature: (Lorg/openquantumsafe/KeyEncapsulation/Pair;[BJJ)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
+  (JNIEnv *env, jobject obj, jobject pair_obj, jbyteArray jpublic_key, jlong length_ciphertext, jlong length_shared_secret)
+{
+    // Convert public_key to jbyte array
+    jsize len = (*env)->GetArrayLength(env, jpublic_key);
+    jbyte *public_key = (*env)->GetByteArrayElements(env, jpublic_key, 0);
+    
+    // Allocate space for the ciphertext and the shared secret
+    uint8_t *ciphertext = (uint8_t *) calloc(length_ciphertext, sizeof(uint8_t));
+    uint8_t *shared_secret = (uint8_t *) calloc(length_shared_secret, sizeof(uint8_t));
+    
+    // Get pointer to KEM and invoke liboqs encapsulate secret function
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+    OQS_STATUS rv_ = OQS_KEM_encaps(kem, ciphertext, shared_secret, public_key);
+    
+    // Release C public_key
+    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key, JNI_ABORT);
+    
+    // Create new Java byte arrays, fill them with the ciphertext and the shared_secret, and free the C memory
+    jbyteArray jctxt_arr = (jbyteArray)(*env)->NewByteArray(env, length_ciphertext);
+    jbyteArray jshared_sec_arr = (jbyteArray)(*env)->NewByteArray(env, length_shared_secret);
+    (*env)->SetByteArrayRegion(env, jctxt_arr, 0, length_ciphertext, (jbyte*) ciphertext);
+    (*env)->SetByteArrayRegion(env, jshared_sec_arr, 0, length_shared_secret, (jbyte*) shared_secret);
+    free(ciphertext);
+    free(shared_secret);
+    
+    // Get the pair class of the input object and get field references
+    jclass pair_class = (*env)->GetObjectClass(env, pair_obj);
+    (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "left", "Ljava/lang/Object;"), jctxt_arr);
+    (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "right", "Ljava/lang/Object;"), jshared_sec_arr);
+    
+    return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }

@@ -66,6 +66,10 @@ public class KEM_Test {
         System.out.println("\tSecret key lenght : " + sk.length);
         System.out.println();
         
+        System.out.println("Encapsulate secret");
+        Pair<byte[], byte[]> pair = ke.encap_secret(pk);
+        System.out.println();
+        
     }
 
 }
