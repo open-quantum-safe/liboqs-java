@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    create_KEM_new
@@ -22,6 +23,30 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1ne
  */
 JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1details
   (JNIEnv *, jobject);
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    generate_keypair
+ * Signature: (JJ)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypair
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    export_public_key
+ * Signature: (J)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1public_1key
+  (JNIEnv *, jobject, jlong);
+    
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    export_secret_key
+ * Signature: (J)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1secret_1key
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

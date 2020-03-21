@@ -41,18 +41,30 @@ public class KEM_Test {
         
         // test get_supported_KEMs
         ArrayList<String> supported_KEMs = KEMs.get_supported_KEMs();
+        System.out.println("Supported KEMs :");
         print_list(supported_KEMs);
         System.out.println();
         
         // test get_enabled_KEMs
         ArrayList<String> enabled_KEMs = KEMs.get_enabled_KEMs();
+        System.out.println("Enabled KEMs :");
         print_list(enabled_KEMs);
         System.out.println();
     
         // Create new KeyEncapsulation
         KeyEncapsulation ke = new KeyEncapsulation("Kyber768");
         ke.print_KeyEncapsulation();
+        System.out.println();
         ke.print_details();
+        System.out.println();
+        
+        // Generate keypair
+        System.out.println("Generating keypair");
+        byte[] pk = ke.generate_keypair();
+        byte[] sk = ke.export_secret_key();
+        System.out.println("\tPublic key lenght : " + pk.length);
+        System.out.println("\tSecret key lenght : " + sk.length);
+        System.out.println();
         
     }
 
