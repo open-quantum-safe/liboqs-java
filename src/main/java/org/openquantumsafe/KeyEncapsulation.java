@@ -23,15 +23,15 @@ public class KeyEncapsulation {
          * \brief Print KEM algorithm details
          */
         void printKeyEncapsulation() {
-            System.out.println("Key Encapsulation Details:");
-            System.out.println("\tMethod name: " + this.method_name);
-            System.out.println("\tVersion: " + this.alg_version);
-            System.out.println("\tClaimed NIST level: " + this.claimed_nist_level);
-            System.out.println("\tIs IND_CCA: " + this.ind_cca);
-            System.out.println("\tLength public key (bytes): " + this.length_public_key);
-            System.out.println("\tLength secret key (bytes): " + this.length_secret_key);
-            System.out.println("\tLength ciphertext (bytes): " + this.length_ciphertext);
-            System.out.println("\tLength shared secret (bytes): " + this.length_shared_secret);
+            System.out.println("KEM Details:");
+            System.out.println("  Name: " + this.method_name);
+            System.out.println("  Version: " + this.alg_version);
+            System.out.println("  Claimed NIST level: " + this.claimed_nist_level);
+            System.out.println("  Is IND-CCA: " + this.ind_cca);
+            System.out.println("  Length public key (bytes): " + this.length_public_key);
+            System.out.println("  Length secret key (bytes): " + this.length_secret_key);
+            System.out.println("  Length ciphertext (bytes): " + this.length_ciphertext);
+            System.out.println("  Length shared secret (bytes): " + this.length_shared_secret);
         }
     
     }
