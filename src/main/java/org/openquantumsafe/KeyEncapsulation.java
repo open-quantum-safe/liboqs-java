@@ -61,11 +61,10 @@ public class KeyEncapsulation {
      * \param alg_name Cryptographic algorithm method_name
      * \param secret_key Secret key
      */
-// FIXME: secret key
     public KeyEncapsulation(String alg_name, byte[] secret_key) throws RuntimeException {
-        // if (secret_key != null) {
-            // secret_key_ = Arrays.copyOf(secret_key, secret_key.length);
-        // }
+        if (secret_key != null) {
+            import_secret_key(secret_key);
+        }
         // KEM not enabled
         if (!KEMs.is_KEM_enabled(alg_name)) {
             // perhaps it's supported
@@ -98,6 +97,12 @@ public class KeyEncapsulation {
      * \return Status
      */
     private native int generate_keypair(long length_public_key, long length_secret_key);
+    
+    /**
+     * \brief Import secret key
+     * \param Secret key
+     */
+    private native void import_secret_key(byte[] secret_key);
     
     /**
      * \brief Export public key

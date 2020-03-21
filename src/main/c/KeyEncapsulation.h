@@ -34,6 +34,14 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypa
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    import_secret_key
+ * Signature: ([B)V
+ */
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_import_1secret_1key
+  (JNIEnv *, jobject, jbyteArray);
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    export_public_key
  * Signature: (J)[B
  */

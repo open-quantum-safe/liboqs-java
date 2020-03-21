@@ -102,6 +102,19 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypa
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    import_secret_key
+ * Signature: ([B)V
+ */
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_import_1secret_1key
+  (JNIEnv *env, jobject obj, jbyteArray jsecret_key) 
+{
+    // Convert java secret_key to jbyte array and store the pointer to it
+    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
+    setHandle(env, obj, secret_key_native, "native_secret_key_handle_");
+}
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    export_public_key
  * Signature: (J)[B
  */
