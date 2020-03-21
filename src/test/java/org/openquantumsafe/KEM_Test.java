@@ -2,6 +2,7 @@ package org.openquantumsafe;
  
 import org.openquantumsafe.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class KEM_Test {
     
@@ -13,66 +14,71 @@ public class KEM_Test {
         System.out.println();
     }
     
-    public static void main(String[] args) {
-        // test max_number_KEMs
-        System.out.println("Num of KEMs " + KEMs.max_number_KEMs());
-        System.out.println();
-        
-        // test is_KEM_enabled
-        String alg = "foobar";
-        System.out.println("is_KEM_enabled(\"" + alg + "\"): " + KEMs.is_KEM_enabled(alg));
-        alg = "Kyber768";
-        System.out.println("is_KEM_enabled(\"" + alg + "\"): " + KEMs.is_KEM_enabled(alg));
-        System.out.println();
-        
-        // test get_KEM_name
-        int alg_id = 0;
-        System.out.println("get_KEM_name(" + alg_id + "): " + KEMs.get_KEM_name(alg_id));
-        alg_id = 5;
-        System.out.println("get_KEM_name(" + alg_id + "): " + KEMs.get_KEM_name(alg_id));
-        System.out.println();
-        
-        // test is_KEM_supported
-        alg = "foobar";
-        System.out.println("is_KEM_supported(\"" + alg + "\"): " + KEMs.is_KEM_supported(alg));
-        alg = "Kyber768";
-        System.out.println("is_KEM_supported(\"" + alg + "\"): " + KEMs.is_KEM_supported(alg));
-        System.out.println();
-        
-        // test get_supported_KEMs
-        ArrayList<String> supported_KEMs = KEMs.get_supported_KEMs();
-        System.out.println("Supported KEMs :");
-        print_list(supported_KEMs);
-        System.out.println();
-        
-        // test get_enabled_KEMs
-        ArrayList<String> enabled_KEMs = KEMs.get_enabled_KEMs();
-        System.out.println("Enabled KEMs :");
-        print_list(enabled_KEMs);
-        System.out.println();
+    public static String shortHex(byte[] bytes) {
+        final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        int num = 8;
+        for (int i = 0; i < num; i++) {
+            int v = bytes[i] & 0xFF;
+            sb.append(HEX_ARRAY[v >>> 4]);
+            sb.append(HEX_ARRAY[v & 0x0F]);
+            sb.append(" ");
+        }
+        if (bytes.length > num*2) {
+            sb.append("... ");
+        }
+        for (int i = bytes.length - num; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            sb.append(HEX_ARRAY[v >>> 4]);
+            sb.append(HEX_ARRAY[v & 0x0F]);
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
     
-        // Create new KeyEncapsulation
-        KeyEncapsulation ke = new KeyEncapsulation("Kyber768");
-        ke.print_KeyEncapsulation();
-        System.out.println();
-        ke.print_details();
+    public static void main(String[] args) {
+        System.out.println("Supported KEMs:");
+        print_list(KEMs.get_supported_KEMs());
         System.out.println();
         
-        // Generate keypair
-        System.out.println("Generating keypair");
-        byte[] pk = ke.generate_keypair();
-        byte[] sk = ke.export_secret_key();
-        System.out.println("\tPublic key length : " + pk.length);
-        System.out.println("\tSecret key length : " + sk.length);
+        System.out.println("Enabled KEMs:");
+        print_list(KEMs.get_enabled_KEMs());
         System.out.println();
         
-        System.out.println("Encapsulate secret");
-        Pair<byte[], byte[]> pair = ke.encap_secret(pk);
-        System.out.println();
+        String kem_name = "DEFAULT";
+        KeyEncapsulation client = new KeyEncapsulation(kem_name);
+        client.print_details();
+        System.out.println("\n");
+
+        long t = System.currentTimeMillis();
+        byte[] client_public_key = client.generate_keypair();
+        long timeElapsed = System.currentTimeMillis() - t;
         
-        System.out.println("Decapsulate secret");
-        byte[] shared_secret = ke.decap_secret(pair.getLeft());
-        System.out.println();
+        byte[] client_pk = client.export_public_key();
+        byte[] client_sk = client.export_secret_key();
+        
+        System.out.println("Client public key:");
+        System.out.println(shortHex(client_public_key));
+        System.out.println("\nIt took " + timeElapsed + " millisecs to generate the key pair.");
+        
+        KeyEncapsulation server = new KeyEncapsulation(kem_name);
+
+        t = System.currentTimeMillis();
+        Pair<byte[], byte[]> server_pair = server.encap_secret(client_public_key);
+        System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to encapsulate the secret.");
+        byte[] ciphertext = server_pair.getLeft();
+        byte[] shared_secret_server = server_pair.getRight();
+        
+        t = System.currentTimeMillis();
+        byte[] shared_secret_client = client.decap_secret(ciphertext);
+        System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to decapsulate the secret.");
+
+        System.out.println("\nClient shared secret:");
+        System.out.println(shortHex(shared_secret_client));
+        System.out.println("\nServer shared secret:");
+        System.out.println(shortHex(shared_secret_server));
+        
+        System.out.println("\nShared secrets coincide? " + Arrays.equals(shared_secret_client, shared_secret_server));
     }
 
 }
