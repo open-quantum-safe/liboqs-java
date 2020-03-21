@@ -48,7 +48,7 @@ public class KEM_Test {
         String kem_name = "DEFAULT";
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
         client.print_details();
-        System.out.println("\n");
+        System.out.println();
 
         long t = System.currentTimeMillis();
         byte[] client_public_key = client.generate_keypair();
