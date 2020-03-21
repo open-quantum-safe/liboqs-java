@@ -208,7 +208,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
 
     // release memory
     (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, 0);
-    (*env)->ReleaseByteArrayElements(env, jshared_secret, ciphertext_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext_native, 0);
 
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
