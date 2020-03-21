@@ -11,6 +11,12 @@ $(LIBRARY):
 run:
 	java -classpath src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.KEM_Test
 
+clean-c:
+	$(MAKE) -C src/main/c clean
+
+clean-java:
+	$(MAKE) -C src/main/java/org/openquantumsafe clean
+	
 clean:
 	$(MAKE) -C src/main/c clean
 	$(MAKE) -C src/main/java/org/openquantumsafe clean
