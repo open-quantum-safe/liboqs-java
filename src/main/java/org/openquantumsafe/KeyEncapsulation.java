@@ -1,37 +1,5 @@
 package org.openquantumsafe;
 
-import java.util.Arrays;
-
-/**
- * \brief Cryptographic scheme not supported
- */
-class MechanismNotSupportedError extends RuntimeException {
-    
-    public MechanismNotSupportedError(String alg_name) {
-        super("\"" + alg_name + "\" is not supported by OQS");
-    }
-    
-    public MechanismNotSupportedError(String alg_name, Throwable throwable) {
-        super("\"" + alg_name + "\" is not supported by OQS", throwable);
-    }
-    
-}
-
-/**
- * \brief Cryptographic scheme not enabled
- */
-class MechanismNotEnabledError extends RuntimeException {
-    
-    public MechanismNotEnabledError(String alg_name) {
-        super("\"" + alg_name + "\" is not enabled by OQS");
-    }
-    
-    public MechanismNotEnabledError(String alg_name, Throwable throwable) {
-        super("\"" + alg_name + "\" is not enabled by OQS", throwable);
-    }
-    
-}
-
 /**
  * \brief Key Encapsulation Mechanisms
  */
