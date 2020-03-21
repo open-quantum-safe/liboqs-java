@@ -15,7 +15,8 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1ne
     OQS_KEM *kem = OQS_KEM_new(_nativeString);
     (*env)->ReleaseStringUTFChars(env, java_str, _nativeString);
     // Stow the native OQS_KEM pointer in the Java handle.
-    setHandle(env, obj, kem);
+    char kem_handle_field_[] = "native_kem_handle_";
+    setHandle(env, obj, kem, kem_handle_field_);
 }
 
 /*
@@ -36,7 +37,8 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
     // Call back constructor to allocate a new instance, with an int argument
     jobject _nativeKED = (*env)->NewObject(env, cls, org_openquantumsafe_oqs_);
     
-    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj);
+    char kem_handle_field_[] = "native_kem_handle_";
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, kem_handle_field_);
     
     // Copy fields from C struct to Java class
     // String method_name;
