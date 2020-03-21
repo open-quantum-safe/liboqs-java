@@ -149,7 +149,6 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
   (JNIEnv *env, jobject obj, jobject pair_obj, jbyteArray jpublic_key, jlong length_ciphertext, jlong length_shared_secret)
 {
     // Convert public_key to jbyte array
-    jsize len = (*env)->GetArrayLength(env, jpublic_key);
     jbyte *public_key = (*env)->GetByteArrayElements(env, jpublic_key, 0);
     
     // Allocate space for the ciphertext and the shared secret
@@ -176,5 +175,27 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
     (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "left", "Ljava/lang/Object;"), jctxt_arr);
     (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "right", "Ljava/lang/Object;"), jshared_sec_arr);
     
+    return (rv_ == OQS_SUCCESS) ? 0 : -1;
+}
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    decap_secret
+ * Signature: ([B[B)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
+  (JNIEnv *env, jobject obj, jbyteArray jshared_secret, jbyteArray jciphertext)
+{
+    jbyte *shared_secret_native = (*env)->GetByteArrayElements(env, jshared_secret, 0);
+    jbyte *ciphertext_native = (*env)->GetByteArrayElements(env, jciphertext, 0);
+    uint8_t *secret_key_native = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
+    
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+    OQS_STATUS rv_ = OQS_KEM_decaps(kem, shared_secret_native, ciphertext_native, secret_key_native);
+
+    // release memory
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, ciphertext_native, 0);
+
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }

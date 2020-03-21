@@ -55,7 +55,15 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1s
  */
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
   (JNIEnv *, jobject, jobject, jbyteArray, jlong, jlong);
-    
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    decap_secret
+ * Signature: ([B[B)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
+  (JNIEnv *, jobject, jbyteArray, jbyteArray);
+
 #ifdef __cplusplus
 }
 #endif

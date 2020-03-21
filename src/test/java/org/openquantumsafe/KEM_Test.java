@@ -62,14 +62,17 @@ public class KEM_Test {
         System.out.println("Generating keypair");
         byte[] pk = ke.generate_keypair();
         byte[] sk = ke.export_secret_key();
-        System.out.println("\tPublic key lenght : " + pk.length);
-        System.out.println("\tSecret key lenght : " + sk.length);
+        System.out.println("\tPublic key length : " + pk.length);
+        System.out.println("\tSecret key length : " + sk.length);
         System.out.println();
         
         System.out.println("Encapsulate secret");
         Pair<byte[], byte[]> pair = ke.encap_secret(pk);
         System.out.println();
         
+        System.out.println("Decapsulate secret");
+        byte[] shared_secret = ke.decap_secret(pair.getLeft());
+        System.out.println();
     }
 
 }
