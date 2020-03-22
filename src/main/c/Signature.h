@@ -72,6 +72,14 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Signature_export_1secret_1
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
   (JNIEnv *, jobject, jbyteArray, jobject, jbyteArray, jlong, jbyteArray);
 
+/*
+ * Class:     org_openquantumsafe_Signature
+ * Method:    verify
+ * Signature: ([BJ[BJ[B)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify
+  (JNIEnv *, jobject, jbyteArray, jlong, jbyteArray, jlong, jbyteArray);
+
 #ifdef __cplusplus
 }
 #endif

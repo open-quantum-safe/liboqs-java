@@ -141,7 +141,7 @@ public class Signature {
      * \param secret_key
      * \return Status
      */
-    private native int sign(byte[] signature, MutableLong signature_len_ret,
+    private native int sign(byte[] signature, Mutable<Long> signature_len_ret,
                         byte[] message, long message_len, byte[] secret_key);
 
     /**
@@ -151,11 +151,16 @@ public class Signature {
      *                                              const uint8_t *signature,
      *                                              size_t signature_len,
      *                                              const uint8_t *public_key);
-     * \param shared_secret
-     * \param ciphertext
-     * \return Status
+     * \param message
+     * \param message_len
+     * \param signature
+     * \param signature_len
+     * \param public_key
+     * \return True if the signature is valid, false otherwise
      */
-    // private native int verify(byte[] shared_secret, byte[] ciphertext);
+    private native boolean verify(byte[] message, long message_len,
+                                byte[] signature, long signature_len,
+                                byte[] public_key);
 
     /**
      * \brief Invoke native free_sig
@@ -205,37 +210,37 @@ public class Signature {
         }
 
         byte[] signature = new byte[(int) alg_details_.max_length_signature];
-        MutableLong signature_len_ret = new MutableLong();
+        Mutable<Long> signature_len_ret = new Mutable<>();
         int rv_= sign(signature, signature_len_ret,
                         message, message.length, secret_key_);
         long actual_signature_len = signature_len_ret.value;
         byte[] actual_signature = new byte[(int) actual_signature_len];
-        System.arraycopy(signature, 0, actual_signature, 0, (int) actual_signature_len);
-
-        if (rv_ != 0) throw new RuntimeException("Cannot encapsulate secret");
+        System.arraycopy(signature, 0,
+                            actual_signature, 0, (int) actual_signature_len);
+        if (rv_ != 0) throw new RuntimeException("Cannot sign message");
         return actual_signature;
     }
 
-    // /**
-    //  * \brief Decapsulate secret
-    //  * \param ciphertext Ciphertext
-    //  * \return Shared secret
-    //  */
-    // public byte[] verify(byte[] ciphertext) throws RuntimeException {
-    //     if (ciphertext.length != alg_details_.length_ciphertext) {
-    //         throw new RuntimeException("Incorrect ciphertext length");
-    //     }
-    //     byte[] secret_key_ = export_secret_key(alg_details_.length_secret_key);
-    //     if (secret_key_.length != alg_details_.length_secret_key) {
-    //         throw new RuntimeException("Incorrect secret key length,
-    //                                     make sure you specify one in the
-    //                                     constructor or run generate_keypair()");
-    //     }
-    //     byte[] shared_secret = new byte[(int) alg_details_.length_shared_secret];
-    //     int rv_ = verify(shared_secret, ciphertext);
-    //     if (rv_ != 0) throw new RuntimeException("Cannot decapsulate secret");
-    //     return shared_secret;
-    // }
+    /**
+     * \brief Invoke native verify method
+     * \param message
+     * \param signature
+     * \param public_key
+     * \return True if the signature is valid, false otherwise
+     */
+    public boolean verify(byte[] message, byte[] signature, byte[] public_key)
+                                                    throws RuntimeException {
+        if (public_key.length != alg_details_.length_public_key) {
+            throw new RuntimeException("Incorrect public key length");
+        }
+        if (signature.length > alg_details_.max_length_signature) {
+            throw new RuntimeException("Incorrect signature length");
+        }
+
+        boolean rv_ = verify(message, message.length, signature,
+                                signature.length, public_key);
+        return rv_;
+    }
 
     /**
      * \brief Print Signature. If a SignatureDetails object is not
@@ -259,9 +264,10 @@ public class Signature {
         alg_details_.printSignature();
     }
 
-    public class MutableLong {
-        long value;
-        public void setValue(long newval) { this.value = newval; }
-        public long getValue() { return this.value; }
+    public class Mutable<T> {
+        T value;
+        public void setValue(T t) { this.value = t; }
+        public T getValue() { return this.value; }
     }
+
 }
