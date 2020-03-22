@@ -1,14 +1,12 @@
-LIBRARY := src/main/c/liboqs-jni.so
+all: liboqs-jni KEM_example Sig_example
 
-all: KEM_example Sig_example
-
-KEM_example: $(LIBRARY)
+KEM_example: liboqs-jni
 	javac -classpath src/main/java/ src/test/java/org/openquantumsafe/KEM_Test.java
 
-Sig_example: $(LIBRARY)
+Sig_example: liboqs-jni
 	javac -classpath src/main/java/ src/test/java/org/openquantumsafe/Sig_Test.java
 
-$(LIBRARY):
+liboqs-jni:
 	$(MAKE) -C src/main/c
 
 run-kem:
@@ -22,8 +20,9 @@ clean-c:
 
 clean-java:
 	$(MAKE) -C src/main/java/org/openquantumsafe clean
-	
+
 clean:
 	$(MAKE) -C src/main/c clean
 	$(MAKE) -C src/main/java/org/openquantumsafe clean
 	$(MAKE) -C src/test/java/org/openquantumsafe clean
+	$(RM) -f *.log
