@@ -18,6 +18,14 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1ne
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    free_KEM
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_free_1KEM
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    get_KEM_details
  * Signature: ()Lorg/openquantumsafe/KeyEncapsulation/KeyEncapsulationDetails;
  */
@@ -47,7 +55,7 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_import_1secret_
  */
 JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1public_1key
   (JNIEnv *, jobject, jlong);
-    
+
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    export_secret_key

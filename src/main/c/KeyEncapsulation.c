@@ -20,6 +20,22 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1ne
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    free_KEM
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_free_1KEM
+  (JNIEnv *env, jobject obj, jlong length_secret_key)
+{
+    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
+    if (secret_key != NULL) {
+        OQS_MEM_cleanse(secret_key, length_secret_key);
+    }
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+    OQS_KEM_free(kem);
+}
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    get_KEM_details
  * Signature: ()Lorg/openquantumsafe/KeyEncapsulation/KeyEncapsulationDetails;
  */
