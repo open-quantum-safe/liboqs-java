@@ -7,11 +7,11 @@ import java.util.Arrays;
 public class Sig_Test {
 
     public static void main(String[] args) {
-        System.out.println("Supported Sigs:");
+        System.out.println("Supported signatures:");
         Common.print_list(Sigs.get_supported_sigs());
         System.out.println();
 
-        System.out.println("Enabled Sigs:");
+        System.out.println("Enabled signatures:");
         Common.print_list(Sigs.get_enabled_sigs());
         System.out.println();
 
@@ -37,14 +37,14 @@ public class Sig_Test {
         byte[] signature = signer.sign(message);
         System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to sign the message.");
 
-        System.out.println("\nSignature:");
-        System.out.println(Common.chopHex(signature));
-
         Signature verifier = new Signature(sig_name);
 
         t = System.currentTimeMillis();
         boolean is_valid = verifier.verify(message, signature, signer_pk);
-        System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to decapsulate the secret.");
+        System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to verify the signature.");
+
+        System.out.println("\nSignature:");
+        System.out.println(Common.chopHex(signature));
 
         System.out.println("\nValid signature? " + is_valid);
 
