@@ -186,7 +186,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
 
     // Get pointer to KEM and invoke liboqs encapsulate secret function
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
-    OQS_STATUS rv_ = OQS_KEM_encaps(kem, ciphertext, shared_secret, public_key);
+    OQS_STATUS rv_ = OQS_KEM_encaps(kem, ciphertext, shared_secret, (uint8_t*) public_key);
 
     // Release C public_key
     (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key, JNI_ABORT);
@@ -220,7 +220,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
     uint8_t *secret_key_native = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
 
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
-    OQS_STATUS rv_ = OQS_KEM_decaps(kem, shared_secret_native, ciphertext_native, secret_key_native);
+    OQS_STATUS rv_ = OQS_KEM_decaps(kem, (uint8_t*) shared_secret_native, (uint8_t*) ciphertext_native, secret_key_native);
 
     // release memory
     (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, 0);

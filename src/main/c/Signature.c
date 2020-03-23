@@ -181,8 +181,9 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
     size_t len_sig;
-    OQS_STATUS rv_ = OQS_SIG_sign(sig, signature_native, &len_sig, message_native,
-                                    message_len, secret_key_native);
+    OQS_STATUS rv_ = OQS_SIG_sign(sig, (uint8_t*)signature_native, &len_sig,
+                                    (uint8_t*)message_native, message_len,
+                                    (uint8_t*)secret_key_native);
 
     // fill java signature bytes
     (*env)->SetByteArrayRegion(env, jsignature, 0, len_sig, (jbyte*) signature_native);
@@ -220,8 +221,9 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify
     jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
-    OQS_STATUS rv_ = OQS_SIG_verify(sig, message_native, message_len,
-                            signature_native, signature_len, public_key_native);
+    OQS_STATUS rv_ = OQS_SIG_verify(sig, (uint8_t*) message_native, message_len,
+                                    (uint8_t*) signature_native, signature_len,
+                                    (uint8_t*) public_key_native);
 
     // Release C memory
     (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_ABORT);

@@ -18,7 +18,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Rand_randombytes
     if (rand_bytes_native == NULL) return NULL;
 
     // native call to liboqs
-    OQS_randombytes(rand_bytes_native, bytes_to_read);
+    OQS_randombytes((uint8_t*) rand_bytes_native, bytes_to_read);
 
     // Store java byte array
     (*env)->SetByteArrayRegion(env, jrand_bytes, 0, bytes_to_read, (jbyte*) rand_bytes_native);
@@ -53,10 +53,10 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_Rand_randombytes_1nist_1kat_1ini
     jbyte *entropy_input_native = (*env)->GetByteArrayElements(env, jentropy_input, 0);
 
     if (pers_str_len == 0) {
-        OQS_randombytes_nist_kat_init(entropy_input_native, NULL, 256);
+        OQS_randombytes_nist_kat_init((uint8_t*) entropy_input_native, NULL, 256);
     } else {
         jbyte *pers_str_native = (*env)->GetByteArrayElements(env, jpers_str, 0);
-        OQS_randombytes_nist_kat_init(entropy_input_native, pers_str_native, 256);
+        OQS_randombytes_nist_kat_init((uint8_t*) entropy_input_native, (uint8_t*) pers_str_native, 256);
         (*env)->ReleaseByteArrayElements(env, jpers_str, pers_str_native, JNI_ABORT);
     }
 
