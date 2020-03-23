@@ -4,7 +4,7 @@ import org.openquantumsafe.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class KEM_Test {
+public class KEMExample {
 
     public static void main(String[] args) {
         System.out.println("Supported KEMs:");

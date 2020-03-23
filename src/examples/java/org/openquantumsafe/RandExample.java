@@ -2,7 +2,7 @@ package org.openquantumsafe;
 
 import org.openquantumsafe.*;
 
-public class Rand_Test {
+public class RandExample {
 
     public static void main(String[] args) {
         Rand.randombytes_switch_algorithm("NIST-KAT");

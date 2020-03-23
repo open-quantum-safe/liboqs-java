@@ -4,7 +4,7 @@ import org.openquantumsafe.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Sig_Test {
+public class SigExample {
 
     public static void main(String[] args) {
         System.out.println("Supported signatures:");
