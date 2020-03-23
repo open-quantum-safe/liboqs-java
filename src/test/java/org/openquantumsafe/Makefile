@@ -1,2 +1,2 @@
 clean:
-	$(RM) *.class *.log
+	$(RM) *.class
