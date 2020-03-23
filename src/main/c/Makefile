@@ -1,5 +1,5 @@
 LIBRARY := liboqs-jni.so
-OBJFILES := handle.o KEMs.o KeyEncapsulation.o Sigs.o Signature.o
+OBJFILES := handle.o KEMs.o KeyEncapsulation.o Sigs.o Signature.o Rand.o
 JAVA_INCLUDES := -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 
 $(LIBRARY): $(OBJFILES)
@@ -19,6 +19,9 @@ Sigs.o: Sigs.c Sigs.h
 
 Signature.o: Signature.c Signature.h
 	gcc -fPIC -c Signature.c $(JAVA_INCLUDES)
+
+Rand.o: Rand.c Rand.h
+	gcc -fPIC -c Rand.c $(JAVA_INCLUDES)
 
 clean:
 	$(RM) *.o *.so *.class oqs/*.class *.log
