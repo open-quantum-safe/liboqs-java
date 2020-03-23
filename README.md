@@ -98,4 +98,13 @@ OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 
 System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
 ```
 
+### Unit Tests
+
+```
+$ make
+$ make tests
+$ make run-tests
+```
+
+
 [badge-license]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
