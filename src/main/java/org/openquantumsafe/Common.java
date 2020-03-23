@@ -1,7 +1,7 @@
 package org.openquantumsafe;
 
 public class Common {
-    
+
     public static <E, T extends Iterable<E>> void print_list(T list) {
         for (Object element : list){
             System.out.print(element);
@@ -10,7 +10,19 @@ public class Common {
         System.out.println();
     }
 
-    public static String chopHex(byte[] bytes) {
+    public static String to_hex(byte[] bytes) {
+        final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            sb.append(HEX_ARRAY[v >>> 4]);
+            sb.append(HEX_ARRAY[v & 0x0F]);
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    public static String chop_hex(byte[] bytes) {
         final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
         StringBuilder sb = new StringBuilder();
         int num = 8;

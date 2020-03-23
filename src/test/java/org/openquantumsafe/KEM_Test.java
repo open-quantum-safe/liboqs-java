@@ -28,7 +28,7 @@ public class KEM_Test {
         byte[] client_sk = client.export_secret_key();
 
         System.out.println("Client public key:");
-        System.out.println(Common.chopHex(client_public_key));
+        System.out.println(Common.chop_hex(client_public_key));
         System.out.println("\nIt took " + timeElapsed + " millisecs to generate the key pair.");
 
         KeyEncapsulation server = new KeyEncapsulation(kem_name);
@@ -47,9 +47,9 @@ public class KEM_Test {
         server.free_KEM();
 
         System.out.println("\nClient shared secret:");
-        System.out.println(Common.chopHex(shared_secret_client));
+        System.out.println(Common.chop_hex(shared_secret_client));
         System.out.println("\nServer shared secret:");
-        System.out.println(Common.chopHex(shared_secret_server));
+        System.out.println(Common.chop_hex(shared_secret_server));
 
         System.out.println("\nShared secrets coincide? " + Arrays.equals(shared_secret_client, shared_secret_server));
     }

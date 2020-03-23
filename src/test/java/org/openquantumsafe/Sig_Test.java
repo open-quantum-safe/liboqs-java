@@ -30,7 +30,7 @@ public class Sig_Test {
         byte[] signer_sk = signer.export_secret_key();
 
         System.out.println("Signer public key:");
-        System.out.println(Common.chopHex(signer_public_key));
+        System.out.println(Common.chop_hex(signer_public_key));
         System.out.println("\nIt took " + timeElapsed + " millisecs to generate the key pair.");
 
         t = System.currentTimeMillis();
@@ -44,7 +44,7 @@ public class Sig_Test {
         System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to verify the signature.");
 
         System.out.println("\nSignature:");
-        System.out.println(Common.chopHex(signature));
+        System.out.println(Common.chop_hex(signature));
 
         System.out.println("\nValid signature? " + is_valid);
 
