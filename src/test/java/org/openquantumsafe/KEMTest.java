@@ -12,9 +12,11 @@ import java.util.ArrayList;
 
 public class KEMTest {
 
+    private final int spaces = 40;
+
     public void test_kem(String kem_name) {
         System.out.print(kem_name);
-        System.out.format("%1$" + (30 - kem_name.length()) + "s", "");
+        System.out.format("%1$" + (spaces - kem_name.length()) + "s", "");
 
         // Create client and server
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
@@ -50,7 +52,7 @@ public class KEMTest {
 // TODO: Fix crash with Classic-McEliece-* KEMs
             if (kem_name.startsWith("Classic-McEliece-"))  {
                 System.out.print(kem_name);
-                System.out.format("%1$" + (30 - kem_name.length()) + "s", "");
+                System.out.format("%1$" + (spaces - kem_name.length()) + "s", "");
                 System.out.println("Skipped");
                 continue;
             }

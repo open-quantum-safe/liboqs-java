@@ -1,6 +1,6 @@
 all: liboqs-jni KEM_example Sig_example Rand_example
 
-tests: KEMTest
+tests: KEMTest SigTest
 
 # Compile JNI code
 
@@ -25,6 +25,9 @@ Rand_example: liboqs-jni
 KEMTest: liboqs-jni
 	javac -cp lib/junit-4.13.jar:src/main/java src/test/java/org/openquantumsafe/KEMTest.java
 
+SigTest: liboqs-jni
+	javac -cp lib/junit-4.13.jar:src/main/java src/test/java/org/openquantumsafe/SigTest.java
+
 
 # Run examples
 
@@ -43,6 +46,13 @@ run-rand:
 run-kem-test:
 	java -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.KEMTest
 
+run-sig-test:
+	java -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.SigTest
+
+run-tests: run-kem-test run-sig-test
+
+
+# Clean
 
 clean-c:
 	$(MAKE) -C src/main/c clean
