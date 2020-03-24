@@ -1,24 +1,70 @@
-# liboqs-java: Java wrapper for [liboqs](https://github.com/open-quantum-safe/liboqs) [![License MIT][badge-license]](LICENSE)
-## [Open Quantum Safe Project](https://openquantumsafe.org/)
+# liboqs-java: Java wrapper for liboqs [![License MIT][badge-license]](LICENSE)
 
+**liboqs-java** offers a Java wrapper providing quantum-resistant cryptographic algorithms via [liboqs](https://github.com/open-quantum-safe/liboqs/).
 
-**liboqs-java** offers a Java wrapper for the master branch of [Open Quantum Safe](https://openquantumsafe.org/) [liboqs](https://github.com/open-quantum-safe/liboqs/) C library, which is a C library for quantum-resistant cryptographic algorithms.
+## Overview
+
+The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.
+
+**liboqs** is an open source C library for quantum-resistant cryptographic algorithms. See more about liboqs at https://github.com/open-quantum-safe/liboqs, including a list of supported algorithms.
+
+**liboqs-java** is an open source Java wrapper for the liboqs C library that provides:
+* a common API for post-quantum key encapsulation mechanisms and digital signature schemes
+* a collection of open source implementations of post-quantum cryptography algorithms
+
+The OQS project also provides prototype integrations into application-level protocols to enable testing of quantum-resistant cryptography.
+
+More information on OQS can be found on https://openquantumsafe.org.
+
 
 ## Pre-requisites
-liboqs-java depends on the [liboqs](https://github.com/open-quantum-safe/liboqs) C library; liboqs master branch must first be compiled as a Linux/macOS/Windows library, see the specific platform building instructions below.
+liboqs-java depends on the [liboqs](https://github.com/open-quantum-safe/liboqs) C library; liboqs master branch must first be compiled as a Linux/macOS/Windows library (i.e. using ninja install with -DBUILD_SHARED_LIBS=ON during configuration).
 
 
-## Building on POSIX (Linux/UNIX-like) platforms
-First, you must build the master branch of liboqs according to the [liboqs building instructions](https://github.com/open-quantum-safe/liboqs#linuxmacos) with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+## Contents
+
+* __`src/main/c/`:__ Native C JNI wrapper code that interfaces with liboqs.
+
+* __`src/main/java/org/openquantumsafe/`:__  Java wrappers for the liboqs C library.
+
+* __`src/examples/java/org/openquantumsafe/`:__  Key encapsulation, digital signatures and rand examples.
+
+* __`src/test/java/org/openquantumsafe/`:__  Unit tests.
 
 
-### Compilation
+## Usage
+
+liboqs-java defines four main classes: **`KeyEncapsulation`** and **`Signature`**, providing post-quantum key encapsulation and signture mechanisms, respectively, and **`KEMs`** and **`Sigs`**, containing only static member functions that provide information related to the available key encapsulation mechanisms or signature mechanism, respectively.
+
+
+`KeyEncapsulation` and/or `Signature` must be instantiated with a string identifying one of mechanisms supported by liboqs; these can be enumerated using the `KEMs.get_enabled_KEMs()` and `Sigs.get_enabled_sigs()` methods.
+
+
+Support for alternative RNGs is provided via the `randombytes` functions.
+
+The examples in the [examples](./src/examples/java/org/openquantumsafe/) directory are self-explanatory and provide more details about the wrapper's API.
+
+
+## Compilation
+
+First, you must build the master branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+
+Next, to compile the Java and C files required for the liboqs-java wrapper type
+
 ```
 $ make
 ```
 
 ### Examples
-##### Key Encapsulation example
+
+The examples include:
+
+1. Key Encapsulation example
+1. Digital Signatures example
+1. Rand example
+
+
+##### 1) Key Encapsulation example
 
 ```
 $ make run-kem
@@ -55,7 +101,7 @@ B0 8A C0 62 69 68 44 D3 52 6A F9 9E 5A 42 26 16
 Shared secrets coincide? true
 ```
 
-##### Signatures example
+##### 2) Signatures example
 
 ```
 $ make run-sig
@@ -88,7 +134,7 @@ Signature:
 Valid signature? true
 ```
 
-##### Rand example
+##### 3) Rand example
 
 ```
 $ make run-rand
@@ -105,6 +151,16 @@ $ make
 $ make tests
 $ make run-tests
 ```
+
+## Contributors
+
+Contributors to the liboqs-java wrapper include:
+* Dimitris Mouris [@jimouris](https://github.com/jimouris)
+
+## License
+liboqs-java is licensed under the MIT License; see [LICENSE](./LICENSE) for details.
+
+
 
 
 [badge-license]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
