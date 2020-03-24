@@ -48,19 +48,6 @@ public class SigTest {
         ArrayList<String> enabled_sigs = Sigs.get_enabled_sigs();
 
         for (String sig_name : enabled_sigs) {
-            if (
-// TODO: Fix crashes
-                sig_name.equals("Rainbow-IIIc-Cyclic")
-                || sig_name.equals("Rainbow-IIIc-Cyclic-Compressed")
-                || sig_name.equals("Rainbow-Vc-Classic")
-                || sig_name.equals("Rainbow-Vc-Cyclic")
-                || sig_name.equals("Rainbow-Vc-Cyclic-Compressed")
-            )  {
-                System.out.print(sig_name);
-                System.out.format("%1$" + (spaces - sig_name.length()) + "s", "");
-                System.out.println("Skipped");
-                continue;
-            }
             test_sig(sig_name, message);
         }
     }

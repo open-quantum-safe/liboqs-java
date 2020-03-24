@@ -49,13 +49,6 @@ public class KEMTest {
         ArrayList<String> enabled_kems = KEMs.get_enabled_KEMs();
 
         for (String kem_name : enabled_kems) {
-// TODO: Fix crash with Classic-McEliece-* KEMs
-            if (kem_name.startsWith("Classic-McEliece-"))  {
-                System.out.print(kem_name);
-                System.out.format("%1$" + (spaces - kem_name.length()) + "s", "");
-                System.out.println("Skipped");
-                continue;
-            }
             test_kem(kem_name);
         }
     }

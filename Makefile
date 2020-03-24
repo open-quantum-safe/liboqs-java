@@ -32,10 +32,10 @@ SigTest: liboqs-jni
 # Run examples
 
 run-kem:
-	java -cp src/main/java/:src/examples/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.KEMExample
+	java -Xss10M -cp src/main/java/:src/examples/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.KEMExample
 
 run-sig:
-	java -cp src/main/java/:src/examples/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.SigExample
+	java -Xss10M -cp src/main/java/:src/examples/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.SigExample
 
 run-rand:
 	java -cp src/main/java/:src/examples/java/ -Djava.library.path=./src/main/c/ org.openquantumsafe.RandExample
@@ -44,10 +44,10 @@ run-rand:
 # Run Tests
 
 run-kem-test:
-	java -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.KEMTest
+	java -Xss10M -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.KEMTest
 
 run-sig-test:
-	java -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.SigTest
+	java -Xss10M -cp lib/junit-4.13.jar:lib/hamcrest-2.2.jar:src/main/java/:src/test/java/ -Djava.library.path=./src/main/c/ org.junit.runner.JUnitCore org.openquantumsafe.SigTest
 
 run-tests: run-kem-test run-sig-test
 
