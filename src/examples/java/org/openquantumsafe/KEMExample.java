@@ -24,9 +24,6 @@ public class KEMExample {
         byte[] client_public_key = client.generate_keypair();
         long timeElapsed = System.currentTimeMillis() - t;
 
-        byte[] client_pk = client.export_public_key();
-        byte[] client_sk = client.export_secret_key();
-
         System.out.println("Client public key:");
         System.out.println(Common.chop_hex(client_public_key));
         System.out.println("\nIt took " + timeElapsed + " millisecs to generate the key pair.");
@@ -43,8 +40,8 @@ public class KEMExample {
         byte[] shared_secret_client = client.decap_secret(ciphertext);
         System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to decapsulate the secret.");
 
-        client.free_KEM();
-        server.free_KEM();
+        client.dispose_KEM();
+        server.dispose_KEM();
 
         System.out.println("\nClient shared secret:");
         System.out.println(Common.chop_hex(shared_secret_client));

@@ -20,9 +20,9 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Sigs_max_1number_1sigs
 JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Sigs_is_1sig_1enabled
   (JNIEnv *env, jclass cls, jstring jstr)
 {
-    const char *_nativeString = (*env)->GetStringUTFChars(env, jstr, 0);
-    int is_enabled = OQS_SIG_alg_is_enabled (_nativeString);
-	(*env)->ReleaseStringUTFChars(env, jstr, _nativeString);
+    const char *str_native = (*env)->GetStringUTFChars(env, jstr, 0);
+    int is_enabled = OQS_SIG_alg_is_enabled (str_native);
+	(*env)->ReleaseStringUTFChars(env, jstr, str_native);
     return (is_enabled) ? JNI_TRUE : JNI_FALSE;
 }
 
@@ -34,6 +34,6 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Sigs_is_1sig_1enabled
 JNIEXPORT jstring JNICALL Java_org_openquantumsafe_Sigs_get_1sig_1name
   (JNIEnv *env, jclass cls, jlong alg_id)
 {
-    const char *_nativeString = OQS_SIG_alg_identifier((size_t) alg_id);
-    return (*env)->NewStringUTF(env, _nativeString);
+    const char *str_native = OQS_SIG_alg_identifier((size_t) alg_id);
+    return (*env)->NewStringUTF(env, str_native);
 }

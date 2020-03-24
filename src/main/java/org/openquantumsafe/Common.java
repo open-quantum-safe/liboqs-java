@@ -2,6 +2,12 @@ package org.openquantumsafe;
 
 public class Common {
 
+    public static void wipe(byte[] array) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 0;
+        }
+    }
+
     public static <E, T extends Iterable<E>> void print_list(T list) {
         for (Object element : list){
             System.out.print(element);

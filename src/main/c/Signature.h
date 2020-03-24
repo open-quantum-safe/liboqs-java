@@ -18,10 +18,10 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_create_1sig_1new
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    free_sig
- * Signature: (J)V
+ * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_free_1sig
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_openquantumsafe_Signature
@@ -34,10 +34,10 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_Signature_get_1sig_1details
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    generate_keypair
- * Signature: (JJ)I
+ * Signature: ([B[B)I
  */
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_generate_1keypair
-  (JNIEnv *, jobject, jlong, jlong);
+  (JNIEnv *, jobject, jbyteArray, jbyteArray);
 
 /*
  * Class:     org_openquantumsafe_Signature

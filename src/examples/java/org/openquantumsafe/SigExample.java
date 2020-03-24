@@ -26,9 +26,6 @@ public class SigExample {
         byte[] signer_public_key = signer.generate_keypair();
         long timeElapsed = System.currentTimeMillis() - t;
 
-        byte[] signer_pk = signer.export_public_key();
-        byte[] signer_sk = signer.export_secret_key();
-
         System.out.println("Signer public key:");
         System.out.println(Common.chop_hex(signer_public_key));
         System.out.println("\nIt took " + timeElapsed + " millisecs to generate the key pair.");
@@ -40,7 +37,7 @@ public class SigExample {
         Signature verifier = new Signature(sig_name);
 
         t = System.currentTimeMillis();
-        boolean is_valid = verifier.verify(message, signature, signer_pk);
+        boolean is_valid = verifier.verify(message, signature, signer_public_key);
         System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to verify the signature.");
 
         System.out.println("\nSignature:");
@@ -48,8 +45,8 @@ public class SigExample {
 
         System.out.println("\nValid signature? " + is_valid);
 
-        signer.free_sig();
-        verifier.free_sig();
+        signer.dispose_sig();
+        verifier.dispose_sig();
     }
 
 }

@@ -1,5 +1,7 @@
 package org.openquantumsafe;
 
+import java.util.Arrays;
+
 /**
  * \brief Key Encapsulation Mechanisms
  */
@@ -38,11 +40,12 @@ public class KeyEncapsulation {
     }
 
     /**
-     * Keep native pointers for Java to remember which C memory it is managing.
+     * Keep native pointer for Java to remember which C memory it is managing.
      */
     private long native_kem_handle_;
-    private long native_public_key_handle_;
-    private long native_secret_key_handle_;
+
+    private byte[] public_key_;
+    private byte[] secret_key_;
 
     /**
      * Private object that has the KEM details.
@@ -64,9 +67,6 @@ public class KeyEncapsulation {
      */
     public KeyEncapsulation(String alg_name, byte[] secret_key)
                                                     throws RuntimeException {
-        if (secret_key != null) {
-            import_secret_key(secret_key);
-        }
         // KEM not enabled
         if (!KEMs.is_KEM_enabled(alg_name)) {
             // perhaps it's supported
@@ -78,6 +78,13 @@ public class KeyEncapsulation {
         }
         create_KEM_new(alg_name);
         alg_details_ = get_KEM_details();
+        // initialize keys
+        if (secret_key != null) {
+            this.secret_key_ = Arrays.copyOf(secret_key, secret_key.length);
+        } else {
+            this.secret_key_ = new byte[(int) alg_details_.length_secret_key];
+        }
+        this.public_key_ = new byte[(int) alg_details_.length_public_key];
     }
 
     /**
@@ -89,9 +96,8 @@ public class KeyEncapsulation {
     /**
      * \brief Wrapper for OQS_API void OQS_KEM_free(OQS_KEM *kem);
      * Frees an OQS_KEM object that was constructed by OQS_KEM_new.
-     * \param Secret key length
      */
-    private native void free_KEM(long length_secret_key);
+    private native void free_KEM();
 
     /**
      * \brief Initialize and fill a KeyEncapsulationDetails object from the
@@ -102,30 +108,11 @@ public class KeyEncapsulation {
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_keypair(const OQS_KEM *kem,
      *                              uint8_t *public_key, uint8_t *secret_key);
-     * \param Public key length
-     * \param Secret key length
+     * \param Public key
+     * \param Secret key
      * \return Status
      */
-    private native int generate_keypair(long length_public_key,
-                                        long length_secret_key);
-
-    /**
-     * \brief Import secret key
-     * \param Secret key
-     */
-    private native void import_secret_key(byte[] secret_key);
-
-    /**
-     * \brief Export public key
-     * \param Public key
-     */
-    private native void export_public_key(byte[] public_key);
-
-    /**
-     * \brief Export secret key
-     * \param Secret key
-     */
-    private native void export_secret_key(byte[] secret_key);
+    private native int generate_keypair(byte[] public_key, byte[] secret_key);
 
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem,
@@ -147,15 +134,18 @@ public class KeyEncapsulation {
      *                                          const uint8_t *secret_key);
      * \param shared_secret
      * \param ciphertext
+     * \param secret_key
      * \return Status
      */
-    private native int decap_secret(byte[] shared_secret, byte[] ciphertext);
+    private native int decap_secret(byte[] shared_secret, byte[] ciphertext,
+                                    byte[] secret_key);
 
     /**
      * \brief Invoke native free_KEM
      */
-    public void free_KEM() {
-        free_KEM(alg_details_.length_secret_key);
+    public void dispose_KEM() {
+        Common.wipe(this.secret_key_);
+        free_KEM();
     }
 
     /**
@@ -163,32 +153,23 @@ public class KeyEncapsulation {
      * from alg_details_. Check return value and if != 0 throw Exception.
      */
     public byte[] generate_keypair() throws RuntimeException {
-        int rv_ = generate_keypair(alg_details_.length_public_key,
-                                    alg_details_.length_secret_key);
+        int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
-        byte[] public_key = new byte[(int) alg_details_.length_public_key];
-        export_public_key(public_key);
-        return public_key;
+        return this.public_key_;
     }
 
     /**
-     * \brief Invoke native export_public_key method using PK length
-     * \return Public key
+     * \brief Return public key
      */
     public byte[] export_public_key() {
-        byte[] public_key = new byte[(int) alg_details_.length_public_key];
-        export_public_key(public_key);
-        return public_key;
+        return this.public_key_;
     }
 
     /**
-     * \brief Invoke native export_secret_key method using SK length
-     * \return Secret key
+    * \brief Return secret key
      */
     public byte[] export_secret_key() {
-        byte[] secret_key = new byte[(int) alg_details_.length_secret_key];
-        export_secret_key(secret_key);
-        return secret_key;
+        return this.secret_key_;
     }
 
     /**
@@ -221,15 +202,13 @@ public class KeyEncapsulation {
         if (ciphertext.length != alg_details_.length_ciphertext) {
             throw new RuntimeException("Incorrect ciphertext length");
         }
-        byte[] secret_key_ = new byte[(int) alg_details_.length_secret_key];
-        export_secret_key(secret_key_);
-        if (secret_key_.length != alg_details_.length_secret_key) {
+        if (this.secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +
                                     "constructor or run generate_keypair()");
         }
         byte[] shared_secret = new byte[(int)alg_details_.length_shared_secret];
-        int rv_ = decap_secret(shared_secret, ciphertext);
+        int rv_ = decap_secret(shared_secret, ciphertext, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot decapsulate secret");
         return shared_secret;
     }

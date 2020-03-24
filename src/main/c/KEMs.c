@@ -20,9 +20,9 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KEMs_max_1number_1KEMs
 JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_KEMs_is_1KEM_1enabled
   (JNIEnv *env, jclass cls, jstring java_str)
 {
-	const char *_nativeString = (*env)->GetStringUTFChars(env, java_str, 0);
-    int is_enabled = OQS_KEM_alg_is_enabled (_nativeString);
-	(*env)->ReleaseStringUTFChars(env, java_str, _nativeString);
+	const char *str_native = (*env)->GetStringUTFChars(env, java_str, 0);
+    int is_enabled = OQS_KEM_alg_is_enabled (str_native);
+	(*env)->ReleaseStringUTFChars(env, java_str, str_native);
     return (is_enabled) ? JNI_TRUE : JNI_FALSE;
 }
 
@@ -34,7 +34,7 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_KEMs_is_1KEM_1enabled
 JNIEXPORT jstring JNICALL Java_org_openquantumsafe_KEMs_get_1KEM_1name
   (JNIEnv *env, jclass cls, jlong alg_id)
 {
-    const char *_nativeString = OQS_KEM_alg_identifier((size_t) alg_id);
-    return (*env)->NewStringUTF(env, _nativeString);
+    const char *str_native = OQS_KEM_alg_identifier((size_t) alg_id);
+    return (*env)->NewStringUTF(env, str_native);
 }
 

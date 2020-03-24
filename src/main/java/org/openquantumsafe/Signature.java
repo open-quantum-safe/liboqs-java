@@ -1,5 +1,7 @@
 package org.openquantumsafe;
 
+import java.util.Arrays;
+
 /**
  * \brief Signature Mechanisms
  */
@@ -39,8 +41,9 @@ public class Signature {
      * Keep native pointers for Java to remember which C memory it is managing.
      */
     private long native_sig_handle_;
-    private long native_public_key_handle_;
-    private long native_secret_key_handle_;
+
+    private byte[] public_key_;
+    private byte[] secret_key_;
 
     /**
      * Private object that has the signature details.
@@ -62,9 +65,6 @@ public class Signature {
      */
     public Signature(String alg_name, byte[] secret_key)
                                                     throws RuntimeException {
-        if (secret_key != null) {
-            import_secret_key(secret_key);
-        }
         // signature not enabled
         if (!Sigs.is_sig_enabled(alg_name)) {
             // perhaps it's supported
@@ -76,6 +76,13 @@ public class Signature {
         }
         create_sig_new(alg_name);
         alg_details_ = get_sig_details();
+        // initialize keys
+        if (secret_key != null) {
+            this.secret_key_ = Arrays.copyOf(secret_key, secret_key.length);
+        } else {
+            this.secret_key_ = new byte[(int) alg_details_.length_secret_key];
+        }
+        this.public_key_ = new byte[(int) alg_details_.length_public_key];
     }
 
     /**
@@ -87,9 +94,8 @@ public class Signature {
     /**
      * \brief Wrapper for OQS_API void OQS_SIG_free(OQS_SIG *sig);
      * Frees an OQS_SIG object that was constructed by OQS_SIG_new.
-     * \param Secret key length
      */
-    private native void free_sig(long length_secret_key);
+    private native void free_sig();
 
     /**
      * \brief Initialize and fill a SignatureDetails object from the native
@@ -100,30 +106,11 @@ public class Signature {
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_SIG_keypair(const OQS_SIG *sig,
      *                              uint8_t *public_key, uint8_t *secret_key);
-     * \param Public key length
-     * \param Secret key length
+     * \param Public key
+     * \param Secret key
      * \return Status
      */
-    private native int generate_keypair(long length_public_key,
-                                        long length_secret_key);
-
-    /**
-     * \brief Import secret key
-     * \param Secret key
-     */
-    private native void import_secret_key(byte[] secret_key);
-
-    /**
-     * \brief Export public key
-     * \param Public key
-     */
-     private native void export_public_key(byte[] public_key);
-
-    /**
-     * \brief Export secret key
-     * \param Secret key
-     */
-    private native void export_secret_key(byte[] secret_key);
+    private native int generate_keypair(byte[] public_key, byte[] secret_key);
 
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_SIG_sign(const OQS_SIG *sig,
@@ -163,8 +150,9 @@ public class Signature {
     /**
      * \brief Invoke native free_sig
      */
-    public void free_sig() {
-        free_sig(alg_details_.length_secret_key);
+    public void dispose_sig() {
+        Common.wipe(this.secret_key_);
+        free_sig();
     }
 
     /**
@@ -172,32 +160,23 @@ public class Signature {
      * from alg_details_. Check return value and if != 0 throw RuntimeException.
      */
     public byte[] generate_keypair() throws RuntimeException {
-        int rv_ = generate_keypair(alg_details_.length_public_key,
-                                    alg_details_.length_secret_key);
+        int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
-        byte[] public_key = new byte[(int) alg_details_.length_public_key];
-        export_public_key(public_key);
-        return public_key;
+        return this.public_key_;
     }
 
     /**
-     * \brief Invoke native export_public_key method using PK length
-     * \return Public key
+     * \brief Return public key
      */
     public byte[] export_public_key() {
-        byte[] public_key = new byte[(int) alg_details_.length_public_key];
-        export_public_key(public_key);
-        return public_key;
+        return this.public_key_;
     }
 
     /**
-     * \brief Invoke native export_secret_key method using SK length
-     * \return Secret key
+    * \brief Return secret key
      */
     public byte[] export_secret_key() {
-        byte[] secret_key = new byte[(int) alg_details_.length_secret_key];
-        export_secret_key(secret_key);
-        return secret_key;
+        return this.secret_key_;
     }
 
     /**
@@ -206,9 +185,7 @@ public class Signature {
      * \return signature
      */
     public byte[] sign(byte[] message) throws RuntimeException {
-        byte[] secret_key_ = new byte[(int) alg_details_.length_secret_key];
-        export_secret_key(secret_key_);
-        if (secret_key_.length != alg_details_.length_secret_key) {
+        if (this.secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +
                                     "constructor or run generate_keypair()");
@@ -216,7 +193,7 @@ public class Signature {
         byte[] signature = new byte[(int) alg_details_.max_length_signature];
         Mutable<Long> signature_len_ret = new Mutable<>();
         int rv_= sign(signature, signature_len_ret,
-                        message, message.length, secret_key_);
+                        message, message.length, this.secret_key_);
         long actual_signature_len = signature_len_ret.value;
         byte[] actual_signature = new byte[(int) actual_signature_len];
         System.arraycopy(signature, 0,
