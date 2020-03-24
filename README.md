@@ -18,7 +18,7 @@ More information on OQS can be found on https://openquantumsafe.org.
 
 
 ## Pre-requisites
-liboqs-java depends on the [liboqs](https://github.com/open-quantum-safe/liboqs) C library; liboqs master branch must first be compiled as a Linux/macOS/Windows library (i.e. using ninja install with -DBUILD_SHARED_LIBS=ON during configuration).
+liboqs-java depends on the [liboqs](https://github.com/open-quantum-safe/liboqs) C library; liboqs master branch must first be compiled as a Linux/macOS/Windows library (i.e. using `ninja install` with `-DBUILD_SHARED_LIBS=ON` during cmake configuration).
 
 
 ## Contents
@@ -59,10 +59,19 @@ $ make
 
 The examples include:
 
-1. Key Encapsulation example
-1. Digital Signatures example
-1. Rand example
+1. **Key Encapsulation example:**
 
+    ![alt text][KEM-overview]
+
+1. **Digital Signatures example:**
+
+    ![alt text][DS-overview]
+
+1. **Rand example:**
+    Print random bytes from
+    * NIST-KAT
+    * OpenSSL
+    * System (default)
 
 ##### 1) Key Encapsulation example
 
@@ -162,5 +171,7 @@ liboqs-java is licensed under the MIT License; see [LICENSE](./LICENSE) for deta
 
 
 
+[KEM-overview]: ./images/KEM.png
+[DS-overview]: ./images/digital-signature.png
 
 [badge-license]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
