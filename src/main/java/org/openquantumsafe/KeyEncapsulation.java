@@ -117,32 +117,28 @@ public class KeyEncapsulation {
 
     /**
      * \brief Export public key
-     * \param Public key length
-     * \return Public key
+     * \param Public key
      */
-    private native byte[] export_public_key(long length_public_key);
+    private native void export_public_key(byte[] public_key);
 
     /**
      * \brief Export secret key
-     * \param Secret key length
-     * \return Secret key
+     * \param Secret key
      */
-    private native byte[] export_secret_key(long length_secret_key);
+    private native void export_secret_key(byte[] secret_key);
 
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem,
      *                                               uint8_t *ciphertext,
      *                                               uint8_t *shared_secret,
      *                                               const uint8_t *public_key);
-     * \param Pair <ciphertext, shared secret>
+     * \param ciphertext
+     * \param shared secret>
      * \param Public key
-     * \param length_ciphertext
-     * \param length_shared_secret
      * \return Status
      */
-    private native int encap_secret(Pair<byte[], byte[]> pair,
-                                    byte[] public_key, long length_ciphertext,
-                                    long length_shared_secret);
+    private native int encap_secret(byte[] ciphertext, byte[] shared_secret,
+                                    byte[] public_key);
 
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_decaps(const OQS_KEM *kem,
@@ -170,7 +166,9 @@ public class KeyEncapsulation {
         int rv_ = generate_keypair(alg_details_.length_public_key,
                                     alg_details_.length_secret_key);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
-        return export_public_key(alg_details_.length_public_key);
+        byte[] public_key = new byte[(int) alg_details_.length_public_key];
+        export_public_key(public_key);
+        return public_key;
     }
 
     /**
@@ -178,7 +176,9 @@ public class KeyEncapsulation {
      * \return Public key
      */
     public byte[] export_public_key() {
-        return export_public_key(alg_details_.length_public_key);
+        byte[] public_key = new byte[(int) alg_details_.length_public_key];
+        export_public_key(public_key);
+        return public_key;
     }
 
     /**
@@ -186,7 +186,9 @@ public class KeyEncapsulation {
      * \return Secret key
      */
     public byte[] export_secret_key() {
-        return export_secret_key(alg_details_.length_secret_key);
+        byte[] secret_key = new byte[(int) alg_details_.length_secret_key];
+        export_secret_key(secret_key);
+        return secret_key;
     }
 
     /**
@@ -199,11 +201,13 @@ public class KeyEncapsulation {
         if (public_key.length != alg_details_.length_public_key) {
             throw new RuntimeException("Incorrect public key length");
         }
-        Pair<byte[], byte[]> pair = new Pair<>(
-                            new byte[(int) alg_details_.length_ciphertext],
-                            new byte[(int) alg_details_.length_shared_secret]);
-        int rv_= encap_secret(pair, public_key, alg_details_.length_ciphertext,
-                                alg_details_.length_shared_secret);
+
+        byte[] ciphertext = new byte[(int) alg_details_.length_ciphertext];
+        byte[] shared_secret = new byte[(int) alg_details_.length_shared_secret];
+
+        int rv_= encap_secret(ciphertext, shared_secret, public_key);
+
+        Pair<byte[], byte[]> pair = new Pair<>(ciphertext, shared_secret);
         if (rv_ != 0) throw new RuntimeException("Cannot encapsulate secret");
         return pair;
     }
@@ -217,7 +221,8 @@ public class KeyEncapsulation {
         if (ciphertext.length != alg_details_.length_ciphertext) {
             throw new RuntimeException("Incorrect ciphertext length");
         }
-        byte[] secret_key_ = export_secret_key(alg_details_.length_secret_key);
+        byte[] secret_key_ = new byte[(int) alg_details_.length_secret_key];
+        export_secret_key(secret_key_);
         if (secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +

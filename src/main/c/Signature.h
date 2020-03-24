@@ -50,19 +50,18 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_import_1secret_1key
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    export_public_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Signature_export_1public_1key
-  (JNIEnv *, jobject, jlong);
+JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1public_1key
+  (JNIEnv *, jobject, jbyteArray);
 
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    export_secret_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Signature_export_1secret_1key
-  (JNIEnv *, jobject, jlong);
-
+JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1secret_1key
+  (JNIEnv *, jobject, jbyteArray);
 
 /*
  * Class:     org_openquantumsafe_Signature

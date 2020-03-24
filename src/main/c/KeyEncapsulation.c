@@ -5,7 +5,7 @@
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    get_new_KEM
- * Signature: (Ljava/lang/String;)Loqs/KeyEncapsulation/KeyEncapsulationDetails;
+ * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1new
   (JNIEnv *env, jobject obj, jstring jstr)
@@ -132,78 +132,56 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_import_1secret_
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    export_public_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1public_1key
-  (JNIEnv *env, jobject obj, jlong length_public_key)
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1public_1key
+  (JNIEnv *env, jobject obj, jbyteArray jpublic_key)
 {
     // retrieve C pointer to the public key
-    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_public_key_handle_");
-
-    // create a byte array for the public key that will be passed back to Java
-    jbyteArray jpublic_key = (jbyteArray)(*env)->NewByteArray(env, length_public_key);
-    if (jpublic_key == NULL) return NULL;
+    uint8_t *public_key = (uint8_t *) getHandle(env, obj, "native_public_key_handle_");
+    // get its size
+    jsize length_public_key = (*env)->GetArrayLength(env, jpublic_key);
     // copy contents from C bytes to java byte array
-    (*env)->SetByteArrayRegion(env, jpublic_key, 0, length_public_key, (jbyte*) secret_key);
-
-    return jpublic_key;
+    (*env)->SetByteArrayRegion(env, jpublic_key, 0, length_public_key, (jbyte*) public_key);
 }
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    export_secret_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1secret_1key
-  (JNIEnv *env, jobject obj, jlong length_secret_key)
+JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_export_1secret_1key
+  (JNIEnv *env, jobject obj, jbyteArray jsecret_key)
 {
     // retrieve C pointer to the secret key
     uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
-
-    // create a byte array for the secret key that will be passed back to Java
-    jbyteArray jsecret_key = (jbyteArray)(*env)->NewByteArray(env, length_secret_key);
-    if (jsecret_key == NULL) return NULL;
+    // get its size
+    jsize length_secret_key = (*env)->GetArrayLength(env, jsecret_key);
     // copy contents from C bytes to java byte array
     (*env)->SetByteArrayRegion(env, jsecret_key, 0, length_secret_key, (jbyte*) secret_key);
-
-    return jsecret_key;
 }
 
 /*
  * Class:     org_openquantumsafe_KeyEncapsulation
  * Method:    encap_secret
- * Signature: (Lorg/openquantumsafe/KeyEncapsulation/Pair;[BJJ)I
+ * Signature: ([B[B[B)I
  */
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
-  (JNIEnv *env, jobject obj, jobject pair_obj, jbyteArray jpublic_key, jlong length_ciphertext, jlong length_shared_secret)
+  (JNIEnv *env, jobject obj, jbyteArray jciphertext, jbyteArray jshared_secret, jbyteArray jpublic_key)
 {
     // Convert public_key to jbyte array
     jbyte *public_key = (*env)->GetByteArrayElements(env, jpublic_key, 0);
-
-    // Allocate space for the ciphertext and the shared secret
-    uint8_t *ciphertext = (uint8_t *) calloc(length_ciphertext, sizeof(uint8_t));
-    uint8_t *shared_secret = (uint8_t *) calloc(length_shared_secret, sizeof(uint8_t));
+    jbyte* ciphertext = (*env)->GetByteArrayElements(env, jciphertext, 0);
+    jbyte* shared_secret = (*env)->GetByteArrayElements(env, jshared_secret, 0);
 
     // Get pointer to KEM and invoke liboqs encapsulate secret function
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
-    OQS_STATUS rv_ = OQS_KEM_encaps(kem, ciphertext, shared_secret, (uint8_t*) public_key);
+    OQS_STATUS rv_ = OQS_KEM_encaps(kem, (uint8_t*) ciphertext, (uint8_t*) shared_secret, (uint8_t*) public_key);
 
     // Release C public_key
     (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key, JNI_ABORT);
-
-    // Create new Java byte arrays, fill them with the ciphertext and the shared_secret, and free the C memory
-    jbyteArray jctxt_arr = (jbyteArray)(*env)->NewByteArray(env, length_ciphertext);
-    jbyteArray jshared_sec_arr = (jbyteArray)(*env)->NewByteArray(env, length_shared_secret);
-    (*env)->SetByteArrayRegion(env, jctxt_arr, 0, length_ciphertext, (jbyte*) ciphertext);
-    (*env)->SetByteArrayRegion(env, jshared_sec_arr, 0, length_shared_secret, (jbyte*) shared_secret);
-    free(ciphertext);
-    free(shared_secret);
-
-    // Get the pair class of the input object and get field references
-    jclass pair_class = (*env)->GetObjectClass(env, pair_obj);
-    (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "left", "Ljava/lang/Object;"), jctxt_arr);
-    (*env)->SetObjectField(env, pair_obj, (*env)->GetFieldID(env, pair_class, "right", "Ljava/lang/Object;"), jshared_sec_arr);
-
+    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret, JNI_COMMIT);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
 
@@ -223,8 +201,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
     OQS_STATUS rv_ = OQS_KEM_decaps(kem, (uint8_t*) shared_secret_native, (uint8_t*) ciphertext_native, secret_key_native);
 
     // release memory
-    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, 0);
-    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext_native, 0);
-
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext_native, JNI_ABORT);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }

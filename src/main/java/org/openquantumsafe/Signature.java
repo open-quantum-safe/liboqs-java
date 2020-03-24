@@ -115,17 +115,15 @@ public class Signature {
 
     /**
      * \brief Export public key
-     * \param Public key length
-     * \return Public key
+     * \param Public key
      */
-    private native byte[] export_public_key(long length_public_key);
+     private native void export_public_key(byte[] public_key);
 
     /**
      * \brief Export secret key
-     * \param Secret key length
-     * \return Secret key
+     * \param Secret key
      */
-    private native byte[] export_secret_key(long length_secret_key);
+    private native void export_secret_key(byte[] secret_key);
 
     /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_SIG_sign(const OQS_SIG *sig,
@@ -177,7 +175,9 @@ public class Signature {
         int rv_ = generate_keypair(alg_details_.length_public_key,
                                     alg_details_.length_secret_key);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
-        return export_public_key(alg_details_.length_public_key);
+        byte[] public_key = new byte[(int) alg_details_.length_public_key];
+        export_public_key(public_key);
+        return public_key;
     }
 
     /**
@@ -185,7 +185,9 @@ public class Signature {
      * \return Public key
      */
     public byte[] export_public_key() {
-        return export_public_key(alg_details_.length_public_key);
+        byte[] public_key = new byte[(int) alg_details_.length_public_key];
+        export_public_key(public_key);
+        return public_key;
     }
 
     /**
@@ -193,22 +195,24 @@ public class Signature {
      * \return Secret key
      */
     public byte[] export_secret_key() {
-        return export_secret_key(alg_details_.length_secret_key);
+        byte[] secret_key = new byte[(int) alg_details_.length_secret_key];
+        export_secret_key(secret_key);
+        return secret_key;
     }
 
     /**
      * \brief Invoke native sign method
      * \param message
-     * \return
+     * \return signature
      */
     public byte[] sign(byte[] message) throws RuntimeException {
-        byte[] secret_key_ = export_secret_key(alg_details_.length_secret_key);
+        byte[] secret_key_ = new byte[(int) alg_details_.length_secret_key];
+        export_secret_key(secret_key_);
         if (secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +
                                     "constructor or run generate_keypair()");
         }
-
         byte[] signature = new byte[(int) alg_details_.max_length_signature];
         Mutable<Long> signature_len_ret = new Mutable<>();
         int rv_= sign(signature, signature_len_ret,

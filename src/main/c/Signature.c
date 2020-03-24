@@ -128,41 +128,33 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_import_1secret_1key
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    export_public_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Signature_export_1public_1key
-  (JNIEnv *env, jobject obj, jlong length_public_key)
+JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1public_1key
+  (JNIEnv *env, jobject obj, jbyteArray jpublic_key)
 {
     // retrieve C pointer to the public key
-    uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_public_key_handle_");
-
-    // create a byte array for the public key that will be passed back to Java
-    jbyteArray jpublic_key = (jbyteArray)(*env)->NewByteArray(env, length_public_key);
-    if (jpublic_key == NULL) return NULL;
+    uint8_t *public_key = (uint8_t *) getHandle(env, obj, "native_public_key_handle_");
+    // get its size
+    jsize length_public_key = (*env)->GetArrayLength(env, jpublic_key);
     // copy contents from C bytes to java byte array
-    (*env)->SetByteArrayRegion(env, jpublic_key, 0, length_public_key, (jbyte*) secret_key);
-
-    return jpublic_key;
+    (*env)->SetByteArrayRegion(env, jpublic_key, 0, length_public_key, (jbyte*) public_key);
 }
 
 /*
  * Class:     org_openquantumsafe_Signature
  * Method:    export_secret_key
- * Signature: (J)[B
+ * Signature: ([B)V
  */
-JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Signature_export_1secret_1key
-  (JNIEnv *env, jobject obj, jlong length_secret_key)
+JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1secret_1key
+  (JNIEnv *env, jobject obj, jbyteArray jsecret_key)
 {
     // retrieve C pointer to the secret key
     uint8_t *secret_key = (uint8_t *) getHandle(env, obj, "native_secret_key_handle_");
-
-    // create a byte array for the secret key that will be passed back to Java
-    jbyteArray jsecret_key = (jbyteArray)(*env)->NewByteArray(env, length_secret_key);
-    if (jsecret_key == NULL) return NULL;
+    // get its size
+    jsize length_secret_key = (*env)->GetArrayLength(env, jsecret_key);
     // copy contents from C bytes to java byte array
     (*env)->SetByteArrayRegion(env, jsecret_key, 0, length_secret_key, (jbyte*) secret_key);
-
-    return jsecret_key;
 }
 
 /*
@@ -199,7 +191,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
     (*env)->SetObjectField(env, sig_len_obj, value_fid, jlong_obj);
 
     // Release C memory
-    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_COMMIT);
     (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_ABORT);
 
