@@ -60,9 +60,13 @@ clean-c:
 clean-java:
 	$(MAKE) -C src/main/java/org/openquantumsafe clean
 
+clean-tests:
+	$(RM) src/test/java/org/openquantumsafe/*.class
+
 clean:
 	$(MAKE) -C src/main/c clean
 	$(MAKE) -C src/main/java/org/openquantumsafe clean
 	$(MAKE) -C src/test/java/org/openquantumsafe clean
 	$(MAKE) -C src/examples/java/org/openquantumsafe clean
-	$(RM) -f *.log
+	$(MAKE) clean-tests
+	$(RM) *.log
