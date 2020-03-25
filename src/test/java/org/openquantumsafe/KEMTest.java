@@ -2,21 +2,16 @@ package org.openquantumsafe;
 
 import org.openquantumsafe.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-// import java.io.Console;
 
 public class KEMTest {
 
     public void test_kem(String kem_name) {
         StringBuilder sb = new StringBuilder();
         sb.append(kem_name);
-        sb.append(String.format("%1$" + (spaces - kem_name.length()) + "s", ""));
+        sb.append(String.format("%1$" + (40 - kem_name.length()) + "s", ""));
 
         // Create client and server
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
@@ -34,13 +29,16 @@ public class KEMTest {
         byte[] shared_secret_client = client.decap_secret(ciphertext);
 
         // Check if equal
+        String reset = "\033[0m";
         try {
             assertArrayEquals(shared_secret_client, shared_secret_server);
         } catch (AssertionError e) {
+            String red = "\033[0;31m";
             sb.append(red + "FAIL" + reset);
             System.out.println(sb.toString());
             throw e;
         }
+        String green = "\033[0;32m";
         sb.append(green + "PASSED" + reset);
         System.out.println(sb.toString());
     }
@@ -58,10 +56,5 @@ public class KEMTest {
     public void test_unsupported_kem() {
         KeyEncapsulation test = new KeyEncapsulation("MechanismNotSupported");
     }
-
-    private final int spaces = 40;
-    private final String green = "\033[0;32m";
-    private final String red = "\033[0;31m";
-    private final String reset = "\033[0m";
 
 }
