@@ -9,14 +9,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+// import java.io.Console;
 
 public class KEMTest {
 
-    private final int spaces = 40;
-
     public void test_kem(String kem_name) {
-        System.out.print(kem_name);
-        System.out.format("%1$" + (spaces - kem_name.length()) + "s", "");
+        StringBuilder sb = new StringBuilder();
+        sb.append(kem_name);
+        sb.append(String.format("%1$" + (spaces - kem_name.length()) + "s", ""));
 
         // Create client and server
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
@@ -37,25 +37,31 @@ public class KEMTest {
         try {
             assertArrayEquals(shared_secret_client, shared_secret_server);
         } catch (AssertionError e) {
-            System.out.println("FAIL");
+            sb.append(red + "FAIL" + reset);
+            System.out.println(sb.toString());
             throw e;
         }
-        System.out.println("PASSED");
+        sb.append(green + "PASSED" + reset);
+        System.out.println(sb.toString());
     }
 
     @Test
     public void test_all_kems() {
         System.out.println();
         ArrayList<String> enabled_kems = KEMs.get_enabled_KEMs();
-
-        for (String kem_name : enabled_kems) {
+        enabled_kems.parallelStream().forEach((kem_name) -> {
             test_kem(kem_name);
-        }
+        });
     }
 
     @Test(expected = MechanismNotSupportedError.class)
     public void test_unsupported_kem() {
         KeyEncapsulation test = new KeyEncapsulation("MechanismNotSupported");
     }
+
+    private final int spaces = 40;
+    private final String green = "\033[0;32m";
+    private final String red = "\033[0;31m";
+    private final String reset = "\033[0m";
 
 }
