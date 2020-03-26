@@ -47,7 +47,29 @@ The examples in the [examples](./src/examples/java/org/openquantumsafe/) directo
 
 ## Compilation
 
+### 1) liboqs
+
 First, you must build the master branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+
+```
+git clone -b master https://github.com/open-quantum-safe/liboqs.git
+cd liboqs
+mkdir build && cd build
+cmake -GNinja -DBUILD_SHARED_LIBS=ON ..
+ninja
+sudo ninja install
+```
+
+### 2) liboqs-java
+
+Then, you need to clone the liboqs-java wrapper repository and depending your system set the `JAVA_HOME` environmental variable.
+
+```
+git clone git@github.com:jimouris/liboqs-java.git
+```
+
+* Linux: `export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64"`
+* MacOS: `export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"`
 
 Next, to compile the Java and C files required for the liboqs-java wrapper type
 
@@ -55,7 +77,17 @@ Next, to compile the Java and C files required for the liboqs-java wrapper type
 $ make
 ```
 
-### Examples
+### Unit Tests
+
+To compile and run the unit tests, just type
+
+```
+$ make tests
+$ make run-tests
+```
+
+
+## Examples
 
 The examples include:
 
@@ -153,13 +185,6 @@ OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 
 System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
 ```
 
-### Unit Tests
-
-```
-$ make
-$ make tests
-$ make run-tests
-```
 
 ## Contributors
 
