@@ -1,45 +1,45 @@
-OBJFILES := handle.o KEMs.o KeyEncapsulation.o Sigs.o Signature.o Rand.o
-CFLAGS := -O3 -Wall
-
 ifeq ($(OS),Windows_NT)
     uname_S := Windows
 else
     uname_S := $(shell uname -s)
 endif
 
+# Directories
+BUILD_DIR := ../../../build
+SOURCES_DIR := ./
+SOURCES := $(wildcard $(SOURCES_DIR)/*.c)
+OBJECTS := $(patsubst $(SOURCES_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
+
 ifeq ($(uname_S), Windows)
-    target = liboqs-jni.dll
+    TARGET_LIB = $(BUILD_DIR)/liboqs-jni.dll
+	# dir *.c /s
 	# JAVA_INCLUDES := -I$(JAVA_HOME)\include -I$(JAVA_HOME)\include\win32
 endif
 ifeq ($(uname_S), Linux)
-    target = liboqs-jni.so
+	CC := gcc
+    TARGET_LIB := $(BUILD_DIR)/liboqs-jni.so
 	JAVA_INCLUDES := -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 endif
 ifeq ($(uname_S), Darwin)
-    target = liboqs-jni.jnilib
+	CC := clang
+    TARGET_LIB := $(BUILD_DIR)/liboqs-jni.jnilib
 	JAVA_INCLUDES := -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin
 endif
 
-$(target): $(OBJFILES)
-	$(CC) -shared -o $@ $^ -loqs
+# Compile flags
+CFLAGS := -fPIC -Wall -O3 $(JAVA_INCLUDES)
+LDFLAGS := -shared
 
-handle.o: handle.c handle.h
-	$(CC) -fPIC -c handle.c $(JAVA_INCLUDES) $(CFLAGS)
+all: dirs $(TARGET_LIB)
 
-KEMs.o: KEMs.c KEMs.h
-	$(CC) -fPIC -c KEMs.c $(JAVA_INCLUDES) $(CFLAGS)
+dirs:
+	mkdir -p $(BUILD_DIR)
 
-KeyEncapsulation.o: KeyEncapsulation.c KeyEncapsulation.h
-	$(CC) -fPIC -c KeyEncapsulation.c $(JAVA_INCLUDES) $(CFLAGS)
+$(TARGET_LIB): $(OBJECTS)
+	$(CC) ${LDFLAGS} $^ -o $@ -loqs
 
-Sigs.o: Sigs.c Sigs.h
-	$(CC) -fPIC -c Sigs.c $(JAVA_INCLUDES) $(CFLAGS)
-
-Signature.o: Signature.c Signature.h
-	$(CC) -fPIC -c Signature.c $(JAVA_INCLUDES) $(CFLAGS)
-
-Rand.o: Rand.c Rand.h
-	$(CC) -fPIC -c Rand.c $(JAVA_INCLUDES) $(CFLAGS)
+$(OBJECTS): $(BUILD_DIR)/%.o : $(SOURCES_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) *.o *.so *.class oqs/*.class *.log
+	rm -f $(BUILD_DIR)/*o $(TARGET_LIB)
