@@ -69,7 +69,7 @@ If `JAVA_HOME` is empty set it to the installed JDK (i.e., OpenJDK 8):
 * MacOS: `export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"`
 * Windows: `TODO`
 
-To build `liboqs-java` on architecture `<arch>` (where `<arch>` is one of the architecture supported by OQS and the Java wrapper, for example `x64`, `arm`, etc.), first download or clone this java wrapper into a `liboqs-java` folder, e.g.,
+To build `liboqs-java` first download or clone this java wrapper into a `liboqs-java` folder, e.g.,
 
 ```
 git clone -b master https://github.com/jimouris/liboqs-java.git
@@ -134,36 +134,28 @@ The examples include:
 $ make run-kem
 
 Supported KEMs:
-    DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO
-    Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896
-    Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
-    Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128
-    Classic-McEliece-8192128f Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s
-    Kyber1024-90s LEDAcryptKEM-LT12 LEDAcryptKEM-LT32 LEDAcryptKEM-LT52
-    NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677
-    NTRU-HPS-4096-821 NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear
-    BabyBearEphem MamaBear MamaBearEphem PapaBear PapaBearEphem FrodoKEM-640-AES
-    FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-    FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed
-    SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434
-    SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed
-    SIKE-p610-compressed SIKE-p751-compressed
+  DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864 Classic-McEliece-348864f
+  Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
+  Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f
+  Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s LEDAcryptKEM-LT12 LEDAcryptKEM-LT32
+  LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
+  NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
+  PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
+  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed 
+  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed 
+  SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
 
 Enabled KEMs:
-    DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864
-    Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f
-    Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119
-    Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f
-    Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s
-    LEDAcryptKEM-LT12 LEDAcryptKEM-LT32 LEDAcryptKEM-LT52 NewHope-512-CCA
-    NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
-    NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem
-    MamaBear MamaBearEphem PapaBear PapaBearEphem FrodoKEM-640-AES
-    FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-    FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed
-    SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434
-    SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed
-    SIKE-p610-compressed SIKE-p751-compressed
+  DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864 Classic-McEliece-348864f
+  Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
+  Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f
+  Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s LEDAcryptKEM-LT12 LEDAcryptKEM-LT32
+  LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
+  NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
+  PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
+  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed 
+  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed 
+  SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
 
 KEM Details:
   Name: FrodoKEM-640-AES
@@ -197,58 +189,38 @@ Shared secrets coincide? true
 $ make run-sig
 
 Supported signatures:
-    DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024
-    MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic Rainbow-Ia-Cyclic
-    Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
-    Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic
-    Rainbow-Vc-Cyclic-Compressed SPHINCS+-Haraka-128f-robust
-    SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust
-    SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust
-    SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust
-    SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust
-    SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust
-    SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust
-    SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust
-    SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust
-    SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust
-    SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust
-    SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust
-    SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust
-    SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
-    SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust
-    SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust
-    SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
-    SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust
-    SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L3_FS
-    picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
-    qTesla-p-I qTesla-p-III
+  DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
+  Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
+  Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic Rainbow-Vc-Cyclic-Compressed
+  SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple
+  SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple
+  SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple
+  SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
+  SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
+  SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
+  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust 
+  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple 
+  SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
+  SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
+  picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
+  qTesla-p-I qTesla-p-III
 
 Enabled signatures: 
-    DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024
-    MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic Rainbow-Ia-Cyclic
-    Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
-    Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic
-    Rainbow-Vc-Cyclic-Compressed SPHINCS+-Haraka-128f-robust
-    SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust
-    SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust
-    SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust
-    SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust
-    SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust
-    SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust
-    SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust
-    SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust
-    SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust
-    SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust
-    SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust
-    SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust
-    SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
-    SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust
-    SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust
-    SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
-    SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust
-    SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L3_FS
-    picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
-    qTesla-p-I qTesla-p-III
+  DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
+  Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
+  Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic Rainbow-Vc-Cyclic-Compressed
+  SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple
+  SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple
+  SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple
+  SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
+  SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
+  SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
+  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust 
+  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple 
+  SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
+  SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
+  picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
+  qTesla-p-I qTesla-p-III
 
 Signature Details:
   Name: DILITHIUM_2
