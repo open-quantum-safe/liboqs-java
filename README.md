@@ -54,10 +54,10 @@ We acknowledge that some parties may want to begin deploying post-quantum crypto
 
 
 ## Building
-Builds have been tested on Linux (Ubuntu 19.10) and macOS Mojave with OpenJDK >= 8.
+Builds have been tested on Linux (Ubuntu 18.04 LTS and 19.10) and macOS Mojave with OpenJDK 8, 9, 11.
 
 ### Pre-requisites
-To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/).
+To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8.
 
 Then, you need to check if the `JAVA_HOME` environmental variable is set by typing:
 ```
@@ -87,6 +87,11 @@ mkdir build && cd build
 cmake -GNinja -DBUILD_SHARED_LIBS=ON ..
 ninja
 sudo ninja install
+```
+
+Finally, make sure that your system can find `liboqs` by updating the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
+```
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 ```
 
 ##### Windows
