@@ -141,8 +141,8 @@ Supported KEMs:
   LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
   NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
   PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed 
-  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed 
+  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed
+  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed
   SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
 
 Enabled KEMs:
@@ -153,8 +153,8 @@ Enabled KEMs:
   LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
   NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
   PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed 
-  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed 
+  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed
+  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed
   SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
 
 KEM Details:
@@ -198,14 +198,14 @@ Supported signatures:
   SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
   SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
   SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
-  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust 
-  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple 
+  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
+  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple
   SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
   SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
   picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
   qTesla-p-I qTesla-p-III
 
-Enabled signatures: 
+Enabled signatures:
   DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
   Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
   Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic Rainbow-Vc-Cyclic-Compressed
@@ -215,8 +215,8 @@ Enabled signatures:
   SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
   SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
   SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
-  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust 
-  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple 
+  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
+  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple
   SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
   SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
   picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
@@ -253,6 +253,27 @@ NIST-KAT:           BF E7 5C 34 F9 1C 54 44 30 CD B1 61 5B FF 3D 92 31 17 38 BD 
 OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 82 D6 89 02 40 B9 45 CF F9 3A 4D 70
 System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
 ```
+
+
+## Troubleshooting
+* __Compile error:__ If the compiler cannot find the `jni.h`:
+    ```
+    fatal error: jni.h: No such file or directory
+        2 | #include <jni.h>
+    compilation terminated.
+    ```
+    try setting the `JAVA_HOME` environment variable.
+    Then, try `ls $JAVA_HOME` to check whether the directory is empty or has contents. If it is empty, set `JAVA_HOME` to a correct JDK.
+
+* __Runtime error:__ If Java cannot find `liboqs`:
+    ```
+    Exception in thread "main" java.lang.UnsatisfiedLinkError:
+        ./liboqs-java/build/liboqs-jni.so: liboqs.so.0: cannot open shared object file: No such file or directory
+    ```
+    try setting the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
+    ```
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+    ```
 
 
 ## Contributors
