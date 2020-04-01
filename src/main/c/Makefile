@@ -27,8 +27,8 @@ ifeq ($(uname_S), Darwin)
 endif
 
 # Compile flags
-CFLAGS := -fPIC -Wall -O3 $(JAVA_INCLUDES)
-LDFLAGS := -shared
+CFLAGS := -fPIC -Wall -O3 $(JAVA_INCLUDES) -I$(LIBOQS_INCLUDE_DIR) -I$(LIBOQS_LIB_DIR)
+LDFLAGS := -shared -L$(LIBOQS_INCLUDE_DIR) -L$(LIBOQS_LIB_DIR)
 
 all: dirs $(TARGET_LIB)
 

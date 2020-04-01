@@ -59,7 +59,7 @@ Builds have been tested on Linux (Ubuntu 18.04 LTS and 19.10) and macOS Mojave w
 ### Pre-requisites
 To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8.
 
-Then, you need to check if the `JAVA_HOME` environmental variable is set by typing:
+Then, you need to check if the `JAVA_HOME` environment variable is set by typing:
 ```
 $ echo $JAVA_HOME
 ```
@@ -77,7 +77,7 @@ git clone -b master https://github.com/jimouris/liboqs-java.git
 
 ### Building the OQS dependency
 
-##### Linux/MacOS
+#### Linux/MacOS
 First, you must build the master branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
 
 ```
@@ -89,12 +89,24 @@ ninja
 sudo ninja install
 ```
 
-Finally, make sure that your system can find `liboqs` by updating the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
+#### Make sure that your system can find `liboqs`.
+
+**If you have installed liboqs to a custom location:** point the `LIBOQS_INCLUDE_DIR` and `LIBOQS_LIB_DIR` environment variables to the `liboqs` installation path, e.g.,
+```
+export LIBOQS_INCLUDE_DIR="/usr/local/include"
+export LIBOQS_LIB_DIR="/usr/local/lib"
+```
+If either `LIBOQS_INCLUDE_DIR` or `LIBOQS_LIB_DIR` is not set correctly, it will result to compilation errors.
+You may omit exporting these variables in case you installed `liboqs` in `/usr/local`.
+
+**Required:** update the `LD_LIBRARY_PATH` environment variable (this is for Java to find in run-time the C shared library for JNI) with the installation location of the `liboqs` shared library, i.e.,
 ```
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
 ```
+If `LD_LIBRARY_PATH` is not set correctly, it will result to run-time errors.
 
-##### Windows
+
+#### Windows
 Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instructions using [`CMake Tools`](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) with Visual Studio.
 
 
