@@ -51,7 +51,20 @@
             </properties>
         </profile>
         <profile>
-            <id>Linux</id>
+            <id>macosx</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>darwin</value>
+                </property>
+            </activation>
+            <properties>
+                <os_name>darwin</os_name>
+                <lib_name>liboqs-jni.jnilib</lib_name>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -112,15 +125,15 @@
                         <compilerStartOption>-fPIC</compilerStartOption>
                         <compilerStartOption>-Wall</compilerStartOption>
                         <compilerStartOption>-O3</compilerStartOption>
-                        <compilerStartOption>-I$(LIBOQS_INCLUDE_DIR)</compilerStartOption>
-                        <compilerStartOption>-I$(LIBOQS_LIB_DIR)</compilerStartOption>
+                        <compilerStartOption>-I${LIBOQS_INCLUDE_DIR}</compilerStartOption>
+                        <compilerStartOption>-I${LIBOQS_LIB_DIR}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>target</linkerOutputDirectory>
                     <linkerExecutable>gcc</linkerExecutable>
                     <linkerStartOptions>
                         <linkerStartOption>-shared</linkerStartOption>
-                        <linkerStartOption>-L$(LIBOQS_INCLUDE_DIR)</linkerStartOption>
-                        <linkerStartOption>-L$(LIBOQS_LIB_DIR)</linkerStartOption>
+                        <linkerStartOption>-L${LIBOQS_INCLUDE_DIR}</linkerStartOption>
+                        <linkerStartOption>-L${LIBOQS_LIB_DIR}</linkerStartOption>
                     </linkerStartOptions>
                     <linkerFinalName/>
                     <linkerEndOptions>

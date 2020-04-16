@@ -81,13 +81,12 @@ sudo ninja install
 
 #### Make sure that your system can find `liboqs`.
 
-**If you have installed liboqs to a custom location:** point the `LIBOQS_INCLUDE_DIR` and `LIBOQS_LIB_DIR` environment variables to the `liboqs` installation path, e.g.,
+Point the `LIBOQS_INCLUDE_DIR` and `LIBOQS_LIB_DIR` environment variables to the `liboqs` installation path, e.g.,
 ```
 export LIBOQS_INCLUDE_DIR="/usr/local/include"
 export LIBOQS_LIB_DIR="/usr/local/lib"
 ```
-If either `LIBOQS_INCLUDE_DIR` or `LIBOQS_LIB_DIR` is not set correctly, it will result to compilation errors.
-You may omit exporting these variables in case you installed `liboqs` in `/usr/local`.
+If either `LIBOQS_INCLUDE_DIR` or `LIBOQS_LIB_DIR` are not set correctly, it will result to compilation errors.
 
 
 #### Windows
@@ -97,18 +96,22 @@ Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instruc
 
 ### Building the Java OQS wrapper
 
-To build the `liboqs-java` wrapper type:
+To build the `liboqs-java` wrapper type for different operating systems add the `-P <OS>` flag, where `OS = {linux, macosx, windows}`.
+
+For instance, to build `liboqs-java` for MacOS, type:
 ```
-$ mvn package
+$ mvn package -P macosx
 ```
 This will compile the C and Java files and also run the unit tests.
 
 To build without running the tests type:
 ```
-$ mvn package -Dmaven.test.skip=true
+$ mvn package -Dmaven.test.skip=true -P macosx
 ```
 
-Both the above commands will create a `target` directory with all the build files, as well as with the `liboqs-java.jar` wrapper.
+Note, the default profile is `linux`, so when building on linux the `-P` flag may be omitted.
+
+Both the above commands will create a `target` directory with all the build files, as well as with the `liboqs-java.jar` wrapper inside the `target` directory.
 
 
 ### Building and running the examples
