@@ -1,5 +1,3 @@
-package org.openquantumsafe;
-
 import org.openquantumsafe.*;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,11 +1,11 @@
 package org.openquantumsafe;
 
+import java.util.Arrays;
+
 public class Common {
 
     public static void wipe(byte[] array) {
-        for (int i = 0; i < array.length; i++) {
-            array[i] = 0;
-        }
+        Arrays.fill(array, (byte) 0);
     }
 
     public static <E, T extends Iterable<E>> void print_list(T list) {
@@ -19,8 +19,8 @@ public class Common {
     public static String to_hex(byte[] bytes) {
         final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            int v = bytes[i] & 0xFF;
+        for (byte aByte : bytes) {
+            int v = aByte & 0xFF;
             sb.append(HEX_ARRAY[v >>> 4]);
             sb.append(HEX_ARRAY[v & 0x0F]);
             sb.append(" ");

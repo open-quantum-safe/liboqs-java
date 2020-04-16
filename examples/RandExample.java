@@ -1,5 +1,3 @@
-package org.openquantumsafe;
-
 import org.openquantumsafe.*;
 
 public class RandExample {

@@ -1,10 +1,8 @@
 package org.openquantumsafe;
 
-import org.openquantumsafe.*;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
 import java.util.ArrayList;
+import static org.junit.Assert.assertArrayEquals;
 
 public class KEMTest {
 
@@ -34,12 +32,12 @@ public class KEMTest {
             assertArrayEquals(shared_secret_client, shared_secret_server);
         } catch (AssertionError e) {
             String red = "\033[0;31m";
-            sb.append(red + "FAIL" + reset);
+            sb.append(red).append("FAIL").append(reset);
             System.out.println(sb.toString());
             throw e;
         }
         String green = "\033[0;32m";
-        sb.append(green + "PASSED" + reset);
+        sb.append(green).append("PASSED").append(reset);
         System.out.println(sb.toString());
     }
 
@@ -47,9 +45,7 @@ public class KEMTest {
     public void test_all_kems() {
         System.out.println();
         ArrayList<String> enabled_kems = KEMs.get_enabled_KEMs();
-        enabled_kems.parallelStream().forEach((kem_name) -> {
-            test_kem(kem_name);
-        });
+        enabled_kems.parallelStream().forEach(this::test_kem);
     }
 
     @Test(expected = MechanismNotSupportedError.class)

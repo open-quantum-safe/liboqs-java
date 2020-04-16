@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * \brief Key Encapsulation Mechanisms Singleton class.
- * Contains details about supported/enabled key exchange echanisms (KEMs)
+ * Contains details about supported/enabled key exchange mechanisms (KEMs)
  */
 public class KEMs {
     
@@ -20,7 +20,7 @@ public class KEMs {
     private KEMs() {}
 
     /**
-     * \brief Make sure that at most one istance is generated.
+     * \brief Make sure that at most one instance is generated.
      * \return Singleton instance
      */
     public static synchronized KEMs get_instance() { 

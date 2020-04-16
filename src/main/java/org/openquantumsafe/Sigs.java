@@ -20,7 +20,7 @@ public class Sigs {
     private Sigs() {}
 
     /**
-     * \brief Make sure that at most one istance is generated.
+     * \brief Make sure that at most one instance is generated.
      * \return Singleton instance
      */
     public static synchronized Sigs get_instance() { 

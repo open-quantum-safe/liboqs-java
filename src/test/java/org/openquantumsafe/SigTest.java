@@ -1,14 +1,14 @@
 package org.openquantumsafe;
 
-import org.openquantumsafe.*;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
 import java.util.ArrayList;
+import static org.junit.Assert.*;
 
 public class SigTest {
 
-    public void test_sig(String sig_name, byte[] message) {
+    final byte[] message = "This is the message to sign".getBytes();
+
+    public void test_sig(String sig_name) {
         StringBuilder sb = new StringBuilder();
         sb.append(sig_name);
         sb.append(String.format("%1$" + (40 - sig_name.length()) + "s", ""));
@@ -30,23 +30,21 @@ public class SigTest {
             assertTrue(is_valid);
         } catch (AssertionError e) {
             String red = "\033[0;31m";
-            sb.append(red + "FAIL" + reset);
+            sb.append(red).append("FAIL").append(reset);
             System.out.println(sb.toString());
             throw e;
         }
         String green = "\033[0;32m";
-        sb.append(green + "PASSED" + reset);
+        sb.append(green).append("PASSED").append(reset);
         System.out.println(sb.toString());
     }
 
     @Test
     public void test_all_sigs() {
         System.out.println();
-        byte[] message = "This is the message to sign".getBytes();
         ArrayList<String> enabled_sigs = Sigs.get_enabled_sigs();
-        enabled_sigs.parallelStream().forEach((sig_name) -> {
-            test_sig(sig_name, message);
-        });
+        enabled_sigs.parallelStream().forEach(this::test_sig);
+
     }
 
     @Test(expected = MechanismNotSupportedError.class)

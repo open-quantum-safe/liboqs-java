@@ -27,9 +27,9 @@ This solution implements a Java wrapper for the C OQS library. It contains the f
 
 * __`src/main/java/org/openquantumsafe/`:__  Java wrappers for the liboqs C library.
 
-* __`src/examples/java/org/openquantumsafe/`:__  Key encapsulation, digital signatures and rand examples.
-
 * __`src/test/java/org/openquantumsafe/`:__  Unit tests.
+
+* __`examples/`:__  Key encapsulation, digital signatures and rand examples.
 
 
 `liboqs-java` defines four main classes: **`KeyEncapsulation`** and **`Signature`**, providing post-quantum key encapsulation and signature mechanisms, respectively, and **`KEMs`** and **`Sigs`**, containing only static member functions that provide information related to the available key encapsulation mechanisms or signature mechanism, respectively.
@@ -38,7 +38,7 @@ This solution implements a Java wrapper for the C OQS library. It contains the f
 
 Support for alternative RNGs is provided via the `randombytes` functions.
 
-The examples in the [examples](./src/examples/java/org/openquantumsafe/) directory are self-explanatory and provide more details about the wrapper's API.
+The examples in the [examples](./examples/) directory are self-explanatory and provide more details about the wrapper's API.
 
 
 
@@ -57,17 +57,7 @@ We acknowledge that some parties may want to begin deploying post-quantum crypto
 Builds have been tested on Linux (Ubuntu 18.04 LTS and 19.10) and macOS Mojave with OpenJDK 8, 9, 11.
 
 ### Pre-requisites
-To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8.
-
-Then, you need to check if the `JAVA_HOME` environment variable is set by typing:
-```
-$ echo $JAVA_HOME
-```
-
-If `JAVA_HOME` is empty set it to the installed JDK (i.e., OpenJDK 8):
-* Linux: `export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64"`
-* MacOS: `export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"`
-* Windows: `TODO`
+To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8 and [Apache Maven](https://maven.apache.org/).
 
 To build `liboqs-java` first download or clone this java wrapper into a `liboqs-java` folder, e.g.,
 
@@ -99,12 +89,6 @@ export LIBOQS_LIB_DIR="/usr/local/lib"
 If either `LIBOQS_INCLUDE_DIR` or `LIBOQS_LIB_DIR` is not set correctly, it will result to compilation errors.
 You may omit exporting these variables in case you installed `liboqs` in `/usr/local`.
 
-**Required:** update the `LD_LIBRARY_PATH` environment variable (this is for Java to find in run-time the C shared library for JNI) with the installation location of the `liboqs` shared library, i.e.,
-```
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
-```
-If `LD_LIBRARY_PATH` is not set correctly, it will result to run-time errors.
-
 
 #### Windows
 Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instructions using [`CMake Tools`](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) with Visual Studio.
@@ -113,21 +97,21 @@ Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instruc
 
 ### Building the Java OQS wrapper
 
-To compile the Java and C files required for the `liboqs-java` wrapper type:
+To build the `liboqs-java` wrapper type:
 ```
-$ make
+$ mvn package
 ```
+This will compile the C and Java files and also run the unit tests.
 
-### Building the unit-tests
-
-To compile and run the unit tests, just type
+To build without running the tests type:
 ```
-$ make tests
-$ make run-tests
+$ mvn package -Dmaven.test.skip=true
 ```
 
+Both the above commands will create a `target` directory with all the build files, as well as with the `liboqs-java.jar` wrapper.
 
-## Example programs
+
+### Building and running the examples
 
 The examples include:
 
@@ -147,9 +131,13 @@ The examples include:
 
 ##### 1) Key Encapsulation example
 
+To compile and run the KEM example, type:
 ```
-$ make run-kem
+$ javac -cp target/liboqs-java.jar examples/KEMExample.java
+$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ KEMExample
+```
 
+```
 Supported KEMs:
   DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864 Classic-McEliece-348864f
   Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
@@ -203,8 +191,11 @@ Shared secrets coincide? true
 ##### 2) Signatures example
 
 ```
-$ make run-sig
+$ javac -cp target/liboqs-java.jar examples/SigExample.java
+$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ SigExample
+```
 
+```
 Supported signatures:
   DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
   Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
@@ -264,8 +255,11 @@ Valid signature? true
 ##### 3) Rand example
 
 ```
-$ make run-rand
+$ javac -cp target/liboqs-java.jar examples/RandExample.java
+$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample
+```
 
+```
 NIST-KAT:           BF E7 5C 34 F9 1C 54 44 30 CD B1 61 5B FF 3D 92 31 17 38 BD 71 61 0C 22 CD F7 B8 23 D9 7C 27 F3
 OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 82 D6 89 02 40 B9 45 CF F9 3A 4D 70
 System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
@@ -293,10 +287,12 @@ System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 
     ```
 
 
-## Contributors
+## Team
+The Open Quantum Safe project is led by [Douglas Stebila](https://www.douglas.stebila.ca/research/) and [Michele Mosca](http://faculty.iqc.uwaterloo.ca/mmosca/) at the University of Waterloo.
 
 Contributors to the liboqs-java wrapper include:
-* Dimitris Mouris [@jimouris](https://github.com/jimouris)
+* Dimitris Mouris ([@jimouris](https://github.com/jimouris)) (University of Delaware)
+* Christian Paquin ([@christianpaquin](https://github.com/christianpaquin)) (Microsoft Research)
 
 ## License
 `liboqs-java` is licensed under the MIT License; see [LICENSE](./LICENSE) for details.

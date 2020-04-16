@@ -81,6 +81,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-build/
+target/
 *.vscode/
 *.idea/
+*.iml

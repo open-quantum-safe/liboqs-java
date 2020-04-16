@@ -70,17 +70,5 @@ public class Rand {
             throw new RuntimeException("The personalization string must be either empty or at least 48 byte[] long");
         }
         randombytes_nist_kat_init(entropy_input, personalization_string, personalization_string.length);
-        return;
     }
 }
-
-//
-// /**
-//  * \brief Switches oqs::rand::randombytes() to use the given function
-//  * \note This allows additional custom RNGs besides the provided ones.
-//  * \param algorithm_ptr Pointer to RNG function
-//  */
-// void randombytes_custom_algorithm(void (*algorithm_ptr)(uint8_t*,
-//                                                         size_t)) {
-//     C::OQS_randombytes_custom_algorithm(algorithm_ptr);
-// }

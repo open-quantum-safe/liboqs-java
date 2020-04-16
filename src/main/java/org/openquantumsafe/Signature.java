@@ -218,9 +218,7 @@ public class Signature {
             throw new RuntimeException("Incorrect signature length");
         }
 
-        boolean rv_ = verify(message, message.length, signature,
-                                signature.length, public_key);
-        return rv_;
+        return verify(message, message.length, signature, signature.length, public_key);
     }
 
     /**
@@ -245,7 +243,7 @@ public class Signature {
         alg_details_.printSignature();
     }
 
-    public class Mutable<T> {
+    public static class Mutable<T> {
         T value;
         public void setValue(T t) { this.value = t; }
         public T getValue() { return this.value; }
