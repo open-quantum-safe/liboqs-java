@@ -62,7 +62,7 @@ To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [Op
 To build `liboqs-java` first download or clone this java wrapper into a `liboqs-java` folder, e.g.,
 
 ```
-git clone -b master https://github.com/jimouris/liboqs-java.git
+git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 ```
 
 ### Building the OQS dependency
