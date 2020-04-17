@@ -79,16 +79,6 @@ ninja
 sudo ninja install
 ```
 
-#### Make sure that your system can find `liboqs`.
-
-Point the `LIBOQS_INCLUDE_DIR` and `LIBOQS_LIB_DIR` environment variables to the `liboqs` installation path, e.g.,
-```
-export LIBOQS_INCLUDE_DIR="/usr/local/include"
-export LIBOQS_LIB_DIR="/usr/local/lib"
-```
-If either `LIBOQS_INCLUDE_DIR` or `LIBOQS_LIB_DIR` are not set correctly, it will result to compilation errors.
-
-
 #### Windows
 Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instructions using [`CMake Tools`](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) with Visual Studio.
 
@@ -96,20 +86,22 @@ Refer to [liboqs](https://github.com/open-quantum-safe/liboqs/) building instruc
 
 ### Building the Java OQS wrapper
 
-To build the `liboqs-java` wrapper type for different operating systems add the `-P <OS>` flag, where `OS = {linux, macosx, windows}`.
+To build the `liboqs-java` wrapper type for different operating systems add the `-P <OS>` flag, where `<OS> = {linux, macosx, windows}`.
 
 For instance, to build `liboqs-java` for MacOS, type:
 ```
-$ mvn package -P macosx
+$ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib"
 ```
-This will compile the C and Java files and also run the unit tests.
+The above command will compile the C and Java files and also run the unit tests.
 
-To build without running the tests type:
+To build without running the default unit tests you can use the `-Dmaven.test.skip=true` command line option as follows:
 ```
-$ mvn package -Dmaven.test.skip=true -P macosx
+$ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib" -Dmaven.test.skip=true
 ```
 
-Note, the default profile is `linux`, so when building on linux the `-P` flag may be omitted.
+The default profile for building is `linux`, so when building on Linux the `-P <OS>` command line option may be omitted.
+
+You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo ninja install` after building liboqs).
 
 Both the above commands will create a `target` directory with all the build files, as well as with the `liboqs-java.jar` wrapper inside the `target` directory.
 
@@ -270,24 +262,35 @@ System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 
 
 
 ## Troubleshooting
-* __Compile error:__ If the compiler cannot find the `jni.h`:
-    ```
-    fatal error: jni.h: No such file or directory
-        2 | #include <jni.h>
-    compilation terminated.
-    ```
-    try setting the `JAVA_HOME` environment variable.
-    Then, try `ls $JAVA_HOME` to check whether the directory is empty or has contents. If it is empty, set `JAVA_HOME` to a correct JDK.
+* __Compiler errors__
 
-* __Runtime error:__ If Java cannot find `liboqs`:
-    ```
-    Exception in thread "main" java.lang.UnsatisfiedLinkError:
-        ./liboqs-java/build/liboqs-jni.so: liboqs.so.0: cannot open shared object file: No such file or directory
-    ```
-    try setting the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
-    ```
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
-    ```
+    * Cannot find `jni.h`:
+        ```
+        fatal error: jni.h: No such file or directory
+            2 | #include <jni.h>
+        compilation terminated.
+        ```
+        Try setting the `JAVA_HOME` environment variable.
+        Then, try `ls $JAVA_HOME` to check whether the directory is empty or has contents. If it is empty, set `JAVA_HOME` to a correct JDK.
+
+    * Cannot find `oqs/oqs.h`
+        ```
+        fatal error: oqs.h: No such file or directory
+            5 | #include <oqs/oqs.h>
+        compilation terminated.
+        ```
+        Try providing the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` command line options to maven as mentioned in the [build instructions](https://github.com/open-quantum-safe/liboqs-java#building-the-java-oqs-wrapper).
+
+* __Runtime errors__
+    * If Java cannot find `liboqs`:
+        ```
+        Exception in thread "main" java.lang.UnsatisfiedLinkError:
+            ./liboqs-java/build/liboqs-jni.so: liboqs.so.0: cannot open shared object file: No such file or directory
+        ```
+        try setting the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
+        ```
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
+        ```
 
 
 ## Team

@@ -125,15 +125,15 @@
                         <compilerStartOption>-fPIC</compilerStartOption>
                         <compilerStartOption>-Wall</compilerStartOption>
                         <compilerStartOption>-O3</compilerStartOption>
-                        <compilerStartOption>-I${LIBOQS_INCLUDE_DIR}</compilerStartOption>
-                        <compilerStartOption>-I${LIBOQS_LIB_DIR}</compilerStartOption>
+                        <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
+                        <compilerStartOption>-I${liboqs.lib.dir}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>target</linkerOutputDirectory>
                     <linkerExecutable>gcc</linkerExecutable>
                     <linkerStartOptions>
                         <linkerStartOption>-shared</linkerStartOption>
-                        <linkerStartOption>-L${LIBOQS_INCLUDE_DIR}</linkerStartOption>
-                        <linkerStartOption>-L${LIBOQS_LIB_DIR}</linkerStartOption>
+                        <linkerStartOption>-L${liboqs.include.dir}</linkerStartOption>
+                        <linkerStartOption>-L${liboqs.lib.dir}</linkerStartOption>
                     </linkerStartOptions>
                     <linkerFinalName/>
                     <linkerEndOptions>
