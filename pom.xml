@@ -8,13 +8,14 @@
     <packaging>jar</packaging>
     <version>1.0</version>
     <name>liboqs-java: Java wrapper for liboqs</name>
+    <description>liboqs-java offers a Java wrapper providing quantum-resistant cryptographic algorithms via liboqs.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- <maven.test.skip>true</maven.test.skip> -->
+        <liboqs.include.dir />
+        <liboqs.lib.dir />
+        <java.os.include />
     </properties>
 
     <dependencies>
@@ -46,8 +47,12 @@
                 </property>
             </activation>
             <properties>
-                <os_name>win32</os_name>
                 <lib_name>oqs-jni.dll</lib_name>
+                    <!-- Provide default liboqs Windows installation directories -->
+
+                    <!-- <liboqs.include.dir>/usr/local/include</liboqs.include.dir>-->
+                    <!-- <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>-->
+                <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/win32</java.os.include>
             </properties>
         </profile>
         <profile>
@@ -59,8 +64,10 @@
                 </property>
             </activation>
             <properties>
-                <os_name>darwin</os_name>
                 <lib_name>liboqs-jni.jnilib</lib_name>
+                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
+                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
+                <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
             </properties>
         </profile>
         <profile>
@@ -73,8 +80,10 @@
                 </property>
             </activation>
             <properties>
-                <os_name>linux</os_name>
                 <lib_name>liboqs-jni.so</lib_name>
+                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
+                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
+                <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
             </properties>
         </profile>
     </profiles>
@@ -86,7 +95,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M4</version>
                 <configuration>
-                    <!-- <forkCount>1</forkCount> -->
                     <argLine>-Xss10M -Djava.library.path=${project.build.directory}</argLine>
                 </configuration>
             </plugin>
@@ -96,7 +104,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -105,7 +112,6 @@
                 <version>1.0-alpha-9</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <javahOS>${os_name}</javahOS>
                     <sources>
                         <source>
                             <directory>${basedir}/src/main/c</directory>
@@ -122,17 +128,16 @@
                     <compilerProvider>generic-classic</compilerProvider>
                     <compilerExecutable>gcc</compilerExecutable>
                     <compilerStartOptions>
+                        <compilerStartOption>${java.os.include}</compilerStartOption>
                         <compilerStartOption>-fPIC</compilerStartOption>
                         <compilerStartOption>-Wall</compilerStartOption>
                         <compilerStartOption>-O3</compilerStartOption>
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
-                        <compilerStartOption>-I${liboqs.lib.dir}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>target</linkerOutputDirectory>
                     <linkerExecutable>gcc</linkerExecutable>
                     <linkerStartOptions>
                         <linkerStartOption>-shared</linkerStartOption>
-                        <linkerStartOption>-L${liboqs.include.dir}</linkerStartOption>
                         <linkerStartOption>-L${liboqs.lib.dir}</linkerStartOption>
                     </linkerStartOptions>
                     <linkerFinalName/>
