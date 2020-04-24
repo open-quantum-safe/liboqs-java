@@ -124,6 +124,8 @@ The examples include:
     * OpenSSL
     * System (default)
 
+#### Linux/MacOS
+
 ##### 1) Key Encapsulation example
 
 To compile and run the KEM example, type:
@@ -259,6 +261,18 @@ NIST-KAT:           BF E7 5C 34 F9 1C 54 44 30 CD B1 61 5B FF 3D 92 31 17 38 BD 
 OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 82 D6 89 02 40 B9 45 CF F9 3A 4D 70
 System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
 ```
+
+#### Windows
+
+To run the examples on Windows, compilation is the same, but the command to run the program is slightly different since the PATH environment variable in Windows is separated by semicolons `;` instead of `:`.
+
+For instance, to compile and run the KEM example, type:
+```
+$ javac -cp target/liboqs-java.jar examples/KEMExample.java
+$ java -Djava.library.path=target/ -cp target/liboqs-java.jar;examples/ KEMExample
+```
+
+Similarly, you can run the `SigExample` and `RandExample` located  in the [examples](./examples/) directory.
 
 
 ## Troubleshooting
