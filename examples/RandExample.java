@@ -12,7 +12,7 @@ public class RandExample {
         System.out.println("NIST-KAT:\t\t" + Common.to_hex(Rand.randombytes(32)));
 
         String os = System.getProperty("os.name");
-        if (!os.equals("Windows")) {
+        if (!os.equals("Windows")) { // OQS note: Windows not yet supported, but leaving this here for when we do
             Rand.randombytes_switch_algorithm("OpenSSL");
             System.out.println("OpenSSL:\t\t" + Common.to_hex(Rand.randombytes(32)));
         }

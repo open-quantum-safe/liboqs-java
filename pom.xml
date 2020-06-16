@@ -39,23 +39,6 @@
 
     <profiles>
         <profile>
-            <id>windows</id>
-            <activation>
-                <property>
-                    <name>platform</name>
-                    <value>win</value>
-                </property>
-            </activation>
-            <properties>
-                <lib_name>oqs-jni.dll</lib_name>
-                    <!-- Provide default liboqs Windows installation directories -->
-
-                    <!-- <liboqs.include.dir>/usr/local/include</liboqs.include.dir>-->
-                    <!-- <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>-->
-                <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/win32</java.os.include>
-            </properties>
-        </profile>
-        <profile>
             <id>macosx</id>
             <activation>
                 <property>
