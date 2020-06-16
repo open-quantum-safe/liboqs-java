@@ -1,14 +1,35 @@
 package org.openquantumsafe;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
-import static org.junit.Assert.*;
+import java.util.stream.Stream;
 
 public class SigTest {
 
-    final byte[] message = "This is the message to sign".getBytes();
+    private final byte[] message = "This is the message to sign".getBytes();
+    private static ArrayList<String> enabled_sigs;
 
-    public void test_sig(String sig_name) {
+    /**
+     * Before running the tests, get a list of enabled Sigs
+     */
+    @BeforeAll
+    public static void init(){
+        System.out.println("Initialize list of enabled Signatures");
+        enabled_sigs = Sigs.get_enabled_sigs();
+    }
+
+    /**
+     * Test all enabled Sigs
+     */
+    @ParameterizedTest(name = "Testing {arguments}")
+    @MethodSource("getEnabledSigsAsStream")
+    public void testAllSigs(String sig_name) {
         StringBuilder sb = new StringBuilder();
         sb.append(sig_name);
         sb.append(String.format("%1$" + (40 - sig_name.length()) + "s", ""));
@@ -25,31 +46,27 @@ public class SigTest {
 
         // Verify the signature
         boolean is_valid = verifier.verify(message, signature, signer_public_key);
-        String reset = "\033[0m";
-        try {
-            assertTrue(is_valid);
-        } catch (AssertionError e) {
-            String red = "\033[0;31m";
-            sb.append(red).append("FAIL").append(reset);
-            System.out.println(sb.toString());
-            throw e;
-        }
-        String green = "\033[0;32m";
-        sb.append(green).append("PASSED").append(reset);
+
+        assertTrue(is_valid, sig_name);
+
+        // If successful print Sig name, otherwise an exception will be thrown
+        sb.append("\033[0;32m").append("PASSED").append("\033[0m");
         System.out.println(sb.toString());
     }
 
+    /**
+     * Test the MechanismNotSupported Exception
+     */
     @Test
-    public void test_all_sigs() {
-        System.out.println();
-        ArrayList<String> enabled_sigs = Sigs.get_enabled_sigs();
-        enabled_sigs.parallelStream().forEach(this::test_sig);
-
+    public void testUnsupportedSigExpectedException() {
+        Assertions.assertThrows(MechanismNotSupportedError.class, () -> new Signature("MechanismNotSupported"));
     }
 
-    @Test(expected = MechanismNotSupportedError.class)
-    public void test_unsupported_sig() {
-        Signature test = new Signature("MechanismNotSupported");
+    /**
+     * Method to convert the list of Sigs to a stream for input to testAllSigs
+     */
+    private static Stream<String> getEnabledSigsAsStream() {
+        return enabled_sigs.parallelStream();
     }
 
 }

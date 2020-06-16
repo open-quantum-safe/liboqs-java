@@ -1,12 +1,34 @@
 package org.openquantumsafe;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 import java.util.ArrayList;
-import static org.junit.Assert.assertArrayEquals;
+import java.util.stream.Stream;
 
 public class KEMTest {
 
-    public void test_kem(String kem_name) {
+    private static ArrayList<String> enabled_kems;
+
+    /**
+     * Before running the tests, get a list of enabled KEMs
+     */
+    @BeforeAll
+    public static void init(){
+        System.out.println("Initialize list of enabled KEMs");
+        enabled_kems = KEMs.get_enabled_KEMs();
+    }
+
+    /**
+     * Test all enabled KEMs
+     */
+    @ParameterizedTest(name = "Testing {arguments}")
+    @MethodSource("getEnabledKEMsAsStream")
+    public void testAllKEMs(String kem_name) {
         StringBuilder sb = new StringBuilder();
         sb.append(kem_name);
         sb.append(String.format("%1$" + (40 - kem_name.length()) + "s", ""));
@@ -27,30 +49,26 @@ public class KEMTest {
         byte[] shared_secret_client = client.decap_secret(ciphertext);
 
         // Check if equal
-        String reset = "\033[0m";
-        try {
-            assertArrayEquals(shared_secret_client, shared_secret_server);
-        } catch (AssertionError e) {
-            String red = "\033[0;31m";
-            sb.append(red).append("FAIL").append(reset);
-            System.out.println(sb.toString());
-            throw e;
-        }
-        String green = "\033[0;32m";
-        sb.append(green).append("PASSED").append(reset);
+        assertArrayEquals(shared_secret_client, shared_secret_server, kem_name);
+
+        // If successful print KEM name, otherwise an exception will be thrown
+        sb.append("\033[0;32m").append("PASSED").append("\033[0m");
         System.out.println(sb.toString());
     }
 
+    /**
+     * Test the MechanismNotSupported Exception
+     */
     @Test
-    public void test_all_kems() {
-        System.out.println();
-        ArrayList<String> enabled_kems = KEMs.get_enabled_KEMs();
-        enabled_kems.parallelStream().forEach(this::test_kem);
+    public void testUnsupportedKEMExpectedException() {
+        Assertions.assertThrows(MechanismNotSupportedError.class, () -> new KeyEncapsulation("MechanismNotSupported"));
     }
 
-    @Test(expected = MechanismNotSupportedError.class)
-    public void test_unsupported_kem() {
-        KeyEncapsulation test = new KeyEncapsulation("MechanismNotSupported");
+    /**
+     * Method to convert the list of KEMs to a stream for input to testAllKEMs
+     */
+    private static Stream<String> getEnabledKEMsAsStream() {
+        return enabled_kems.parallelStream();
     }
 
 }
