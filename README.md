@@ -1,4 +1,4 @@
-# liboqs-java: Java wrapper for liboqs [![License MIT][badge-license]](LICENSE)
+# liboqs-java: Java wrapper for liboqs [![Build status - CircleCI Linux][badge-circleci]](https://circleci.com/gh/open-quantum-safe/liboqs-java) [![License MIT][badge-license]](LICENSE)
 
 **liboqs-java** offers a Java wrapper providing quantum-resistant cryptographic algorithms via [liboqs](https://github.com/open-quantum-safe/liboqs/).
 
@@ -305,4 +305,5 @@ Contributors to the liboqs-java wrapper include:
 [KEM-overview]: ./images/KEM.png
 [DS-overview]: ./images/digital-signature.png
 
-[badge-license]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
+[badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=svg
+[badge-circleci]: https://img.shields.io/circleci/build/github/open-quantum-safe/liboqs-java?logo=circleci
