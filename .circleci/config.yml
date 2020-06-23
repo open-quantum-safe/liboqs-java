@@ -1,58 +1,85 @@
-version: 2 # use CircleCI 2.0
+version: 2
+
+.my_job: &myjob
+  working_directory: ~/liboqs-java
+  docker:
+    - image: ${IMAGE}
+  steps:
+    - checkout
+    - run:
+        name: Clone liboqs-master
+        command: cd ~/ && git clone --branch master --single-branch https://github.com/open-quantum-safe/liboqs
+    - run:
+        name: Install liboqs dependencies
+        command: .circleci/git_no_checkin_in_last_day.sh || (${SUDO} apt-get update && ${SUDO} apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz -y)
+    - run:
+        name: Build liboqs-master
+        command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/liboqs && mkdir build && cd build && cmake -GNinja -DBUILD_SHARED_LIBS=ON .. && ninja && ${SUDO} ninja install)
+    - restore_cache:
+        key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
+    - run:
+        name: Resolve all maven project dependencies
+        command: .circleci/git_no_checkin_in_last_day.sh || (mvn dependency:go-offline)
+    - save_cache:
+        paths:
+          - ~/.m2
+        key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
+    - run:
+        name: Build the package and run the tests
+        command: .circleci/git_no_checkin_in_last_day.sh || (export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package)
+    - run:
+        name: Compile KEMs, Signatures and Rand examples
+        command: >
+          .circleci/git_no_checkin_in_last_day.sh || (
+          javac -cp target/liboqs-java.jar examples/KEMExample.java &&
+          javac -cp target/liboqs-java.jar examples/SigExample.java &&
+          javac -cp target/liboqs-java.jar examples/RandExample.java )
+    - run:
+        name: Run KEMs, Signatures and Rand examples
+        command: >
+          .circleci/git_no_checkin_in_last_day.sh || (
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" &&
+          java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ KEMExample &&
+          java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ SigExample &&
+          java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample )
+    - store_test_results:
+        path: target/surefire-reports
+    - store_artifacts:
+        path: target/liboqs-java.jar
+
 jobs:
+  circleci-openjdk-9:
+    <<: *myjob
+    environment:
+      IMAGE: circleci/openjdk:9-jdk
+      SUDO: sudo
+  debian-buster-amd64:
+    <<: *myjob
+    environment:
+      IMAGE: openquantumsafe/ci-debian-buster-amd64:latest
+      SUDO: ''
+  ubuntu-bionic-x86_64:
+    <<: *myjob
+    environment:
+      IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+      SUDO: ''
+
+workflows:
+  version: 2
   build:
-
-    working_directory: ~/liboqs-java # directory where steps will run
-
-    docker: # run the steps with Docker
-      - image: circleci/openjdk:9-jdk
-
-    steps: # a collection of executable commands
-
-      - checkout # check out source code to working directory
-
-      - run:
-          name: Install liboqs dependencies
-          command: sudo apt-get update && sudo apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz -y
-
-      - run:
-          name: Clone liboqs-master
-          command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/ && git clone --branch master --single-branch https://github.com/open-quantum-safe/liboqs)
-
-      - run:
-          name: Build liboqs-master
-          command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/liboqs && mkdir build && cd build && cmake -GNinja -DBUILD_SHARED_LIBS=ON .. && ninja && sudo ninja install)
-
-      - run:
-          name: Print Java home contents
-          command: java -version && echo $JAVA_HOME && ls $JAVA_HOME
-
-      - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
-          key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
-
-      - run:
-          name: Resolve all maven project dependencies
-          command: mvn dependency:go-offline
-
-      - save_cache: # saves project dependencies
-          paths:
-            - ~/.m2
-          key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
-
-      - run:
-          name: Build the package and run the tests
-          command: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package
-
-      - run:
-          name: Compile KEMs, Signatures and Rand examples
-          command: javac -cp target/liboqs-java.jar examples/KEMExample.java && javac -cp target/liboqs-java.jar examples/SigExample.java && javac -cp target/liboqs-java.jar examples/RandExample.java
-
-      - run:
-          name: Run KEMs, Signatures and Rand examples
-          command: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ KEMExample && java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ SigExample && java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample
-
-      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
-          path: target/surefire-reports
-
-      - store_artifacts: # store the uberjar as an artifact
-          path: target/liboqs-java.jar
+    jobs:
+      - circleci-openjdk-9
+      - debian-buster-amd64
+      - ubuntu-bionic-x86_64
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 1 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - circleci-openjdk-9
+      - debian-buster-amd64
+      - ubuntu-bionic-x86_64
