@@ -7,11 +7,11 @@ version: 2
   steps:
     - checkout
     - run:
-        name: Install liboqs dependencies
-        command: ${SUDO} apt-get update && ${SUDO} apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz -y
-    - run:
         name: Clone liboqs-master
-        command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/ && git clone --branch master --single-branch https://github.com/open-quantum-safe/liboqs)
+        command: cd ~/ && git clone --branch master --single-branch https://github.com/open-quantum-safe/liboqs
+    - run:
+        name: Install liboqs dependencies
+        command: .circleci/git_no_checkin_in_last_day.sh || (${SUDO} apt-get update && ${SUDO} apt-get install cmake gcc ninja-build libssl-dev python3-pytest python3-pytest-xdist unzip xsltproc doxygen graphviz -y)
     - run:
         name: Build liboqs-master
         command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/liboqs && mkdir build && cd build && cmake -GNinja -DBUILD_SHARED_LIBS=ON .. && ninja && ${SUDO} ninja install)
@@ -19,27 +19,29 @@ version: 2
         key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
     - run:
         name: Resolve all maven project dependencies
-        command: mvn dependency:go-offline
+        command: .circleci/git_no_checkin_in_last_day.sh || (mvn dependency:go-offline)
     - save_cache:
         paths:
           - ~/.m2
         key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ arch }}'
     - run:
         name: Build the package and run the tests
-        command: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package
+        command: .circleci/git_no_checkin_in_last_day.sh || (export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package)
     - run:
         name: Compile KEMs, Signatures and Rand examples
         command: >
+          .circleci/git_no_checkin_in_last_day.sh || (
           javac -cp target/liboqs-java.jar examples/KEMExample.java &&
           javac -cp target/liboqs-java.jar examples/SigExample.java &&
-          javac -cp target/liboqs-java.jar examples/RandExample.java
+          javac -cp target/liboqs-java.jar examples/RandExample.java )
     - run:
         name: Run KEMs, Signatures and Rand examples
         command: >
+          .circleci/git_no_checkin_in_last_day.sh || (
           export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" &&
           java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ KEMExample &&
           java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ SigExample &&
-          java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample
+          java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample )
     - store_test_results:
         path: target/surefire-reports
     - store_artifacts:
