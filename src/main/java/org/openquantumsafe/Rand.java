@@ -6,7 +6,7 @@ package org.openquantumsafe;
 public class Rand {
 
     static {
-        System.loadLibrary("oqs-jni");
+        Common.loadNativeLibrary();
     }
 
     private Rand() {}

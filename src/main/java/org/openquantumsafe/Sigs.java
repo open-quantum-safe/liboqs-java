@@ -7,9 +7,9 @@ import java.util.ArrayList;
  * Singleton class, contains details about supported/enabled signature mechanisms
  */
 public class Sigs {
-    
+
     static {
-        System.loadLibrary("oqs-jni");
+        Common.loadNativeLibrary();
     }
     
     /**

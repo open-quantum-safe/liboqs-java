@@ -54,7 +54,7 @@ We acknowledge that some parties may want to begin deploying post-quantum crypto
 
 
 ## Building
-Builds have been tested on Linux (Ubuntu 18.04 LTS and 19.10) and macOS Mojave with OpenJDK 8, 9, 11.
+Builds have been tested on Linux (Ubuntu 18.04 LTS, 19.10, and 20.04) and macOS Mojave with OpenJDK 8, 9, 11.
 
 ### Pre-requisites
 To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8 and [Apache Maven](https://maven.apache.org/).
@@ -99,7 +99,7 @@ The default profile for building is `linux`, so when building on Linux the `-P <
 
 You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo ninja install` after building liboqs).
 
-Both the above commands will create a `target` directory with all the build files, as well as with the `liboqs-java.jar` wrapper inside the `target` directory.
+Both the above commands will create a `target` directory with the build files, as well as a `src/main/resources` directory that will contain the `liboqs-jni.so` native library. Finally, a `liboqs-java.jar` will be created inside the `target` directory that will contain all the class files as well as the `liboqs-jni.so` native library.
 
 
 ### Building and running the examples
@@ -127,7 +127,7 @@ The examples include:
 To compile and run the KEM example, type:
 ```
 $ javac -cp target/liboqs-java.jar examples/KEMExample.java
-$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ KEMExample
+$ java -cp target/liboqs-java.jar:examples/ KEMExample
 ```
 
 ```
@@ -185,7 +185,7 @@ Shared secrets coincide? true
 
 ```
 $ javac -cp target/liboqs-java.jar examples/SigExample.java
-$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ SigExample
+$ java -cp target/liboqs-java.jar:examples/ SigExample
 ```
 
 ```
@@ -249,7 +249,7 @@ Valid signature? true
 
 ```
 $ javac -cp target/liboqs-java.jar examples/RandExample.java
-$ java -Djava.library.path=target/ -cp target/liboqs-java.jar:examples/ RandExample
+$ java -cp target/liboqs-java.jar:examples/ RandExample
 ```
 
 ```
@@ -280,6 +280,16 @@ System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 
         Try providing the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` command line options to maven as mentioned in the [build instructions](https://github.com/open-quantum-safe/liboqs-java#building-the-java-oqs-wrapper).
 
 * __Runtime errors__
+    * If Java cannot find native library:
+        ```
+          Exception in thread "main" java.lang.ExceptionInInitializerError
+            at ...
+          Caused by: java.lang.NullPointerException
+            at org.openquantumsafe.Common.loadNativeLibrary(Common.java:51)
+            at ...
+        ```
+        try passing to the java library path the directory that contains the native library (e.g., `java -Djava.library.path=src/main/resources/ -cp target/liboqs-java.jar:examples/ KEMExample`).
+    
     * If Java cannot find `liboqs`:
         ```
         Exception in thread "main" java.lang.UnsatisfiedLinkError:
