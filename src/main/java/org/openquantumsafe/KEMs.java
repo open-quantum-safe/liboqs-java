@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class KEMs {
     
     static {
-        System.loadLibrary("oqs-jni");
+        Common.loadNativeLibrary();
     }
-    
+
     /**
      * The single KEMs class instance.
      */
