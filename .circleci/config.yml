@@ -15,15 +15,9 @@ version: 2
     - run:
         name: Build liboqs-master
         command: .circleci/git_no_checkin_in_last_day.sh || (cd ~/liboqs && mkdir build && cd build && cmake -GNinja -DBUILD_SHARED_LIBS=ON .. && ninja && ${SUDO} ninja install)
-    - restore_cache:
-        key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ .Branch }}-{{ arch }}'
     - run:
         name: Resolve all maven project dependencies
         command: .circleci/git_no_checkin_in_last_day.sh || (mvn dependency:go-offline)
-    - save_cache:
-        paths:
-          - ~/.m2
-        key: 'liboqs-java-{{ checksum "pom.xml" }}-{{ .Branch }}-{{ arch }}'
     - run:
         name: Build the package and run the tests
         command: .circleci/git_no_checkin_in_last_day.sh || (export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package)
