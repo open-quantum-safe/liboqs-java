@@ -1,4 +1,6 @@
-# liboqs-java: Java wrapper for liboqs [![Build status - CircleCI Linux][badge-circleci]](https://circleci.com/gh/open-quantum-safe/liboqs-java) [![License MIT][badge-license]](LICENSE)
+[![CircleCI Build Status](https://circleci.com/gh/open-quantum-safe/liboqs-java/tree/master.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/liboqs-java/tree/master)
+
+# liboqs-java: Java wrapper for liboqs
 
 **liboqs-java** offers a Java wrapper providing quantum-resistant cryptographic algorithms via [liboqs](https://github.com/open-quantum-safe/liboqs/).
 
@@ -68,10 +70,10 @@ git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 ### Building the OQS dependency
 
 #### Linux/MacOS
-First, you must build the master branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+First, you must build the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
 
 ```
-git clone -b master https://github.com/open-quantum-safe/liboqs.git
+git clone -b main https://github.com/open-quantum-safe/liboqs.git
 cd liboqs
 mkdir build && cd build
 cmake -GNinja -DBUILD_SHARED_LIBS=ON ..
