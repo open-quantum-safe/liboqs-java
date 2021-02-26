@@ -1,10 +1,10 @@
 version: 2.1
 
 jobs:
-  ubuntu_bionic:
+  ubuntu_build:
     description: A template for running liboqs-java tests on the OQS x64 Ubuntu Bionic Docker VM
     docker:
-      - image: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+      - image: openquantumsafe/ci-ubuntu-focal-x86_64:latest
         auth:
           username: $DOCKER_LOGIN
           password: $DOCKER_PASSWORD
@@ -80,8 +80,8 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - ubuntu_bionic:
-          name: ubuntu-bionic
+      - ubuntu_build:
+          name: ubuntu-build
           context: openquantumsafe
       - openjdk-11:
           name: openjdk-11
