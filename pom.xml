@@ -57,6 +57,11 @@
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
+                <compiler.provider>generic-classic</compiler.provider>
+                <compiler.executable>gcc</compiler.executable>
+                <linker.executable>gcc</linker.executable>
+                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <linker.end.option>-o ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>
             </properties>
         </profile>
         <profile>
@@ -73,6 +78,34 @@
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
+                <compiler.provider>generic-classic</compiler.provider>
+                <compiler.executable>gcc</compiler.executable>
+                <linker.executable>gcc</linker.executable>
+                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <linker.end.option>-o ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>windows</value>
+                </property>
+            </activation>
+            <properties>
+                <lib_name>liboqs-jni.dll</lib_name>
+<!-- TODO: Change paths below -->
+<!--                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>-->
+<!--                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>-->
+                <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/win32</java.os.include>
+                <compiler.provider>msvc</compiler.provider>
+                <compiler.executable/>
+                <linker.executable>msvc</linker.executable>
+
+<!-- TODO: Uncomment and use correct flags below -->
+<!--                <linker.start.option>-shared ${liboqs.lib.dir}</linker.start.option>-->
+<!--                <linker.end.option>/out ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>-->
             </properties>
         </profile>
     </profiles>
@@ -131,8 +164,8 @@
                             </fileNames>
                         </source>
                     </sources>
-                    <compilerProvider>generic-classic</compilerProvider>
-                    <compilerExecutable>gcc</compilerExecutable>
+                    <compilerProvider>${compiler.provider}</compilerProvider>
+                    <compilerExecutable>${compiler.executable}</compilerExecutable>
                     <compilerStartOptions>
                         <compilerStartOption>${java.os.include}</compilerStartOption>
                         <compilerStartOption>-fPIC</compilerStartOption>
@@ -141,15 +174,13 @@
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>target</linkerOutputDirectory>
-                    <linkerExecutable>gcc</linkerExecutable>
+                    <linkerExecutable>${linker.executable}</linkerExecutable>
                     <linkerStartOptions>
-                        <linkerStartOption>-shared</linkerStartOption>
-                        <linkerStartOption>-L${liboqs.lib.dir}</linkerStartOption>
+                        <linkerStartOption>${linker.start.option}</linkerStartOption>
                     </linkerStartOptions>
                     <linkerFinalName/>
                     <linkerEndOptions>
-                        <linkerEndOption>-o ${basedir}/src/main/resources/${lib_name}</linkerEndOption>
-                        <linkerEndOption>-loqs</linkerEndOption>
+                        <linkerEndOption>${linker.end.option}</linkerEndOption>
                     </linkerEndOptions>
                 </configuration>
                 <executions>
