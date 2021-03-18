@@ -39,7 +39,7 @@ public class Common {
             } else if (Common.isMac()) {
                 libName = "liboqs-jni.jnilib";
             } else if (Common.isWindows()) {
-                libName = "oqs-jni.dll";
+                libName = "liboqs-jni"; // TODO: check if this is correct. I think the .dll is not needed
             }
             URL url = KEMs.class.getResource("/" + libName);
             File tmpDir;

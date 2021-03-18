@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openquantumsafe</groupId>
     <artifactId>liboqs-java</artifactId>
@@ -55,6 +55,7 @@
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <compiler.executable>gcc</compiler.executable>
+                <position.independent>-fPIC</position.independent>
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
                 <linker.final.name>liboqs-jni</linker.final.name>
                 <linker.final.name.ext>jnilib</linker.final.name.ext>
@@ -76,6 +77,7 @@
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <compiler.executable>gcc</compiler.executable>
+                <position.independent>-fPIC</position.independent>
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
                 <linker.final.name>liboqs-jni</linker.final.name>
                 <linker.final.name.ext>so</linker.final.name.ext>
@@ -91,16 +93,16 @@
                 </property>
             </activation>
             <properties>
-<!-- TODO: Change paths below -->
-<!--                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>-->
-<!--                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>-->
+                <liboqs.include.dir>C:\Users\Administrator\git\liboqs\build\include</liboqs.include.dir>
+                <liboqs.lib.dir>C:\Users\Administrator\git\liboqs\build\lib\Debug\oqs.lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/win32</java.os.include>
                 <compiler.provider>msvc</compiler.provider>
                 <compiler.executable/>
-                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <position.independent/>
+                <linker.start.option>${liboqs.lib.dir} /DLL</linker.start.option>
                 <linker.final.name>liboqs-jni</linker.final.name>
                 <linker.final.name.ext>dll</linker.final.name.ext>
-                <linker.end.option>-loqs</linker.end.option>
+                <linker.end.option/>
             </properties>
         </profile>
     </profiles>
@@ -163,9 +165,9 @@
                     <compilerExecutable>${compiler.executable}</compilerExecutable>
                     <compilerStartOptions>
                         <compilerStartOption>${java.os.include}</compilerStartOption>
-                        <compilerStartOption>-fPIC</compilerStartOption>
+                        <compilerStartOption>${position.independent}</compilerStartOption>
                         <compilerStartOption>-Wall</compilerStartOption>
-                        <compilerStartOption>-O3</compilerStartOption>
+                        <compilerStartOption>-O2</compilerStartOption>
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>${basedir}/src/main/resources/</linkerOutputDirectory>
