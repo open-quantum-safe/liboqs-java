@@ -13,9 +13,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <liboqs.include.dir />
-        <liboqs.lib.dir />
-        <java.os.include />
     </properties>
 
     <dependencies>
@@ -53,15 +50,15 @@
                 </property>
             </activation>
             <properties>
-                <lib_name>liboqs-jni.jnilib</lib_name>
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <compiler.executable>gcc</compiler.executable>
-                <linker.executable>gcc</linker.executable>
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
-                <linker.end.option>-o ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>
+                <linker.final.name>liboqs-jni</linker.final.name>
+                <linker.final.name.ext>jnilib</linker.final.name.ext>
+                <linker.end.option>-loqs</linker.end.option>
             </properties>
         </profile>
         <profile>
@@ -74,15 +71,15 @@
                 </property>
             </activation>
             <properties>
-                <lib_name>liboqs-jni.so</lib_name>
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <compiler.executable>gcc</compiler.executable>
-                <linker.executable>gcc</linker.executable>
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
-                <linker.end.option>-o ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>
+                <linker.final.name>liboqs-jni</linker.final.name>
+                <linker.final.name.ext>so</linker.final.name.ext>
+                <linker.end.option>-loqs</linker.end.option>
             </properties>
         </profile>
         <profile>
@@ -94,18 +91,16 @@
                 </property>
             </activation>
             <properties>
-                <lib_name>liboqs-jni.dll</lib_name>
 <!-- TODO: Change paths below -->
 <!--                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>-->
 <!--                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>-->
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/win32</java.os.include>
                 <compiler.provider>msvc</compiler.provider>
                 <compiler.executable/>
-                <linker.executable>msvc</linker.executable>
-
-<!-- TODO: Uncomment and use correct flags below -->
-<!--                <linker.start.option>-shared ${liboqs.lib.dir}</linker.start.option>-->
-<!--                <linker.end.option>/out ${basedir}/src/main/resources/${lib_name} -loqs</linker.end.option>-->
+                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <linker.final.name>liboqs-jni</linker.final.name>
+                <linker.final.name.ext>dll</linker.final.name.ext>
+                <linker.end.option>-loqs</linker.end.option>
             </properties>
         </profile>
     </profiles>
@@ -173,12 +168,12 @@
                         <compilerStartOption>-O3</compilerStartOption>
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
                     </compilerStartOptions>
-                    <linkerOutputDirectory>target</linkerOutputDirectory>
-                    <linkerExecutable>${linker.executable}</linkerExecutable>
+                    <linkerOutputDirectory>${basedir}/src/main/resources/</linkerOutputDirectory>
+                    <linkerFinalName>${linker.final.name}</linkerFinalName>
+                    <linkerFinalNameExt>${linker.final.name.ext}</linkerFinalNameExt>
                     <linkerStartOptions>
                         <linkerStartOption>${linker.start.option}</linkerStartOption>
                     </linkerStartOptions>
-                    <linkerFinalName/>
                     <linkerEndOptions>
                         <linkerEndOption>${linker.end.option}</linkerEndOption>
                     </linkerEndOptions>
