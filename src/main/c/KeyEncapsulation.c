@@ -46,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
     if (NULL == constructor_meth_id_) { fprintf(stderr, "\nCould not initialize class\n"); return NULL; }
 
     // Call back constructor to allocate a new instance, with an int argument
-    jobject _nativeKED = (*env)->NewObject(env, cls, constructor_meth_id_);
+    jobject _nativeKED = (*env)->NewObject(env, cls, constructor_meth_id_, obj);
 
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
 
