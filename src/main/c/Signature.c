@@ -46,7 +46,7 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_Signature_get_1sig_1details
     if (NULL == constructor_meth_id_) { fprintf(stderr, "\nCould not initialize class\n"); return NULL; }
 
     // Call back constructor to allocate a new instance, with an int argument
-    jobject _nativeKED = (*env)->NewObject(env, cls, constructor_meth_id_);
+    jobject _nativeKED = (*env)->NewObject(env, cls, constructor_meth_id_, obj);
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
 
@@ -133,7 +133,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
     jfieldID value_fid = (*env)->GetFieldID(env,
                                     (*env)->GetObjectClass(env, sig_len_obj),
                                     "value", "Ljava/lang/Object;");
-    jclass cls = (*env)->FindClass(env, "Ljava/lang/Long;");
+    jclass cls = (*env)->FindClass(env, "java/lang/Long");
     jobject jlong_obj = (*env)->NewObject(env, cls,
                                 (*env)->GetMethodID(env, cls, "<init>", "(J)V"),
                                 (jlong) len_sig);
