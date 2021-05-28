@@ -301,6 +301,15 @@ System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 
         ```
         export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
         ```
+        
+    * If a hotspot "irrecoverable stack overflow" error is shown:
+        ```
+        An irrecoverable stack overflow has occurred.
+        Please check if any of your loaded .so files has enabled executable stack (see man page execstack(8))
+        #
+        # A fatal error has been detected by the Java Runtime Environment:
+        ```
+        This could happen for algorithms that use a large stack size. Try adding the `-Xss` option to specify a different thread stack size. For example, `-Xss5m`.
 
 
 ## Team
