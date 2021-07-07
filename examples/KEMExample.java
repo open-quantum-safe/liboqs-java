@@ -13,7 +13,7 @@ public class KEMExample {
         Common.print_list(KEMs.get_enabled_KEMs());
         System.out.println();
 
-        String kem_name = "DEFAULT";
+        String kem_name = "Kyber512";
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
         client.print_details();
         System.out.println();

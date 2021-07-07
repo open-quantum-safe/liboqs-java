@@ -134,51 +134,33 @@ $ java -cp target/liboqs-java.jar:examples/ KEMExample
 
 ```
 Supported KEMs:
-  DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864 Classic-McEliece-348864f
-  Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
-  Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f
-  Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s LEDAcryptKEM-LT12 LEDAcryptKEM-LT32
-  LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
-  NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
-  PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed
-  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed
-  SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
+BIKE-L1 BIKE-L3 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821 NTRU-HRSS-701 ntrulpr653 ntrulpr761 ntrulpr857 sntrup653 sntrup761 sntrup857 LightSaber-KEM Saber-KEM FireSaber-KEM FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed 
 
 Enabled KEMs:
-  DEFAULT BIKE1-L1-CPA BIKE1-L3-CPA BIKE1-L1-FO BIKE1-L3-FO Classic-McEliece-348864 Classic-McEliece-348864f
-  Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f
-  Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f
-  Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s LEDAcryptKEM-LT12 LEDAcryptKEM-LT32
-  LEDAcryptKEM-LT52 NewHope-512-CCA NewHope-1024-CCA NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821
-  NTRU-HRSS-701 LightSaber-KEM Saber-KEM FireSaber-KEM BabyBear BabyBearEphem MamaBear MamaBearEphem PapaBear
-  PapaBearEphem FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES
-  FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed
-  SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed
-  SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed
+BIKE-L1 BIKE-L3 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821 NTRU-HRSS-701 ntrulpr653 ntrulpr761 ntrulpr857 sntrup653 sntrup761 sntrup857 LightSaber-KEM Saber-KEM FireSaber-KEM FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed 
 
 KEM Details:
-  Name: FrodoKEM-640-AES
-  Version: https://github.com/Microsoft/PQCrypto-LWEKE/commit/d5bbd0417ba111b08a959c0042a1dcc65fb14a89
+  Name: Kyber512
+  Version: https://github.com/pq-crystals/kyber/commit/74cad307858b61e434490c75f812cb9b9ef7279b
   Claimed NIST level: 1
   Is IND-CCA: true
-  Length public key (bytes): 9616
-  Length secret key (bytes): 19888
-  Length ciphertext (bytes): 9720
-  Length shared secret (bytes): 16
+  Length public key (bytes): 800
+  Length secret key (bytes): 1632
+  Length ciphertext (bytes): 768
+  Length shared secret (bytes): 32
 
 Client public key:
-14 E7 26 B9 28 F7 F8 23 ... 16 C3 D0 62 1C B3 D1 EB
+C8 58 3B 21 02 A0 4D B0 ... 95 57 A7 E9 42 C0 45 C4 
 
 It took 1 millisecs to generate the key pair.
-It took 2 millisecs to encapsulate the secret.
-It took 1 millisecs to decapsulate the secret.
+It took 0 millisecs to encapsulate the secret.
+It took 0 millisecs to decapsulate the secret.
 
 Client shared secret:
-B0 8A C0 62 69 68 44 D3 52 6A F9 9E 5A 42 26 16
+16 7F 9B 18 18 F9 F0 FE ... 70 F3 F6 4A C1 30 2C FF 
 
 Server shared secret:
-B0 8A C0 62 69 68 44 D3 52 6A F9 9E 5A 42 26 16
+16 7F 9B 18 18 F9 F0 FE ... 70 F3 F6 4A C1 30 2C FF 
 
 Shared secrets coincide? true
 ```
@@ -192,57 +174,29 @@ $ java -cp target/liboqs-java.jar:examples/ SigExample
 
 ```
 Supported signatures:
-  DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
-  Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
-  Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic Rainbow-Vc-Cyclic-Compressed
-  SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple
-  SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple
-  SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple
-  SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
-  SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
-  SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
-  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
-  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple
-  SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
-  SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
-  picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
-  qTesla-p-I qTesla-p-III
+Dilithium2 Dilithium3 Dilithium5 Dilithium2-AES Dilithium3-AES Dilithium5-AES Falcon-512 Falcon-1024 Rainbow-I-Classic Rainbow-I-Circumzenithal Rainbow-I-Compressed Rainbow-III-Classic Rainbow-III-Circumzenithal Rainbow-III-Compressed Rainbow-V-Classic Rainbow-V-Circumzenithal Rainbow-V-Compressed SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L1_full picnic_L3_FS picnic_L3_UR picnic_L3_full picnic_L5_FS picnic_L5_UR picnic_L5_full picnic3_L1 picnic3_L3 picnic3_L5 
 
 Enabled signatures:
-  DEFAULT DILITHIUM_2 DILITHIUM_3 DILITHIUM_4 Falcon-512 Falcon-1024 MQDSS-31-48 MQDSS-31-64 Rainbow-Ia-Classic
-  Rainbow-Ia-Cyclic Rainbow-Ia-Cyclic-Compressed Rainbow-IIIc-Classic Rainbow-IIIc-Cyclic
-  Rainbow-IIIc-Cyclic-Compressed Rainbow-Vc-Classic Rainbow-Vc-Cyclic Rainbow-Vc-Cyclic-Compressed
-  SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple
-  SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple
-  SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple
-  SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple
-  SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple
-  SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple
-  SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust
-  SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple
-  SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust
-  SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS
-  picnic_L1_UR picnic_L3_FS picnic_L3_UR picnic_L5_FS picnic_L5_UR picnic2_L1_FS picnic2_L3_FS picnic2_L5_FS
-  qTesla-p-I qTesla-p-III
+Dilithium2 Dilithium3 Dilithium5 Dilithium2-AES Dilithium3-AES Dilithium5-AES Falcon-512 Falcon-1024 Rainbow-I-Classic Rainbow-I-Circumzenithal Rainbow-I-Compressed Rainbow-III-Classic Rainbow-III-Circumzenithal Rainbow-III-Compressed Rainbow-V-Classic Rainbow-V-Circumzenithal Rainbow-V-Compressed SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L1_full picnic_L3_FS picnic_L3_UR picnic_L3_full picnic_L5_FS picnic_L5_UR picnic_L5_full picnic3_L1 picnic3_L3 picnic3_L5 
 
 Signature Details:
-  Name: DILITHIUM_2
-  Version: https://github.com/pq-crystals/dilithium/commit/c1b40fd599e71f65aa18be64dd6c3fc8e84b0c08
-  Claimed NIST level: 1
+  Name: Dilithium2
+  Version: https://github.com/pq-crystals/dilithium/commit/d9c885d3f2e11c05529eeeb7d70d808c972b8409
+  Claimed NIST level: 2
   Is IND-CCA: true
-  Length public key (bytes): 1184
-  Length secret key (bytes): 2800
-  Maximum length signature (bytes): 2044
+  Length public key (bytes): 1312
+  Length secret key (bytes): 2528
+  Maximum length signature (bytes): 2420
 
 Signer public key:
-0C 3A 73 48 09 14 18 8D ... 70 0B 3C 13 CF 43 F2 AD
+0E 47 54 30 E7 47 6D E6 ... 82 6E 4C C3 87 AA 6E FD 
 
 It took 0 millisecs to generate the key pair.
-It took 2 millisecs to sign the message.
-It took 1 millisecs to verify.
+It took 1 millisecs to sign the message.
+It took 0 millisecs to verify the signature.
 
 Signature:
-6D 06 5E C0 32 DB 70 A8 ... AF C9 F0 28 12 43 6C 04
+0C 2E 2D E2 81 C5 DC 10 ... 00 00 00 00 03 13 29 3B 
 
 Valid signature? true
 ```

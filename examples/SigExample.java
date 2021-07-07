@@ -15,7 +15,7 @@ public class SigExample {
 
         byte[] message = "This is the message to sign".getBytes();
 
-        String sig_name = "DEFAULT";
+        String sig_name = "Dilithium2";
         Signature signer = new Signature(sig_name);
         signer.print_details();
         System.out.println();
