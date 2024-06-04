@@ -105,8 +105,8 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypa
     // Invoke liboqs KEM keypair generation function
     OQS_STATUS rv_ = OQS_KEM_keypair(kem, (uint8_t*) public_key_native, (uint8_t*) secret_key_native);
 
-    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, JNI_COMMIT);
-    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, 0);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
 
@@ -129,8 +129,8 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_encap_1secret
 
     // Release C public_key
     (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key, JNI_ABORT);
-    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext, JNI_COMMIT);
-    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext, 0);
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret, 0);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
 
@@ -150,7 +150,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_decap_1secret
     OQS_STATUS rv_ = OQS_KEM_decaps(kem, (uint8_t*) shared_secret_native, (uint8_t*) ciphertext_native, (uint8_t*) secret_key_native);
 
     // release memory
-    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jshared_secret, shared_secret_native, 0);
     (*env)->ReleaseByteArrayElements(env, jciphertext, ciphertext_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_ABORT);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
