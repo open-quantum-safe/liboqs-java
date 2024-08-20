@@ -101,8 +101,8 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_generate_1keypair
     // Invoke liboqs sig keypair generation function
     OQS_STATUS rv_ = OQS_SIG_keypair(sig, (uint8_t*) public_key_native, (uint8_t*) secret_key_native);
 
-    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, JNI_COMMIT);
-    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, 0);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
 
@@ -140,7 +140,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
     (*env)->SetObjectField(env, sig_len_obj, value_fid, jlong_obj);
 
     // Release C memory
-    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_COMMIT);
+    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, 0);
     (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_ABORT);
 

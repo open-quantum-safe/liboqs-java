@@ -20,16 +20,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>5.6.2</version>
@@ -53,7 +43,8 @@
                 </property>
             </activation>
             <properties>
-                <lib_name>liboqs-jni.jnilib</lib_name>
+                <lib_name>liboqs-jni</lib_name>
+                <lib_name_ext>jnilib</lib_name_ext>
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
@@ -69,7 +60,8 @@
                 </property>
             </activation>
             <properties>
-                <lib_name>liboqs-jni.so</lib_name>
+                <lib_name>liboqs-jni</lib_name>
+                <lib_name_ext>so</lib_name_ext>
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
@@ -84,7 +76,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
                 <configuration>
-                    <argLine>-Xss10M -Djava.library.path=${basedir}/src/main/resources/</argLine>
+                    <argLine>-Xss10M -Djava.library.path=${project.build.outputDirectory}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -94,23 +86,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <target>
-                                <mkdir dir="${basedir}/src/main/resources/"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -140,15 +115,15 @@
                         <compilerStartOption>-O3</compilerStartOption>
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
                     </compilerStartOptions>
-                    <linkerOutputDirectory>target</linkerOutputDirectory>
+                    <linkerOutputDirectory>${project.build.outputDirectory}</linkerOutputDirectory>
                     <linkerExecutable>gcc</linkerExecutable>
                     <linkerStartOptions>
                         <linkerStartOption>-shared</linkerStartOption>
                         <linkerStartOption>-L${liboqs.lib.dir}</linkerStartOption>
                     </linkerStartOptions>
-                    <linkerFinalName/>
+                    <linkerFinalName>${lib_name}</linkerFinalName>
+                    <linkerFinalNameExt>${lib_name_ext}</linkerFinalNameExt>
                     <linkerEndOptions>
-                        <linkerEndOption>-o ${basedir}/src/main/resources/${lib_name}</linkerEndOption>
                         <linkerEndOption>-loqs</linkerEndOption>
                     </linkerEndOptions>
                 </configuration>
@@ -161,27 +136,6 @@
                             <goal>compile</goal>
                             <goal>link</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/resources/</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
