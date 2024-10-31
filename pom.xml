@@ -62,8 +62,8 @@
             <properties>
                 <lib_name>liboqs-jni</lib_name>
                 <lib_name_ext>so</lib_name_ext>
-                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
-                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
+                <liboqs.include.dir>${project.basedir}/liboqs/build/include</liboqs.include.dir>
+                <liboqs.lib.dir>${project.basedir}/liboqs/build/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
             </properties>
         </profile>
@@ -124,7 +124,8 @@
                     <linkerFinalName>${lib_name}</linkerFinalName>
                     <linkerFinalNameExt>${lib_name_ext}</linkerFinalNameExt>
                     <linkerEndOptions>
-                        <linkerEndOption>-loqs</linkerEndOption>
+                        <linkerEndOption>${liboqs.lib.dir}/liboqs.a</linkerEndOption>
+                        <linkerEndOption>-lcrypto</linkerEndOption>
                     </linkerEndOptions>
                 </configuration>
                 <executions>
