@@ -1,30 +1,42 @@
-代码由https://github.com/open-quantum-safe/liboqs-java，修改得到，相比起原本的`liboqs-java`库，这个库里面使用了`liboqs.a`，而不是`liboqs.so`，所以不需要将`liboqs`安装到系统目录，只需要从`./liboqs/`文件夹编译得到`liboqs.a`即可。
+# liboqs-java
 
-这是本地构建用的代码，需要在linux环境运行，需求jdk1.8, gcc, cmake, ninja-build, maven, openssl
+This project is forked from [open-quantum-safe/liboqs-java](https://github.com/open-quantum-safe/liboqs-java). The main difference is that this version uses `liboqs.a` instead of `liboqs.so`, eliminating the need to install liboqs in the system directory. It only requires compiling `liboqs.a` from the `./liboqs/` folder.
 
-## linux下构建指南
-1. 下载代码
+## Description
+liboqs-java is a Java wrapper for liboqs, providing an interface to quantum-resistant cryptographic algorithms.
+
+## Prerequisites
+This code needs to be built in a Linux environment with the following requirements:
+- JDK 1.8
+- GCC
+- CMake
+- ninja-build
+- Maven
+- OpenSSL
+
+## Build Instructions for Linux
+
+1. Clone the repository with submodules
 ```bash
 git clone --recursive https://github.com/AdijeShen/liboqs-java
 ```
 
-2. 编译liboqs的C代码库得到liboqs.a
+2. Build the liboqs C library to generate liboqs.a
 ```bash
 cd liboqs
 cmake -S . -B build
 cmake --build build -j4
 cd ..
 ```
-这一步会生成`liboqs/build/liboqs.a`文件
+This step will generate the `liboqs/build/liboqs.a` file.
 
-3. 编译liboqs-java
+3. Build liboqs-java
 ```bash
 mvn package
 ```
+This step will generate `target/liboqs-java.jar` and `target/classes/liboqs-jni.so`.
 
-这一步会生成`target/liboqs-java.jar`和`target/classes/liboqs-jni.so`文件
-
-4. 可以运行KEM示例:
+4. Run the KEM example:
 ```bash
 javac -cp target/liboqs-java.jar examples/KEMExample.java
 java -cp target/liboqs-java.jar:examples/ KEMExample
