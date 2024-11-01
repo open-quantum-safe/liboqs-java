@@ -58,7 +58,7 @@ mvn -version
 
 8. Build the package:
 ```bash
-mvn package -P linux
+mvn package -P windows
 ```
 
 9. Run the KEM example:
