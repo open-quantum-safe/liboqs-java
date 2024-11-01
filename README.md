@@ -137,12 +137,9 @@ git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 
 #### Build Instructions
 
-First, you must build the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
-
-
 1. Clone the repository with submodules
 ```bash
-git clone --recursive https://github.com/AdijeShen/liboqs-java
+git clone --recursive https://github.com/open-quantum-safe/liboqs-java
 ```
 
 2. Build the liboqs C library to generate liboqs.a
