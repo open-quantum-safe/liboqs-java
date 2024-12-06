@@ -146,6 +146,51 @@ public class Signature {
     private native boolean verify(byte[] message, long message_len,
                                 byte[] signature, long signature_len,
                                 byte[] public_key);
+    
+    /**
+     * \brief Wrapper for OQS_API OQS_STATUS OQS_SIG_sign_with_ctx_str(const OQS_SIG *sig,
+     *                                              uint8_t *signature,
+     *                                              size_t *signature_len,
+     *                                              const uint8_t *message,
+     *                                              size_t message_len,
+     *                                              const uint8_t *ctx,
+     *                                              size_t ctx_len,
+     *                                              const uint8_t *secret_key);
+     * \param signature
+     * \param signature_len_ret
+     * \param message
+     * \param message_len
+     * \param ctx
+     * \param ctx_len
+     * \param secret_key
+     * \return Status
+     */
+    private native int sign_with_ctx_str(byte[] signature, Mutable<Long> signature_len_ret,
+                        byte[] message, long message_len, byte[] ctx, long ctx_len,
+                        byte[] secret_key);
+
+    /**
+     * \brief Wrapper for OQS_API OQS_STATUS OQS_SIG_verify_with_ctx_str(const OQS_SIG *sig,
+     *                                              const uint8_t *message,
+     *                                              size_t message_len,
+     *                                              const uint8_t *signature,
+     *                                              size_t signature_len,
+     *                                              const uint8_t *ctx,
+     *                                              size_t ctx_len,
+     *                                              const uint8_t *public_key);
+     * \param message
+     * \param message_len
+     * \param signature
+     * \param signature_len
+     * \param ctx
+     * \param ctx_len
+     * \param public_key
+     * \return True if the signature is valid, false otherwise
+     */
+    private native boolean verify_with_ctx_str(byte[] message, long message_len,
+                                byte[] signature, long signature_len,
+                                byte[] ctx, long ctx_len,
+                                byte[] public_key);
 
     /**
      * \brief Invoke native free_sig
@@ -219,6 +264,55 @@ public class Signature {
         }
 
         return verify(message, message.length, signature, signature.length, public_key);
+    }
+    
+    /**
+     * \brief Invoke native sign method
+     * \param message
+     * \param ctx
+     * \return signature
+     */
+    public byte[] sign(byte[] message, byte[] ctx) throws RuntimeException {
+        if (this.secret_key_.length != alg_details_.length_secret_key) {
+            throw new RuntimeException("Incorrect secret key length, " +
+                                    "make sure you specify one in the " +
+                                    "constructor or run generate_keypair()");
+        }
+        byte[] signature = new byte[(int) alg_details_.max_length_signature];
+        Mutable<Long> signature_len_ret = new Mutable<>();
+        int ctx_len = (ctx == null) ? 0 : ctx.length;
+        int rv_= sign_with_ctx_str(signature, signature_len_ret,
+                        message, message.length, 
+                        ctx, ctx_len,
+                        this.secret_key_);
+        long actual_signature_len = signature_len_ret.value;
+        byte[] actual_signature = new byte[(int) actual_signature_len];
+        System.arraycopy(signature, 0,
+                            actual_signature, 0, (int) actual_signature_len);
+        if (rv_ != 0) throw new RuntimeException("Cannot sign message");
+        return actual_signature;
+    }
+
+    /**
+     * \brief Invoke native verify method
+     * \param message
+     * \param signature
+     * \param ctx
+     * \param public_key
+     * \return True if the signature is valid, false otherwise
+     */
+    public boolean verify(byte[] message, byte[] signature, byte[] ctx, byte[] public_key)
+                                                    throws RuntimeException {
+        if (public_key.length != alg_details_.length_public_key) {
+            throw new RuntimeException("Incorrect public key length");
+        }
+        if (signature.length > alg_details_.max_length_signature) {
+            throw new RuntimeException("Incorrect signature length");
+        }
+
+        int ctx_len = (ctx == null) ? 0 : ctx.length;
+        
+        return verify_with_ctx_str(message, message.length, signature, signature.length, ctx, ctx_len, public_key);
     }
 
     /**
