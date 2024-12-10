@@ -53,6 +53,41 @@ public class SigTest {
         sb.append("\033[0;32m").append("PASSED").append("\033[0m");
         System.out.println(sb.toString());
     }
+    
+    
+    /**
+     * Test all enabled Sigs with context (if they don't support the context
+     * it should fail gracefully)
+     */
+    @ParameterizedTest(name = "Testing {arguments}")
+    @MethodSource("getEnabledSigsAsStream")
+    public void testAllSigsWithContext(String sig_name) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(sig_name);
+        sb.append(String.format("%1$" + (40 - sig_name.length()) + "s", ""));
+
+        // Create signer and verifier
+        Signature signer = new Signature(sig_name);
+        Signature verifier = new Signature(sig_name);
+
+        byte[] sampleContext = new byte[] {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10};
+        
+        // Generate signer key pair
+        byte[] signer_public_key = signer.generate_keypair();
+
+        // Sign the message
+        byte[] signature = signer.sign(message,sampleContext);
+
+        // Verify the signature
+        boolean is_valid = verifier.verify(message, signature, sampleContext, signer_public_key);
+
+        assertTrue(is_valid, sig_name);
+
+        // If successful print Sig name, otherwise an exception will be thrown
+        sb.append("\033[0;32m").append("PASSED").append("\033[0m");
+        System.out.println(sb.toString());
+    }
+    
 
     /**
      * Test the MechanismNotSupported Exception
