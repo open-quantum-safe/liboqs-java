@@ -11,11 +11,41 @@ jobs:
       - name: Ensure GitHub actions are valid
         run: actionlint -shellcheck "" # run *without* shellcheck
 
-  build-and-test:
-    name: Build and test
+  ubuntu-build:
+    needs: workflowcheck
+    name: OQS Ubuntu
     runs-on: ubuntu-latest
     container: openquantumsafe/ci-ubuntu-latest:latest
     steps:
+      - name: Checkout liboqs-java
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+      - name: Checkout liboqs main
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        with:
+          repository: open-quantum-safe/liboqs
+          path: liboqs
+          ref: main
+      - name: Build liboqs
+        run: mkdir build && cd build && cmake .. -G"Ninja" -DBUILD_SHARED_LIBS=ON -DOQS_BUILD_ONLY_LIB=ON && ninja install
+        working-directory: liboqs
+      - name: Resolve all maven project dependencies
+        run: mvn dependency:go-offline
+      - name: Build liboqs-java and run tests
+        run: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package
+      - name: Compile KEM, Signatures and Rand examples
+        run: |
+          javac -cp target/liboqs-java.jar examples/KEMExample.java &&
+          javac -cp target/liboqs-java.jar examples/SigExample.java &&
+          javac -cp target/liboqs-java.jar examples/RandExample.java
+
+  openjdk-11:
+    needs: workflowcheck
+    name: OpenJDK
+    runs-on: ubuntu-latest
+    container: cimg/openjdk:11.0.9
+    steps:
+      - name: Install dependencies to build liboqs
+        run: sudo apt update -qq && sudo apt install cmake build-essential ninja-build libssl-dev
       - name: Checkout liboqs-java
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Checkout liboqs main
