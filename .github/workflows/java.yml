@@ -1,5 +1,13 @@
 name: liboqs-java CI
 
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  repository_dispatch:
+    types: ["**"]
+
 jobs:
   workflowcheck:
     name: Check validity of GitHub workflows
