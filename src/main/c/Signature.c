@@ -122,6 +122,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
     size_t len_sig;
+    
     OQS_STATUS rv_ = OQS_SIG_sign(sig, (uint8_t*)signature_native, &len_sig,
                                     (uint8_t*)message_native, message_len,
                                     (uint8_t*)secret_key_native);
@@ -173,3 +174,81 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify
 
     return (rv_ == OQS_SUCCESS) ? JNI_TRUE : JNI_FALSE;
 }
+
+/*
+ * Class:     org_openquantumsafe_Signature
+ * Method:    sign_with_ctx_str
+ * Signature: ([BLjava/lang/Long;[BJ[B)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign_1with_1ctx_1str
+  (JNIEnv * env, jobject obj, jbyteArray jsignature, jobject sig_len_obj,
+      jbyteArray jmessage, jlong message_len, jbyteArray jctx, jlong ctx_len,
+      jbyteArray jsecret_key)
+{
+    // Convert to jbyte arrays
+    jbyte *signature_native = (*env)->GetByteArrayElements(env, jsignature, 0);
+    jbyte *message_native = (*env)->GetByteArrayElements(env, jmessage, 0);
+    jbyte *ctx_native = (*env)->GetByteArrayElements(env, jctx, 0);
+    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
+
+    OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
+    size_t len_sig;
+    OQS_STATUS rv_ = OQS_SIG_sign_with_ctx_str(sig, (uint8_t*)signature_native, &len_sig,
+                                    (uint8_t*)message_native, message_len,
+                                    (uint8_t*)ctx_native, ctx_len,
+                                    (uint8_t*)secret_key_native);
+                                    
+    // fill java signature bytes
+    (*env)->SetByteArrayRegion(env, jsignature, 0, len_sig, (jbyte*) signature_native);
+
+    // fill java object signature length
+    jfieldID value_fid = (*env)->GetFieldID(env,
+                                    (*env)->GetObjectClass(env, sig_len_obj),
+                                    "value", "Ljava/lang/Object;");
+    jclass cls = (*env)->FindClass(env, "java/lang/Long");
+    jobject jlong_obj = (*env)->NewObject(env, cls,
+                                (*env)->GetMethodID(env, cls, "<init>", "(J)V"),
+                                (jlong) len_sig);
+    (*env)->SetObjectField(env, sig_len_obj, value_fid, jlong_obj);
+
+    // Release C memory
+    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_ABORT);
+
+    return (rv_ == OQS_SUCCESS) ? 0 : -1;
+}
+
+/*
+ * Class:     org_openquantumsafe_Signature
+ * Method:    verify_with_ctx_str
+ * Signature: ([BJ[BJ[B)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify_1with_1ctx_1str
+  (JNIEnv *env, jobject obj, jbyteArray jmessage, jlong message_len,
+      jbyteArray jsignature, jlong signature_len, jbyteArray jctx, jlong ctx_len,
+      jbyteArray jpublic_key)
+{
+    // Convert to jbyte arrays
+    jbyte *message_native = (*env)->GetByteArrayElements(env, jmessage, 0);
+    jbyte *signature_native = (*env)->GetByteArrayElements(env, jsignature, 0);
+    jbyte *ctx_native = (*env)->GetByteArrayElements(env, jctx, 0);
+    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
+
+    OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
+    OQS_STATUS rv_ = OQS_SIG_verify_with_ctx_str(sig, (uint8_t*) message_native, message_len,
+                                    (uint8_t*) signature_native, signature_len,
+                                    (uint8_t*) ctx_native, ctx_len,
+                                    (uint8_t*) public_key_native);
+ 
+    // Release C memory
+    (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
+    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, JNI_ABORT);
+
+    return (rv_ == OQS_SUCCESS) ? JNI_TRUE : JNI_FALSE;
+}
+
+
