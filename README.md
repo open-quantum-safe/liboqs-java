@@ -1,4 +1,4 @@
-[![CircleCI Build Status](https://circleci.com/gh/open-quantum-safe/liboqs-java/tree/master.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/liboqs-java/tree/master)
+[![GitHub Actions Build Status](https://github.com/open-quantum-safe/liboqs-java/actions/workflows/java.yml/badge.svg)](https://github.com/open-quantum-safe/liboqs-java/actions/workflows/java.yml)
 
 # liboqs-java: Java wrapper for liboqs
 
