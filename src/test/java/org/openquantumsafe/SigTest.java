@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
-// import java.util.Arrays;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class SigTest {
@@ -62,8 +62,7 @@ public class SigTest {
      * Test Sigs with context.
      */
     @ParameterizedTest(name = "Testing {arguments}")
-    @MethodSource("getEnabledSigsAsStream")
-    //@MethodSource("getMLDSASigsAsStream")
+    @MethodSource("getContextSupportedAlgsAsStream")
     public void testSigsWithContext(String sig_name) {
     	byte[] context = "01234567890".getBytes();
         StringBuilder sb = new StringBuilder();
@@ -104,12 +103,12 @@ public class SigTest {
         return enabled_sigs.parallelStream();
     }
 
-//    /**
-//     * Method to convert the list of ML-DSA Sigs to a stream for input to testAllSigs
-//     */
-//    private static Stream<String> getMLDSASigsAsStream() {
-//    	return Arrays.asList(
-//                "ML-DSA-44", "ML-DSA-65", "ML-DSA-87"
-//            ).parallelStream();
-//    }
+    /**
+     * Method to convert the list of ML-DSA Sigs to a stream for input to testAllSigs
+     */
+    private static Stream<String> getContextSupportedAlgsAsStream() {
+    	return Arrays.asList(
+                "ML-DSA-44", "ML-DSA-65", "ML-DSA-87"
+            ).parallelStream();
+    }
 }
