@@ -1,4 +1,4 @@
-liboqs-java version 0.1.1
+liboqs-java version 0.2.0
 =========================
 
 About
@@ -15,4 +15,4 @@ Release notes
 
 The initial release of liboqs-java was released on July 8, 2020. Its release page on GitHub is https://github.com/open-quantum-safe/liboqs-java/releases/tag/0.1.0.
 
-Release 0.1.1 from December 2024 added support for Signature and Verify API's which accept a Context String.
+Release 0.2.0 from January 2025 added support for Signature and Verify API's which accept a Context String.
