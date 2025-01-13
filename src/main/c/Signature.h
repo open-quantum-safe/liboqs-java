@@ -41,32 +41,8 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_generate_1keypair
 
 /*
  * Class:     org_openquantumsafe_Signature
- * Method:    import_secret_key
- * Signature: ([B)V
- */
-JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_import_1secret_1key
-  (JNIEnv *, jobject, jbyteArray);
-
-/*
- * Class:     org_openquantumsafe_Signature
- * Method:    export_public_key
- * Signature: ([B)V
- */
-JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1public_1key
-  (JNIEnv *, jobject, jbyteArray);
-
-/*
- * Class:     org_openquantumsafe_Signature
- * Method:    export_secret_key
- * Signature: ([B)V
- */
-JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_export_1secret_1key
-  (JNIEnv *, jobject, jbyteArray);
-
-/*
- * Class:     org_openquantumsafe_Signature
  * Method:    sign
- * Signature: ([BLjava/lang/Long;[BJ[B)I
+ * Signature: ([BLorg/openquantumsafe/Signature/Mutable;[BJ[B)I
  */
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
   (JNIEnv *, jobject, jbyteArray, jobject, jbyteArray, jlong, jbyteArray);
@@ -78,6 +54,22 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
  */
 JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify
   (JNIEnv *, jobject, jbyteArray, jlong, jbyteArray, jlong, jbyteArray);
+
+/*
+ * Class:     org_openquantumsafe_Signature
+ * Method:    sign_with_ctx_str
+ * Signature: ([BLorg/openquantumsafe/Signature/Mutable;[BJ[BJ[B)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign_1with_1ctx_1str
+  (JNIEnv *, jobject, jbyteArray, jobject, jbyteArray, jlong, jbyteArray, jlong, jbyteArray);
+
+/*
+ * Class:     org_openquantumsafe_Signature
+ * Method:    verify_with_ctx_str
+ * Signature: ([BJ[BJ[BJ[B)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify_1with_1ctx_1str
+  (JNIEnv *, jobject, jbyteArray, jlong, jbyteArray, jlong, jbyteArray, jlong, jbyteArray);
 
 #ifdef __cplusplus
 }
