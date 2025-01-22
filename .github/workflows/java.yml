@@ -25,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     container: openquantumsafe/ci-ubuntu-latest:latest
     steps:
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y default-jdk-headless
       - name: Checkout liboqs-java
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Checkout liboqs main
@@ -39,7 +41,7 @@ jobs:
       - name: Resolve all maven project dependencies
         run: mvn dependency:go-offline
       - name: Build liboqs-java and run tests
-        run: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package
+        run: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && export JAVA_HOME=/usr/lib/jvm/default-java && mvn package
       - name: Compile KEM, Signatures and Rand examples
         run: |
           javac -cp target/liboqs-java.jar examples/KEMExample.java &&
