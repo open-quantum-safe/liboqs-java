@@ -23,7 +23,7 @@ jobs:
     needs: workflowcheck
     name: OQS Ubuntu
     runs-on: ubuntu-latest
-    container: openquantumsafe/ci-ubuntu-focal:latest
+    container: openquantumsafe/ci-ubuntu-latest:latest
     steps:
       - name: Checkout liboqs-java
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
