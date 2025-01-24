@@ -19,11 +19,10 @@ jobs:
       - name: Ensure GitHub actions are valid
         run: actionlint -shellcheck "" # run *without* shellcheck
 
-  build-and-test:
+  linux:
     needs: workflowcheck
-    name: OQS Ubuntu
     runs-on: ubuntu-latest
-    container: openquantumsafe/ci-ubuntu-focal:latest
+    container: openquantumsafe/ci-ubuntu-latest:latest
     steps:
       - name: Checkout liboqs-java
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
@@ -40,6 +39,38 @@ jobs:
         run: mvn dependency:go-offline
       - name: Build liboqs-java and run tests
         run: export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib" && mvn package
+      - name: Compile KEM, Signatures and Rand examples
+        run: |
+          javac -cp target/liboqs-java.jar examples/KEMExample.java &&
+          javac -cp target/liboqs-java.jar examples/SigExample.java &&
+          javac -cp target/liboqs-java.jar examples/RandExample.java
+
+  macos:
+    needs: workflowcheck
+    runs-on: macos-latest
+    steps:
+      - name: Install Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # pin@v5
+        with:
+          python-version: '3.12'
+      - name: Checkout liboqs-java
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+      - name: Checkout liboqs main
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        with:
+          repository: open-quantum-safe/liboqs
+          path: liboqs
+          ref: main
+      - name: Install liboqs dependencies
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install ninja && pip3 install --require-hashes --break-system-packages -r .github/workflows/requirements.txt
+        working-directory: liboqs
+      - name: Build liboqs
+        run: mkdir build && cd build && cmake .. -G"Ninja" -DBUILD_SHARED_LIBS=ON -DOQS_BUILD_ONLY_LIB=ON && sudo ninja install
+        working-directory: liboqs
+      - name: Resolve all maven project dependencies
+        run: mvn dependency:go-offline
+      - name: Build liboqs-java and run tests
+        run: export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/usr/local/lib" && mvn -P macosx package
       - name: Compile KEM, Signatures and Rand examples
         run: |
           javac -cp target/liboqs-java.jar examples/KEMExample.java &&

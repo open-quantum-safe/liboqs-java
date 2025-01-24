@@ -164,13 +164,13 @@ To build the `liboqs-java` wrapper type for different operating systems add the 
 
 For instance, to build `liboqs-java` for MacOS, type:
 ```
-$ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib"
+mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib"
 ```
 The above command will compile the C and Java files and also run the unit tests.
 
 To build without running the default unit tests you can use the `-Dmaven.test.skip=true` command line option as follows:
 ```
-$ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib" -Dmaven.test.skip=true
+mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib" -Dmaven.test.skip=true
 ```
 
 The default profile for building is `linux`, so when building on Linux the `-P <OS>` command line option may be omitted.
@@ -194,7 +194,6 @@ The examples include:
 
 1. **Rand example:**
     Print random bytes from
-    * NIST-KAT
     * OpenSSL
     * System (default)
 
@@ -212,20 +211,20 @@ $ java -cp "target\liboqs-java.jar;examples\" KEMExample
 ##### Linux/MacOS
 
 ```
-$ javac -cp target/liboqs-java.jar examples/KEMExample.java
-$ java -cp target/liboqs-java.jar:examples/ KEMExample
+javac -cp target/liboqs-java.jar examples/KEMExample.java
+java -cp target/liboqs-java.jar:examples/ KEMExample
 ```
 
 ```
 Supported KEMs:
-BIKE-L1 BIKE-L3 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821 NTRU-HRSS-701 ntrulpr653 ntrulpr761 ntrulpr857 sntrup653 sntrup761 sntrup857 LightSaber-KEM Saber-KEM FireSaber-KEM FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed 
+BIKE-L1 BIKE-L3 BIKE-L5 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 ML-KEM-512 ML-KEM-768 ML-KEM-1024 sntrup761 FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE 
 
 Enabled KEMs:
-BIKE-L1 BIKE-L3 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 Kyber512-90s Kyber768-90s Kyber1024-90s NTRU-HPS-2048-509 NTRU-HPS-2048-677 NTRU-HPS-4096-821 NTRU-HRSS-701 ntrulpr653 ntrulpr761 ntrulpr857 sntrup653 sntrup761 sntrup857 LightSaber-KEM Saber-KEM FireSaber-KEM FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE SIDH-p434 SIDH-p503 SIDH-p610 SIDH-p751 SIDH-p434-compressed SIDH-p503-compressed SIDH-p610-compressed SIDH-p751-compressed SIKE-p434 SIKE-p503 SIKE-p610 SIKE-p751 SIKE-p434-compressed SIKE-p503-compressed SIKE-p610-compressed SIKE-p751-compressed 
+BIKE-L1 BIKE-L3 BIKE-L5 Classic-McEliece-348864 Classic-McEliece-348864f Classic-McEliece-460896 Classic-McEliece-460896f Classic-McEliece-6688128 Classic-McEliece-6688128f Classic-McEliece-6960119 Classic-McEliece-6960119f Classic-McEliece-8192128 Classic-McEliece-8192128f HQC-128 HQC-192 HQC-256 Kyber512 Kyber768 Kyber1024 ML-KEM-512 ML-KEM-768 ML-KEM-1024 sntrup761 FrodoKEM-640-AES FrodoKEM-640-SHAKE FrodoKEM-976-AES FrodoKEM-976-SHAKE FrodoKEM-1344-AES FrodoKEM-1344-SHAKE 
 
 KEM Details:
-  Name: Kyber512
-  Version: https://github.com/pq-crystals/kyber/commit/74cad307858b61e434490c75f812cb9b9ef7279b
+  Name: ML-KEM-512
+  Version: FIPS203
   Claimed NIST level: 1
   Is IND-CCA: true
   Length public key (bytes): 800
@@ -234,17 +233,17 @@ KEM Details:
   Length shared secret (bytes): 32
 
 Client public key:
-C8 58 3B 21 02 A0 4D B0 ... 95 57 A7 E9 42 C0 45 C4 
+A8 37 25 CA 79 A5 55 42 ... AF 43 3A 54 6C 3C 34 30 
 
 It took 1 millisecs to generate the key pair.
 It took 0 millisecs to encapsulate the secret.
 It took 0 millisecs to decapsulate the secret.
 
 Client shared secret:
-16 7F 9B 18 18 F9 F0 FE ... 70 F3 F6 4A C1 30 2C FF 
+7D 3B BB C7 29 45 4B 2F ... 58 87 1D BB BD 35 9C 79 
 
 Server shared secret:
-16 7F 9B 18 18 F9 F0 FE ... 70 F3 F6 4A C1 30 2C FF 
+7D 3B BB C7 29 45 4B 2F ... 58 87 1D BB BD 35 9C 79 
 
 Shared secrets coincide? true
 ```
@@ -261,35 +260,35 @@ $ java -cp "target/liboqs-java.jar;examples\" SigExample
 ##### Linux/MacOS
 
 ```
-$ javac -cp target/liboqs-java.jar examples/SigExample.java
-$ java -cp target/liboqs-java.jar:examples/ SigExample
+javac -cp target/liboqs-java.jar examples/SigExample.java
+java -cp target/liboqs-java.jar:examples/ SigExample
 ```
 
 ```
 Supported signatures:
-Dilithium2 Dilithium3 Dilithium5 Dilithium2-AES Dilithium3-AES Dilithium5-AES Falcon-512 Falcon-1024 Rainbow-I-Classic Rainbow-I-Circumzenithal Rainbow-I-Compressed Rainbow-III-Classic Rainbow-III-Circumzenithal Rainbow-III-Compressed Rainbow-V-Classic Rainbow-V-Circumzenithal Rainbow-V-Compressed SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L1_full picnic_L3_FS picnic_L3_UR picnic_L3_full picnic_L5_FS picnic_L5_UR picnic_L5_full picnic3_L1 picnic3_L3 picnic3_L5 
+Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small 
 
 Enabled signatures:
-Dilithium2 Dilithium3 Dilithium5 Dilithium2-AES Dilithium3-AES Dilithium5-AES Falcon-512 Falcon-1024 Rainbow-I-Classic Rainbow-I-Circumzenithal Rainbow-I-Compressed Rainbow-III-Classic Rainbow-III-Circumzenithal Rainbow-III-Compressed Rainbow-V-Classic Rainbow-V-Circumzenithal Rainbow-V-Compressed SPHINCS+-Haraka-128f-robust SPHINCS+-Haraka-128f-simple SPHINCS+-Haraka-128s-robust SPHINCS+-Haraka-128s-simple SPHINCS+-Haraka-192f-robust SPHINCS+-Haraka-192f-simple SPHINCS+-Haraka-192s-robust SPHINCS+-Haraka-192s-simple SPHINCS+-Haraka-256f-robust SPHINCS+-Haraka-256f-simple SPHINCS+-Haraka-256s-robust SPHINCS+-Haraka-256s-simple SPHINCS+-SHA256-128f-robust SPHINCS+-SHA256-128f-simple SPHINCS+-SHA256-128s-robust SPHINCS+-SHA256-128s-simple SPHINCS+-SHA256-192f-robust SPHINCS+-SHA256-192f-simple SPHINCS+-SHA256-192s-robust SPHINCS+-SHA256-192s-simple SPHINCS+-SHA256-256f-robust SPHINCS+-SHA256-256f-simple SPHINCS+-SHA256-256s-robust SPHINCS+-SHA256-256s-simple SPHINCS+-SHAKE256-128f-robust SPHINCS+-SHAKE256-128f-simple SPHINCS+-SHAKE256-128s-robust SPHINCS+-SHAKE256-128s-simple SPHINCS+-SHAKE256-192f-robust SPHINCS+-SHAKE256-192f-simple SPHINCS+-SHAKE256-192s-robust SPHINCS+-SHAKE256-192s-simple SPHINCS+-SHAKE256-256f-robust SPHINCS+-SHAKE256-256f-simple SPHINCS+-SHAKE256-256s-robust SPHINCS+-SHAKE256-256s-simple picnic_L1_FS picnic_L1_UR picnic_L1_full picnic_L3_FS picnic_L3_UR picnic_L3_full picnic_L5_FS picnic_L5_UR picnic_L5_full picnic3_L1 picnic3_L3 picnic3_L5 
+Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small 
 
 Signature Details:
-  Name: Dilithium2
-  Version: https://github.com/pq-crystals/dilithium/commit/d9c885d3f2e11c05529eeeb7d70d808c972b8409
+  Name: ML-DSA-44
+  Version: FIPS204
   Claimed NIST level: 2
   Is IND-CCA: true
   Length public key (bytes): 1312
-  Length secret key (bytes): 2528
+  Length secret key (bytes): 2560
   Maximum length signature (bytes): 2420
 
 Signer public key:
-0E 47 54 30 E7 47 6D E6 ... 82 6E 4C C3 87 AA 6E FD 
+CB CB 70 FF 1E B3 BA 26 ... A7 CF 7C 70 89 A1 1A 40 
 
-It took 0 millisecs to generate the key pair.
+It took 1 millisecs to generate the key pair.
 It took 1 millisecs to sign the message.
 It took 0 millisecs to verify the signature.
 
 Signature:
-0C 2E 2D E2 81 C5 DC 10 ... 00 00 00 00 03 13 29 3B 
+ED 6F 67 B6 2E C9 31 FC ... 00 00 00 00 0F 21 2A 38 
 
 Valid signature? true
 ```
@@ -305,14 +304,13 @@ $ java -cp "target/liboqs-java.jar;examples\" RandExample
 
 ##### Linux/MacOS
 ```
-$ javac -cp target/liboqs-java.jar examples/RandExample.java
-$ java -cp target/liboqs-java.jar:examples/ RandExample
+javac -cp target/liboqs-java.jar examples/RandExample.java
+java -cp target/liboqs-java.jar:examples/ RandExample
 ```
 
 ```
-NIST-KAT:           BF E7 5C 34 F9 1C 54 44 30 CD B1 61 5B FF 3D 92 31 17 38 BD 71 61 0C 22 CD F7 B8 23 D9 7C 27 F3
-OpenSSL:            86 B6 46 9C 56 44 6B FB F8 B1 37 F0 86 4D 4D 74 0F FD 51 99 82 D6 89 02 40 B9 45 CF F9 3A 4D 70
-System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 EF 50 8A F5 AE 25 35 6F 91 CF EC 1D
+OpenSSL:		19 0D 77 20 82 BA 59 69 38 32 3A 81 1B 50 6A A0 6F 81 14 35 06 14 9F 72 4F 6F D2 5F 68 E8 F7 40 
+System (default):	81 2B 43 75 8A 22 63 21 28 D2 2D 1C 36 A1 19 19 22 AA E0 86 9A EE 6C A0 8C 52 E7 89 31 9C A3 6B 
 ```
 
 
@@ -352,10 +350,11 @@ System (default):   37 55 6F 4F 03 53 BB 71 E8 70 C2 3D DF 85 69 57 30 CE FA 11 
         Exception in thread "main" java.lang.UnsatisfiedLinkError:
             ./liboqs-java/build/liboqs-jni.so: liboqs.so.0: cannot open shared object file: No such file or directory
         ```
-        try setting the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
+        On Linux, try setting the `LD_LIBRARY_PATH` environment variable with the installation location of the `liboqs` shared library, i.e.,
         ```
         export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
         ```
+        On macOS, the corresponding environment variable is `DYLD_LIBRARY_PATH`.
         
     * If a hotspot "irrecoverable stack overflow" error is shown:
         ```
@@ -380,6 +379,9 @@ Contributors to the liboqs-java wrapper include:
 
 [KEM-overview]: ./images/KEM.png
 [DS-overview]: ./images/digital-signature.png
+<<<<<<< HEAD
 
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=svg
 [badge-circleci]: https://img.shields.io/circleci/build/github/open-quantum-safe/liboqs-java?logo=circleci
+=======
+>>>>>>> 1d7530e (Update README, examples, and CI before 0.2.0 release (#32))
