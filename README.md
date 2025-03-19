@@ -231,19 +231,20 @@ KEM Details:
   Length secret key (bytes): 1632
   Length ciphertext (bytes): 768
   Length shared secret (bytes): 32
+  Length keypair seed (bytes): 64
 
 Client public key:
-A8 37 25 CA 79 A5 55 42 ... AF 43 3A 54 6C 3C 34 30 
+A4 E7 5D DB AB 9D FA 13 ... 32 9C 08 3F 71 D6 BA 41 
 
 It took 1 millisecs to generate the key pair.
 It took 0 millisecs to encapsulate the secret.
 It took 0 millisecs to decapsulate the secret.
 
 Client shared secret:
-7D 3B BB C7 29 45 4B 2F ... 58 87 1D BB BD 35 9C 79 
+5C BE 27 50 C8 7E 61 36 ... 07 60 EA 4C 3E 25 90 3F 
 
 Server shared secret:
-7D 3B BB C7 29 45 4B 2F ... 58 87 1D BB BD 35 9C 79 
+5C BE 27 50 C8 7E 61 36 ... 07 60 EA 4C 3E 25 90 3F 
 
 Shared secrets coincide? true
 ```
@@ -266,10 +267,10 @@ java -cp target/liboqs-java.jar:examples/ SigExample
 
 ```
 Supported signatures:
-Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small 
+Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small OV-Is OV-Ip OV-III OV-V OV-Is-pkc OV-Ip-pkc OV-III-pkc OV-V-pkc OV-Is-pkc-skc OV-Ip-pkc-skc OV-III-pkc-skc OV-V-pkc-skc 
 
 Enabled signatures:
-Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small 
+Dilithium2 Dilithium3 Dilithium5 ML-DSA-44 ML-DSA-65 ML-DSA-87 Falcon-512 Falcon-1024 Falcon-padded-512 Falcon-padded-1024 SPHINCS+-SHA2-128f-simple SPHINCS+-SHA2-128s-simple SPHINCS+-SHA2-192f-simple SPHINCS+-SHA2-192s-simple SPHINCS+-SHA2-256f-simple SPHINCS+-SHA2-256s-simple SPHINCS+-SHAKE-128f-simple SPHINCS+-SHAKE-128s-simple SPHINCS+-SHAKE-192f-simple SPHINCS+-SHAKE-192s-simple SPHINCS+-SHAKE-256f-simple SPHINCS+-SHAKE-256s-simple MAYO-1 MAYO-2 MAYO-3 MAYO-5 cross-rsdp-128-balanced cross-rsdp-128-fast cross-rsdp-128-small cross-rsdp-192-balanced cross-rsdp-192-fast cross-rsdp-192-small cross-rsdp-256-balanced cross-rsdp-256-fast cross-rsdp-256-small cross-rsdpg-128-balanced cross-rsdpg-128-fast cross-rsdpg-128-small cross-rsdpg-192-balanced cross-rsdpg-192-fast cross-rsdpg-192-small cross-rsdpg-256-balanced cross-rsdpg-256-fast cross-rsdpg-256-small OV-Is OV-Ip OV-III OV-V OV-Is-pkc OV-Ip-pkc OV-III-pkc OV-V-pkc OV-Is-pkc-skc OV-Ip-pkc-skc OV-III-pkc-skc OV-V-pkc-skc 
 
 Signature Details:
   Name: ML-DSA-44
@@ -281,14 +282,14 @@ Signature Details:
   Maximum length signature (bytes): 2420
 
 Signer public key:
-CB CB 70 FF 1E B3 BA 26 ... A7 CF 7C 70 89 A1 1A 40 
+2F F1 7A 8F FF EA 04 AA ... FD 51 A2 A0 80 5C 61 2B 
 
 It took 1 millisecs to generate the key pair.
-It took 1 millisecs to sign the message.
+It took 0 millisecs to sign the message.
 It took 0 millisecs to verify the signature.
 
 Signature:
-ED 6F 67 B6 2E C9 31 FC ... 00 00 00 00 0F 21 2A 38 
+C0 41 9D 4D A9 B1 5F 4C ... 00 00 00 00 0A 20 2E 41 
 
 Valid signature? true
 ```
