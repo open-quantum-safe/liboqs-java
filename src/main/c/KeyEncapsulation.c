@@ -85,6 +85,10 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
     jfieldID _length_shared_secret = (*env)->GetFieldID(env, cls, "length_shared_secret", "J");
     (*env)->SetLongField(env, _nativeKED, _length_shared_secret, (jlong) kem->length_shared_secret);
 
+    // long length_keypair_seed;
+    jfieldID _length_keypair_seed = (*env)->GetFieldID(env, cls, "length_keypair_seed", "J");
+    (*env)->SetLongField(env, _nativeKED, _length_keypair_seed, (jlong) kem->length_keypair_seed);
+
     return _nativeKED;
 }
 
@@ -107,6 +111,30 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypa
 
     (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, 0);
     (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, 0);
+    return (rv_ == OQS_SUCCESS) ? 0 : -1;
+}
+
+/*
+ * Class:     org_openquantumsafe_KeyEncapsulation
+ * Method:    generate_keypair
+ * Signature: ([B[B)I
+ */
+JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypair_1derand
+  (JNIEnv *env, jobject obj, jbyteArray jpublic_key, jbyteArray jsecret_key, jbyteArray jseed)
+{
+    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
+    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
+    jbyte *seed_native = (*env)->GetByteArrayElements(env, jseed, 0);
+
+    // Get pointer to KEM
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+
+    // Invoke liboqs KEM keypair generation function
+    OQS_STATUS rv_ = OQS_KEM_keypair_derand(kem, (uint8_t*) public_key_native, (uint8_t*) secret_key_native, (uint8_t*) seed_native);
+
+    (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, 0);
+    (*env)->ReleaseByteArrayElements(env, jseed, seed_native, JNI_ABORT);
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
 }
 
