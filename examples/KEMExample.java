@@ -14,7 +14,7 @@ public class KEMExample {
         Common.print_list(KEMs.get_enabled_KEMs());
         System.out.println();
 
-        String kem_name = "ML-KEM-768";
+        String kem_name = "ML-KEM-512";
         KeyEncapsulation client = new KeyEncapsulation(kem_name);
         client.print_details();
         System.out.println();

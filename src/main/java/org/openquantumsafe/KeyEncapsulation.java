@@ -20,6 +20,7 @@ public class KeyEncapsulation {
         long length_secret_key;
         long length_ciphertext;
         long length_shared_secret;
+        long length_keypair_seed;
 
         /**
          * \brief Print KEM algorithm details
@@ -33,7 +34,9 @@ public class KeyEncapsulation {
                 "\n  Length public key (bytes): " + this.length_public_key +
                 "\n  Length secret key (bytes): " + this.length_secret_key +
                 "\n  Length ciphertext (bytes): " + this.length_ciphertext +
-                "\n  Length shared secret (bytes): " + this.length_shared_secret
+                "\n  Length shared secret (bytes): " + this.length_shared_secret +
+                "\n  Length keypair seed (bytes): "
+                + ((this.length_keypair_seed > 0) ? this.length_keypair_seed : "N/A")
             );
         }
 
@@ -115,6 +118,18 @@ public class KeyEncapsulation {
     private native int generate_keypair(byte[] public_key, byte[] secret_key);
 
     /**
+     * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_keypair_derand(const OQS_KEM *kem,
+     *                              uint8_t *public_key, uint8_t *secret_key,
+     *                              const uint8_t *seed);
+     * \param Public key
+     * \param Secret key
+     * \param Seed
+     * \return Status
+     */
+    private native int generate_keypair_derand(byte[] public_key,
+                                               byte[] secret_key, byte[] seed);
+
+    /**
      * \brief Wrapper for OQS_API OQS_STATUS OQS_KEM_encaps(const OQS_KEM *kem,
      *                                               uint8_t *ciphertext,
      *                                               uint8_t *shared_secret,
@@ -157,6 +172,27 @@ public class KeyEncapsulation {
         int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
         return this.public_key_;
+    }
+
+    /**
+     * \brief Invoke native generate_keypair_derand method using the PK and SK lengths
+     * from alg_details_. Check return value and if != 0 throw Exception.
+     */
+    public byte[] generate_keypair(byte[] seed) throws RuntimeException {
+        if (seed.length != alg_details_.length_keypair_seed) {
+            throw new RuntimeException("Incorrect seed length");
+        }
+
+        int rv_ = generate_keypair_derand(this.public_key_, this.secret_key_, seed);
+        if (rv_ != 0) throw new RuntimeException("Cannot generate keypair from seed");
+        return this.public_key_;
+    }
+
+    /**
+     * \brief Return seed length
+     */
+    public long get_keypair_seed_length() {
+        return alg_details_.length_keypair_seed;
     }
 
     /**
