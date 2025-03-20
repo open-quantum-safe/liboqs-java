@@ -125,6 +125,64 @@ To build `liboqs-java` first download or clone this java wrapper into a `liboqs-
 git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 ```
 
+### Windows Build
+
+#### Prerequisites
+
+- MinGW-w64 GCC (version 11.5.0 or later)
+- CMake
+- JDK 1.8
+- Maven 3.8.8
+- Git
+
+#### Installation Steps
+
+1. Install MinGW-w64 GCC:
+- Download from [WinLibs](https://winlibs.com/#download-release)
+- Extract the ZIP file to a directory without spaces
+- Add the bin directory to PATH environment variable (e.g., `E:\develop\mingw64\bin`)
+  - Via Control Panel → System → System Info → Advanced System Settings → Advanced → Environment Variables → PATH
+  - Or via command line: `setx PATH "E:\develop\mingw64\bin;%PATH%"` (not recommended)
+
+2. Install CMake:
+- Either via winget: `winget install cmake`
+- Or download from [cmake.org](https://cmake.org/download/)
+- Ensure CMake is added to PATH
+
+3. Verify installations (by open cmd and type):
+```bash
+gcc --version
+cmake --version
+```
+
+4. Build liboqs:
+```bash
+git clone https://github.com/open-quantum-safe/liboqs/
+cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DBUILD_SHARED_LIBS=OFF -S . -B build
+cmake --build build -j4
+cd ..
+```
+
+5. Install Java dependencies:
+- Install JDK 1.8 from [OpenLogic](https://www.openlogic.com/openjdk-downloads)
+- Install Maven 3.8.8 from [Maven](https://maven.apache.org/)
+- Add both to PATH environment variables
+- Verify Java installations:
+```bash
+java -version
+mvn -version
+```
+
+If you clone the liboqs under `liboqs-java` directory, then you can run the following command to build the package:
+```bash
+mvn package -P windows
+```
+
+Or else, you should run
+```bash
+mvn package -P windows -Dliboqs.include.dir="<path-to-save-liboqs>\liboqs\build\include" -Dliboqs.lib.dir="<path-to-save-liboqs>\liboqs\build\lib"
+```
+
 ### Linux/MacOS
 
 #### Prerequisites
@@ -137,26 +195,20 @@ git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 
 #### Build Instructions
 
-1. Clone the repository with submodules
-```bash
-git clone --recursive https://github.com/open-quantum-safe/liboqs-java
-```
+First, you must build the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with static library, followed (optionally) by a `sudo cmake --install build` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
 
-2. Build the liboqs C library to generate liboqs.a
+1. Build the liboqs C library to generate liboqs.a
 ```bash
-cd liboqs
+cd <path-to-save-liboqs>
+git clone https://github.com/open-quantum-safe/liboqs/
 cmake -S . -B build
 cmake --build build -j4
+#optional 
+sudo cmake --install build
 cd ..
 ```
-This step will generate the `liboqs/build/liboqs.a` file.
 
-3. Build liboqs-java
-```bash
-mvn package -P <OS>
-```
-This step will generate `target/liboqs-java.jar` and `target/classes/liboqs-jni.so`.
-
+This step will generate the `liboqs/build/liboqs.a` file. 
 
 ### Building the Java OQS wrapper
 
@@ -168,6 +220,11 @@ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir
 ```
 The above command will compile the C and Java files and also run the unit tests.
 
+For those who doen't want the `liboqs` library to install system wide. You **have to** change `<liboqs.include.dir>` to `<path-to-save-liboqs>/liboqs/build/include` to and `<liboqs.lib.dir>` to `<path-to-save-liboqs>/liboqs/build/lib`
+```
+mvn package -P macosx -Dliboqs.include.dir="<path-to-save-liboqs>/liboqs/build/include" -Dliboqs.lib.dir="<path-to-save-liboqs>/liboqs/build/lib"
+```
+
 To build without running the default unit tests you can use the `-Dmaven.test.skip=true` command line option as follows:
 ```
 mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib" -Dmaven.test.skip=true
@@ -175,10 +232,9 @@ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir
 
 The default profile for building is `linux`, so when building on Linux the `-P <OS>` command line option may be omitted.
 
-You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo --install build` after building liboqs).
+You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo cmake --install build` after building liboqs).
 
 Both the above commands will create a `target` directory with the build files, as well as a `src/main/resources` directory that will contain the `liboqs-jni.so` native library. Finally, a `liboqs-java.jar` will be created inside the `target` directory that will contain all the class files as well as the `liboqs-jni.so` native library.
-
 
 ### Building and running the examples
 

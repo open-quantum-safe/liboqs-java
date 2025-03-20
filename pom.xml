@@ -61,7 +61,7 @@
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <linker.executable>gcc</linker.executable>
-                <!-- 修改为使用静态库 liboqs.a -->
+                <!-- use the static lib liboqs.a -->
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
                 <linker.end.option>${liboqs.lib.dir}/liboqs.a -lcrypto</linker.end.option>
             </properties>
@@ -78,12 +78,12 @@
             <properties>
                 <lib_name>liboqs-jni</lib_name>
                 <lib_name_ext>so</lib_name_ext>
-                <liboqs.include.dir>${project.basedir}/liboqs/build/include</liboqs.include.dir>
-                <liboqs.lib.dir>${project.basedir}/liboqs/build/lib</liboqs.lib.dir>
+                <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
+                <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
                 <compiler.provider>generic-classic</compiler.provider>
                 <linker.executable>gcc</linker.executable>
-                <!-- 修改为使用静态库 liboqs.a -->
+                <!-- use the static lib liboqs.a -->
                 <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
                 <linker.end.option>${liboqs.lib.dir}/liboqs.a -lcrypto</linker.end.option>
             </properties>
@@ -106,7 +106,7 @@
                 <java.os.include>-I"${JAVA_HOME}\include" -I"${JAVA_HOME}\include\win32" </java.os.include>
                 <compiler.provider>mingw</compiler.provider>
                 <linker.executable>g++</linker.executable>
-                <!-- 修改为使用静态库 liboqs.a -->
+                <!-- use the statia lib liboqs.a -->
                 <linker.start.option>-shared -L${liboqs.lib.dir} -ladvapi32</linker.start.option>
                 <linker.end.option>${liboqs.lib.dir}\liboqs.a</linker.end.option>
             </properties>
