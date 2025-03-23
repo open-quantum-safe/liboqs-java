@@ -436,9 +436,6 @@ Contributors to the liboqs-java wrapper include:
 
 [KEM-overview]: ./images/KEM.png
 [DS-overview]: ./images/digital-signature.png
-<<<<<<< HEAD
 
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=svg
 [badge-circleci]: https://img.shields.io/circleci/build/github/open-quantum-safe/liboqs-java?logo=circleci
-=======
->>>>>>> 1d7530e (Update README, examples, and CI before 0.2.0 release (#32))
