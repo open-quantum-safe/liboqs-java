@@ -68,53 +68,7 @@ Builds have been tested on Linux (Ubuntu 18.04 LTS, 19.10, and 20.04) and macOS 
 
 #### Installation Steps
 
-1. Install MinGW-w64 GCC:
-- Download from [WinLibs](https://winlibs.com/#download-release)
-- Extract the ZIP file to a directory without spaces
-- Add the bin directory to PATH environment variable (e.g., `E:\develop\mingw64\bin`)
-  - Via Control Panel → System → System Info → Advanced System Settings → Advanced → Environment Variables → PATH
-  - Or via command line: `setx PATH "E:\develop\mingw64\bin;%PATH%"` (not recommended)
-
-2. Install CMake:
-- Either via winget: `winget install cmake`
-- Or download from [cmake.org](https://cmake.org/download/)
-- Ensure CMake is added to PATH
-
-3. Verify installations:
-```bash
-gcc --version
-cmake --version
-```
-
-4. Clone the repository:
-```bash
-git clone --recursive https://github.com/open-quantum-safe/liboqs-java
-```
-
-5. Build liboqs:
-```bash
-cd liboqs
-cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DBUILD_SHARED_LIBS=OFF -S . -B build
-cmake --build build -j 4
-cmake --install build
-cd ..
-```
-
-6. Install Java dependencies:
-- Install JDK 1.8 from [OpenLogic](https://www.openlogic.com/openjdk-downloads)
-- Install Maven 3.8.8 from [Maven](https://maven.apache.org/)
-- Add both to PATH environment variables
-
-7. Verify Java installations:
-```bash
-java -version
-mvn -version
-```
-
-8. Build the package:
-```bash
-mvn package -P windows
-```
+Builds are tested in GitHub Actions on Linux (Ubuntu 24.04 with OpenJDK 21) and macOS ([macos-latest runner](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories), at macOS Sonoma with Java 21 as of liboqs-java 0.2.0 release).
 
 ### Pre-requisites
 To build the Java OQS wrapper you need a Java Development Kit (JDK), such as [OpenJDK](https://openjdk.java.net/) >= 8 and [Apache Maven](https://maven.apache.org/).
@@ -436,6 +390,3 @@ Contributors to the liboqs-java wrapper include:
 
 [KEM-overview]: ./images/KEM.png
 [DS-overview]: ./images/digital-signature.png
-
-[badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=svg
-[badge-circleci]: https://img.shields.io/circleci/build/github/open-quantum-safe/liboqs-java?logo=circleci
