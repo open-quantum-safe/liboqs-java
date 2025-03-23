@@ -33,7 +33,7 @@ jobs:
           path: liboqs
           ref: main
       - name: Build liboqs
-        run: mkdir build && cd build && cmake .. -G"Ninja" -DBUILD_SHARED_LIBS=ON -DOQS_BUILD_ONLY_LIB=ON && ninja install
+        run: mkdir build && cd build && cmake .. -G"Ninja" -DOQS_BUILD_ONLY_LIB=ON && ninja install
         working-directory: liboqs
       - name: Resolve all maven project dependencies
         run: mvn dependency:go-offline
@@ -65,7 +65,7 @@ jobs:
         run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install ninja && pip3 install --require-hashes --break-system-packages -r .github/workflows/requirements.txt
         working-directory: liboqs
       - name: Build liboqs
-        run: mkdir build && cd build && cmake .. -G"Ninja" -DBUILD_SHARED_LIBS=ON -DOQS_BUILD_ONLY_LIB=ON && sudo ninja install
+        run: mkdir build && cd build && cmake .. -G"Ninja" -DOQS_BUILD_ONLY_LIB=ON && sudo ninja install
         working-directory: liboqs
       - name: Resolve all maven project dependencies
         run: mvn dependency:go-offline
@@ -76,3 +76,57 @@ jobs:
           javac -cp target/liboqs-java.jar examples/KEMExample.java &&
           javac -cp target/liboqs-java.jar examples/SigExample.java &&
           javac -cp target/liboqs-java.jar examples/RandExample.java
+
+  windows:
+    needs: workflowcheck
+    runs-on: windows-latest
+    steps:
+      - name: Install MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-cmake
+            make
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Checkout liboqs-java
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+
+      - name: Checkout liboqs main
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        with:
+          repository: open-quantum-safe/liboqs
+          path: liboqs
+          ref: main
+
+      - name: Build liboqs (static library)
+        shell: msys2 {0}
+        run: |
+          cd liboqs
+          mkdir build
+          cd build
+          cmake .. -G "Ninja" -DOQS_BUILD_ONLY_LIB=ON -DBUILD_SHARED_LIBS=OFF
+          ninja
+
+      - name: Resolve Maven dependencies
+        run: mvn dependency:go-offline
+
+      - name: Build liboqs-java and run tests
+        run: |
+          $env:Path += ";$env:GITHUB_WORKSPACE\liboqs\build\lib"
+          mvn -P windows -Dliboqs.include.dir="$env:GITHUB_WORKSPACE\liboqs\build\include" -Dliboqs.lib.dir="$env:GITHUB_WORKSPACE\liboqs\build\lib" package
+
+      - name: Compile KEM, Signatures and Rand examples
+        run: |
+          javac -cp target\liboqs-java.jar examples\KEMExample.java
+          javac -cp target\liboqs-java.jar examples\SigExample.java
+          javac -cp target\liboqs-java.jar examples\RandExample.java
