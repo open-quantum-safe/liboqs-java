@@ -6,7 +6,7 @@
     <groupId>org.openquantumsafe</groupId>
     <artifactId>liboqs-java</artifactId>
     <packaging>jar</packaging>
-    <version>2.0</version>
+    <version>3.0</version>
     <name>liboqs-java: Java wrapper for liboqs</name>
     <description>liboqs-java offers a Java wrapper providing quantum-resistant cryptographic algorithms via liboqs.</description>
 
