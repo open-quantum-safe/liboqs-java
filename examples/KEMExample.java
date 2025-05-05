@@ -1,6 +1,7 @@
 import org.openquantumsafe.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class KEMExample {
 
@@ -37,6 +38,19 @@ public class KEMExample {
         t = System.currentTimeMillis();
         byte[] shared_secret_client = client.decap_secret(ciphertext);
         System.out.println("It took " + (System.currentTimeMillis() - t) + " millisecs to decapsulate the secret.");
+
+        byte[] secret_key = client.export_secret_key();
+        System.out.println("\nSecret key (Base64):");
+        System.out.println(Base64.getEncoder().encodeToString(secret_key));
+
+        System.out.println("\nShared secrets coincide? " + Arrays.equals(shared_secret_client, shared_secret_server));
+
+        System.out.println("\nShared secrets (Base64):");
+        System.out.println(Base64.getEncoder().encodeToString(shared_secret_server));
+        System.out.println("\nPublic key (Base64):");
+        System.out.println(Base64.getEncoder().encodeToString(client_public_key));
+        System.out.println("\nCiphertext (Base64):");
+        System.out.println(Base64.getEncoder().encodeToString(ciphertext));
 
         client.dispose_KEM();
         server.dispose_KEM();
