@@ -56,18 +56,6 @@ We acknowledge that some parties may want to begin deploying post-quantum crypto
 
 
 ## Building
-Builds have been tested on Linux (Ubuntu 18.04 LTS, 19.10, and 20.04) and macOS Mojave with OpenJDK 8, 9, 11.
-### Windows Build
-
-#### Prerequisites
-- MinGW-w64 GCC (version 11.5.0 or later)
-- CMake
-- JDK 1.8
-- Maven 3.8.8
-- Git
-
-#### Installation Steps
-
 Builds are tested in GitHub Actions on Linux (Ubuntu 24.04 with OpenJDK 21) and macOS ([macos-latest runner](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories), at macOS Sonoma with Java 21 as of liboqs-java 0.2.0 release).
 
 ### Pre-requisites
