@@ -9,16 +9,28 @@
     <version>3.0</version>
     <name>liboqs-java: Java wrapper for liboqs</name>
     <description>liboqs-java offers a Java wrapper providing quantum-resistant cryptographic algorithms via liboqs.</description>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <liboqs.include.dir />
         <liboqs.lib.dir />
         <java.os.include />
+        <compiler.provider />
+        <linker.executable />
+        <linker.start.option />
+        <linker.end.option />
     </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
@@ -32,7 +44,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <profiles>
         <profile>
             <id>macosx</id>
@@ -48,6 +59,11 @@
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin</java.os.include>
+                <compiler.provider>generic-classic</compiler.provider>
+                <linker.executable>gcc</linker.executable>
+                <!-- use the static lib liboqs.a -->
+                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <linker.end.option>${liboqs.lib.dir}/liboqs.a -lcrypto</linker.end.option>
             </properties>
         </profile>
         <profile>
@@ -65,10 +81,37 @@
                 <liboqs.include.dir>/usr/local/include</liboqs.include.dir>
                 <liboqs.lib.dir>/usr/local/lib</liboqs.lib.dir>
                 <java.os.include>-I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux</java.os.include>
+                <compiler.provider>generic-classic</compiler.provider>
+                <linker.executable>gcc</linker.executable>
+                <!-- use the static lib liboqs.a -->
+                <linker.start.option>-shared -L${liboqs.lib.dir}</linker.start.option>
+                <linker.end.option>${liboqs.lib.dir}/liboqs.a -lcrypto</linker.end.option>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>windows</value>
+                </property>
+            </activation>
+            <properties>
+                <lib_name>oqs-jni</lib_name>
+                <lib_name_ext>dll</lib_name_ext>
+                <!-- <lib_name>oqs-jni.dll</lib_name> -->
+                <liboqs.include.dir>${basedir}\liboqs\build\include</liboqs.include.dir>
+                <liboqs.lib.dir>${basedir}\liboqs\build\lib</liboqs.lib.dir>
+                <maven.test.skip>true</maven.test.skip>
+                <java.os.include>-I"${JAVA_HOME}\include" -I"${JAVA_HOME}\include\win32" </java.os.include>
+                <compiler.provider>mingw</compiler.provider>
+                <linker.executable>g++</linker.executable>
+                <!-- use the statia lib liboqs.a -->
+                <linker.start.option>-shared -L${liboqs.lib.dir} -ladvapi32</linker.start.option>
+                <linker.end.option>${liboqs.lib.dir}\liboqs.a</linker.end.option>
             </properties>
         </profile>
     </profiles>
-
     <build>
         <plugins>
             <plugin>
@@ -76,7 +119,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
                 <configuration>
-                    <argLine>-Xss10M -Djava.library.path=${project.build.outputDirectory}</argLine>
+                    <argLine>-Xss10M -Djava.library.path=${basedir}/src/main/resources/</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -86,6 +129,23 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${basedir}/src/main/resources/"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -106,8 +166,8 @@
                             </fileNames>
                         </source>
                     </sources>
-                    <compilerProvider>generic-classic</compilerProvider>
-                    <compilerExecutable>gcc</compilerExecutable>
+                    <compilerProvider>${compiler.provider}</compilerProvider>
+                    <compilerExecutable>${compiler.executable}</compilerExecutable>
                     <compilerStartOptions>
                         <compilerStartOption>${java.os.include}</compilerStartOption>
                         <compilerStartOption>-fPIC</compilerStartOption>
@@ -116,15 +176,15 @@
                         <compilerStartOption>-I${liboqs.include.dir}</compilerStartOption>
                     </compilerStartOptions>
                     <linkerOutputDirectory>${project.build.outputDirectory}</linkerOutputDirectory>
-                    <linkerExecutable>gcc</linkerExecutable>
+                    <linkerExecutable>${linker.executable}</linkerExecutable>
                     <linkerStartOptions>
-                        <linkerStartOption>-shared</linkerStartOption>
-                        <linkerStartOption>-L${liboqs.lib.dir}</linkerStartOption>
+                        <linkerStartOption>${linker.start.option}</linkerStartOption>
                     </linkerStartOptions>
                     <linkerFinalName>${lib_name}</linkerFinalName>
                     <linkerFinalNameExt>${lib_name_ext}</linkerFinalNameExt>
                     <linkerEndOptions>
-                        <linkerEndOption>-loqs</linkerEndOption>
+                        <linkerEndOption>${linker.end.option}</linkerEndOption>
+                        <!-- <linkerEndOption>-lcrypto</linkerEndOption> -->
                     </linkerEndOptions>
                 </configuration>
                 <executions>
@@ -136,6 +196,27 @@
                             <goal>compile</goal>
                             <goal>link</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

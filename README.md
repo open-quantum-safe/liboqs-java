@@ -67,30 +67,105 @@ To build `liboqs-java` first download or clone this java wrapper into a `liboqs-
 git clone -b master https://github.com/open-quantum-safe/liboqs-java.git
 ```
 
-### Building the OQS dependency
+### Windows Build
 
-#### Linux/MacOS
-First, you must build the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with shared library support enabled (add `-DBUILD_SHARED_LIBS=ON` to the `cmake` command), followed (optionally) by a `sudo ninja install` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+#### Prerequisites
 
+- MinGW-w64 GCC (version 11.5.0 or later)
+- CMake
+- JDK 1.8
+- Maven 3.8.8
+- Git
+
+#### Installation Steps
+
+1. Install MinGW-w64 GCC:
+- Download from [WinLibs](https://winlibs.com/#download-release)
+- Extract the ZIP file to a directory without spaces
+- Add the bin directory to PATH environment variable (e.g., `E:\develop\mingw64\bin`)
+  - Via Control Panel → System → System Info → Advanced System Settings → Advanced → Environment Variables → PATH
+  - Or via command line: `setx PATH "E:\develop\mingw64\bin;%PATH%"` (not recommended)
+
+2. Install CMake:
+- Either via winget: `winget install cmake`
+- Or download from [cmake.org](https://cmake.org/download/)
+- Ensure CMake is added to PATH
+
+3. Verify installations (by open cmd and type):
+```bash
+gcc --version
+cmake --version
 ```
-git clone -b main https://github.com/open-quantum-safe/liboqs.git
-cd liboqs
-mkdir build && cd build
-cmake -GNinja -DBUILD_SHARED_LIBS=ON ..
-ninja
-sudo ninja install
+
+4. Build liboqs:
+```bash
+git clone https://github.com/open-quantum-safe/liboqs/
+cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DBUILD_SHARED_LIBS=OFF -S . -B build
+cmake --build build -j4
+cd ..
 ```
 
+5. Install Java dependencies:
+- Install JDK 1.8 from [OpenLogic](https://www.openlogic.com/openjdk-downloads)
+- Install Maven 3.8.8 from [Maven](https://maven.apache.org/)
+- Add both to PATH environment variables
+- Verify Java installations:
+```bash
+java -version
+mvn -version
+```
+
+If you clone the liboqs under `liboqs-java` directory, then you can run the following command to build the package:
+```bash
+mvn package -P windows
+```
+
+Or else, you should run
+```bash
+mvn package -P windows -Dliboqs.include.dir="<path-to-save-liboqs>\liboqs\build\include" -Dliboqs.lib.dir="<path-to-save-liboqs>\liboqs\build\lib"
+```
+
+### Linux/MacOS
+
+#### Prerequisites
+- JDK 1.8
+- GCC
+- CMake
+- ninja-build
+- Maven
+- OpenSSL
+
+#### Build Instructions
+
+First, you must build the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs/) according to the liboqs building instructions with static library, followed (optionally) by a `sudo cmake --install build` to ensure that the compiled library is visible system-wide (by default it installs under `/usr/local/include` and `/usr/local/lib` on Linux/macOS).
+
+1. Build the liboqs C library to generate liboqs.a
+```bash
+cd <path-to-save-liboqs>
+git clone https://github.com/open-quantum-safe/liboqs/
+cmake -S . -B build
+cmake --build build -j4
+#optional 
+sudo cmake --install build
+cd ..
+```
+
+This step will generate the `liboqs/build/liboqs.a` file. 
 
 ### Building the Java OQS wrapper
 
-To build the `liboqs-java` wrapper type for different operating systems add the `-P <OS>` flag, where `<OS> = {linux, macosx}`.
+To build the `liboqs-java` wrapper type for different operating systems add the `-P <OS>` flag, where `<OS> = {linux, macosx, windows}`.
 
 For instance, to build `liboqs-java` for MacOS, type:
 ```
 mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir="/usr/local/lib"
 ```
 The above command will compile the C and Java files and also run the unit tests.
+
+For those who doen't want the `liboqs` library to install system wide. You **have to** change `<liboqs.include.dir>` to `<path-to-save-liboqs>/liboqs/build/include` to and `<liboqs.lib.dir>` to `<path-to-save-liboqs>/liboqs/build/lib`
+```
+mvn package -P macosx -Dliboqs.include.dir="<path-to-save-liboqs>/liboqs/build/include" -Dliboqs.lib.dir="<path-to-save-liboqs>/liboqs/build/lib"
+```
 
 To build without running the default unit tests you can use the `-Dmaven.test.skip=true` command line option as follows:
 ```
@@ -99,10 +174,9 @@ mvn package -P macosx -Dliboqs.include.dir="/usr/local/include" -Dliboqs.lib.dir
 
 The default profile for building is `linux`, so when building on Linux the `-P <OS>` command line option may be omitted.
 
-You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo ninja install` after building liboqs).
+You may also omit the `-Dliboqs.include.dir` and `-Dliboqs.lib.dir` options in case you installed liboqs in `/usr/local` (true if you ran `sudo cmake --install build` after building liboqs).
 
 Both the above commands will create a `target` directory with the build files, as well as a `src/main/resources` directory that will contain the `liboqs-jni.so` native library. Finally, a `liboqs-java.jar` will be created inside the `target` directory that will contain all the class files as well as the `liboqs-jni.so` native library.
-
 
 ### Building and running the examples
 
@@ -121,11 +195,19 @@ The examples include:
     * OpenSSL
     * System (default)
 
-#### Linux/MacOS
-
-##### 1) Key Encapsulation example
+#### 1) Key Encapsulation example
 
 To compile and run the KEM example, type:
+
+##### Windows
+
+```
+$ javac -cp target/liboqs-java.jar examples\KEMExample.java
+$ java -cp "target\liboqs-java.jar;examples\" KEMExample
+```
+
+##### Linux/MacOS
+
 ```
 javac -cp target/liboqs-java.jar examples/KEMExample.java
 java -cp target/liboqs-java.jar:examples/ KEMExample
@@ -165,7 +247,16 @@ Server shared secret:
 Shared secrets coincide? true
 ```
 
-##### 2) Signatures example
+#### 2) Signatures example
+
+##### Windows
+
+```
+$ javac -cp target/liboqs-java.jar examples/SigExample.java
+$ java -cp "target/liboqs-java.jar;examples\" SigExample
+```
+
+##### Linux/MacOS
 
 ```
 javac -cp target/liboqs-java.jar examples/SigExample.java
@@ -201,8 +292,16 @@ C0 41 9D 4D A9 B1 5F 4C ... 00 00 00 00 0A 20 2E 41
 Valid signature? true
 ```
 
-##### 3) Rand example
+#### 3) Rand example
 
+##### Windows
+
+```
+$ javac -cp target/liboqs-java.jar examples\RandExample.java
+$ java -cp "target/liboqs-java.jar;examples\" RandExample
+```
+
+##### Linux/MacOS
 ```
 javac -cp target/liboqs-java.jar examples/RandExample.java
 java -cp target/liboqs-java.jar:examples/ RandExample
