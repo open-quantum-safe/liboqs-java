@@ -3,6 +3,7 @@ package org.openquantumsafe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -55,6 +56,41 @@ public class KEMTest {
         // If successful print KEM name, otherwise an exception will be thrown
         sb.append("\033[0;32m").append("PASSED").append("\033[0m");
         System.out.println(sb.toString());
+    }
+
+    /**
+     * Test that disposing of a KEM twice is harmless
+     */
+    @Test
+    public void testDisposeKEMTwice() {
+        KeyEncapsulation client = new KeyEncapsulation("ML-KEM-512");
+        client.generate_keypair();
+
+        client.dispose_KEM();
+        client.dispose_KEM();
+    }
+
+    /**
+     * Test that a KEM cannot be used after it has been disposed of
+     */
+    @Test
+    public void testUseAfterDisposeKEMExpectedException() {
+        KeyEncapsulation client = new KeyEncapsulation("ML-KEM-512");
+        byte[] client_public_key = client.generate_keypair();
+        byte[] ciphertext = client.encap_secret(client_public_key).getLeft();
+        byte[] seed = Rand.randombytes(client.get_keypair_seed_length());
+
+        client.dispose_KEM();
+
+        assertDisposed(() -> client.generate_keypair());
+        assertDisposed(() -> client.generate_keypair(seed));
+        assertDisposed(() -> client.encap_secret(client_public_key));
+        assertDisposed(() -> client.decap_secret(ciphertext));
+    }
+
+    private static void assertDisposed(Executable executable) {
+        RuntimeException e = Assertions.assertThrows(RuntimeException.class, executable);
+        Assertions.assertEquals("KeyEncapsulation has been disposed", e.getMessage());
     }
 
     /**

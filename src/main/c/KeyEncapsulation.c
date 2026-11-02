@@ -27,7 +27,10 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_free_1KEM
   (JNIEnv *env, jobject obj)
 {
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+    if (kem == NULL) return;
     OQS_KEM_free(kem);
+    // Clear the handle so that the freed object cannot be used again
+    setHandle(env, obj, NULL, "native_kem_handle_");
 }
 
 /*
