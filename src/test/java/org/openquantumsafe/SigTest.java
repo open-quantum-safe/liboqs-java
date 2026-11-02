@@ -18,7 +18,7 @@ public class SigTest {
     private final byte[] message = "This is the message to sign".getBytes();
     // The ML-DSA-*-extmu variants sign an externally computed 64-byte mu
     // instead of the message itself
-    private final byte[] mu = new byte[64];
+    private final byte[] mu = Rand.randombytes(64);
     private static ArrayList<String> enabled_sigs;
 
     /**
