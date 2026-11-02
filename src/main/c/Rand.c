@@ -36,6 +36,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_openquantumsafe_Rand_randombytes
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_Rand_randombytes_1switch_1algorithm_1native
   (JNIEnv *env, jclass cls, jstring jstr)
 {
+    if (jstr == NULL) return -1;
     const char *alg_name_native = (*env)->GetStringUTFChars(env, jstr, 0);
     int rv_ = OQS_randombytes_switch_algorithm(alg_name_native);
     (*env)->ReleaseStringUTFChars(env, jstr, alg_name_native);

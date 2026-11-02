@@ -10,6 +10,8 @@
 JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_create_1sig_1new
   (JNIEnv *env, jobject obj, jstring jstr)
 {
+    if (jstr == NULL) return;
+
     // Create get a liboqs::OQS_SIG pointer
     const char *str_native = (*env)->GetStringUTFChars(env, jstr, 0);
     OQS_SIG *sig = OQS_SIG_new(str_native);
@@ -121,7 +123,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign
     jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
-    size_t len_sig;
+    size_t len_sig = 0;
     
     OQS_STATUS rv_ = OQS_SIG_sign(sig, (uint8_t*)signature_native, &len_sig,
                                     (uint8_t*)message_native, message_len,
@@ -188,11 +190,12 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign_1with_1ctx_1str
     // Convert to jbyte arrays
     jbyte *signature_native = (*env)->GetByteArrayElements(env, jsignature, 0);
     jbyte *message_native = (*env)->GetByteArrayElements(env, jmessage, 0);
-    jbyte *ctx_native = (*env)->GetByteArrayElements(env, jctx, 0);
+    // A null ctx means no context string
+    jbyte *ctx_native = (jctx == NULL) ? NULL : (*env)->GetByteArrayElements(env, jctx, 0);
     jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
-    size_t len_sig;
+    size_t len_sig = 0;
     OQS_STATUS rv_ = OQS_SIG_sign_with_ctx_str(sig, (uint8_t*)signature_native, &len_sig,
                                     (uint8_t*)message_native, message_len,
                                     (uint8_t*)ctx_native, ctx_len,
@@ -214,7 +217,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_sign_1with_1ctx_1str
     // Release C memory
     (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, 0);
     (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
-    (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
+    if (jctx != NULL) (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jsecret_key, secret_key_native, JNI_ABORT);
 
     return (rv_ == OQS_SUCCESS) ? 0 : -1;
@@ -233,7 +236,8 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify_1with_1ctx_
     // Convert to jbyte arrays
     jbyte *message_native = (*env)->GetByteArrayElements(env, jmessage, 0);
     jbyte *signature_native = (*env)->GetByteArrayElements(env, jsignature, 0);
-    jbyte *ctx_native = (*env)->GetByteArrayElements(env, jctx, 0);
+    // A null ctx means no context string
+    jbyte *ctx_native = (jctx == NULL) ? NULL : (*env)->GetByteArrayElements(env, jctx, 0);
     jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
 
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
@@ -245,7 +249,7 @@ JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Signature_verify_1with_1ctx_
     // Release C memory
     (*env)->ReleaseByteArrayElements(env, jsignature, signature_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jmessage, message_native, JNI_ABORT);
-    (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
+    if (jctx != NULL) (*env)->ReleaseByteArrayElements(env, jctx, ctx_native, JNI_ABORT);
     (*env)->ReleaseByteArrayElements(env, jpublic_key, public_key_native, JNI_ABORT);
 
     return (rv_ == OQS_SUCCESS) ? JNI_TRUE : JNI_FALSE;
