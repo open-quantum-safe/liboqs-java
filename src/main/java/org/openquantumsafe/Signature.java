@@ -284,7 +284,7 @@ public class Signature {
     /**
      * \brief Invoke native sign method
      * \param message
-     * \param ctx
+     * \param ctx Context string, or null for no context
      * \return signature
      */
     public byte[] sign(byte[] message, byte[] ctx) throws RuntimeException {
@@ -313,7 +313,7 @@ public class Signature {
      * \brief Invoke native verify method
      * \param message
      * \param signature
-     * \param ctx
+     * \param ctx Context string, or null for no context
      * \param public_key
      * \return True if the signature is valid, false otherwise
      */

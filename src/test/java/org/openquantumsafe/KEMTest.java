@@ -144,6 +144,29 @@ public class KEMTest {
     }
 
     /**
+     * Test that a null algorithm name is rejected like an unsupported one
+     */
+    @Test
+    public void testNullKEMNameExpectedException() {
+        Assertions.assertThrows(MechanismNotSupportedError.class, () -> new KeyEncapsulation(null));
+    }
+
+    /**
+     * Test that a null algorithm name leaves the existing mechanism in place
+     */
+    @Test
+    public void testCreateKEMNewWithNullName() {
+        KeyEncapsulation client = new KeyEncapsulation("ML-KEM-512");
+        KeyEncapsulation server = new KeyEncapsulation("ML-KEM-512");
+        byte[] client_public_key = client.generate_keypair();
+
+        client.create_KEM_new(null);
+
+        Pair<byte[], byte[]> server_pair = server.encap_secret(client_public_key);
+        assertArrayEquals(client.decap_secret(server_pair.getLeft()), server_pair.getRight());
+    }
+
+    /**
      * Method to convert the list of KEMs to a stream for input to testAllKEMs
      */
     private static Stream<String> getEnabledKEMsAsStream() {

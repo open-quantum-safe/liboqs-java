@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 // import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ import java.util.stream.Stream;
 public class SigTest {
 
     private final byte[] message = "This is the message to sign".getBytes();
+    // The ML-DSA-*-extmu variants sign an externally computed 64-byte mu
+    // instead of the message itself
+    private final byte[] mu = Rand.randombytes(64);
     private static ArrayList<String> enabled_sigs;
 
     /**
@@ -46,11 +50,13 @@ public class SigTest {
         // Generate signer key pair
         byte[] signer_public_key = signer.generate_keypair();
 
+        byte[] to_sign = sig_name.endsWith("-extmu") ? mu : message;
+
         // Sign the message
-        byte[] signature = signer.sign(message);
+        byte[] signature = signer.sign(to_sign);
 
         // Verify the signature
-        boolean is_valid = verifier.verify(message, signature, signer_public_key);
+        boolean is_valid = verifier.verify(to_sign, signature, signer_public_key);
 
         assertTrue(is_valid, sig_name);
 
@@ -130,11 +136,72 @@ public class SigTest {
     }
 
     /**
+     * Test that a null context means no context
+     */
+    @ParameterizedTest(name = "Testing {arguments}")
+    @MethodSource("getContextSupportedAlgsAsStream")
+    public void testSigsWithNullContext(String sig_name) {
+        byte[] context = "01234567890".getBytes();
+
+        // Create signer and verifier
+        Signature signer = new Signature(sig_name);
+        Signature verifier = new Signature(sig_name);
+
+        // Generate signer key pair
+        byte[] signer_public_key = signer.generate_keypair();
+
+        // A null context signature verifies as a signature without context
+        byte[] signature = signer.sign(message, null);
+        assertTrue(verifier.verify(message, signature, signer_public_key), sig_name);
+        assertTrue(verifier.verify(message, signature, null, signer_public_key), sig_name);
+
+        // A signature with a context does not verify under a null context
+        byte[] context_signature = signer.sign(message, context);
+        assertFalse(verifier.verify(message, context_signature, null, signer_public_key), sig_name);
+    }
+
+    /**
+     * Test that a failed signing operation is reported as such. ML-DSA limits
+     * the context to 255 bytes.
+     */
+    @ParameterizedTest(name = "Testing {arguments}")
+    @MethodSource("getContextSupportedAlgsAsStream")
+    public void testContextTooLongExpectedException(String sig_name) {
+        Signature signer = new Signature(sig_name);
+        signer.generate_keypair();
+
+        RuntimeException e = Assertions.assertThrows(RuntimeException.class,
+                                () -> signer.sign(message, new byte[256]));
+        Assertions.assertEquals("Cannot sign message", e.getMessage());
+    }
+
+    /**
      * Test the MechanismNotSupported Exception
      */
     @Test
     public void testUnsupportedSigExpectedException() {
         Assertions.assertThrows(MechanismNotSupportedError.class, () -> new Signature("MechanismNotSupported"));
+    }
+
+    /**
+     * Test that a null algorithm name is rejected like an unsupported one
+     */
+    @Test
+    public void testNullSigNameExpectedException() {
+        Assertions.assertThrows(MechanismNotSupportedError.class, () -> new Signature(null));
+    }
+
+    /**
+     * Test that a null algorithm name leaves the existing mechanism in place
+     */
+    @Test
+    public void testCreateSigNewWithNullName() {
+        Signature signer = new Signature("ML-DSA-44");
+        byte[] signer_public_key = signer.generate_keypair();
+
+        signer.create_sig_new(null);
+
+        assertTrue(signer.verify(message, signer.sign(message), signer_public_key));
     }
 
     /**

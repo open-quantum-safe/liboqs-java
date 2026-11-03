@@ -20,6 +20,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_Sigs_max_1number_1sigs
 JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_Sigs_is_1sig_1enabled
   (JNIEnv *env, jclass cls, jstring jstr)
 {
+    if (jstr == NULL) return JNI_FALSE;
     const char *str_native = (*env)->GetStringUTFChars(env, jstr, 0);
     int is_enabled = OQS_SIG_alg_is_enabled (str_native);
 	(*env)->ReleaseStringUTFChars(env, jstr, str_native);
