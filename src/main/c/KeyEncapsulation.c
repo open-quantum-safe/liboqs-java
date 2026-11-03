@@ -10,6 +10,8 @@
 JNIEXPORT void JNICALL Java_org_openquantumsafe_KeyEncapsulation_create_1KEM_1new
   (JNIEnv *env, jobject obj, jstring jstr)
 {
+    if (jstr == NULL) return;
+
     // Create get a liboqs::OQS_KEM pointer
     const char *str_native = (*env)->GetStringUTFChars(env, jstr, 0);
     OQS_KEM *kem = OQS_KEM_new(str_native);

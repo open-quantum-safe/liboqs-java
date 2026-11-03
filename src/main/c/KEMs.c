@@ -20,6 +20,7 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KEMs_max_1number_1KEMs
 JNIEXPORT jboolean JNICALL Java_org_openquantumsafe_KEMs_is_1KEM_1enabled
   (JNIEnv *env, jclass cls, jstring java_str)
 {
+	if (java_str == NULL) return JNI_FALSE;
 	const char *str_native = (*env)->GetStringUTFChars(env, java_str, 0);
     int is_enabled = OQS_KEM_alg_is_enabled (str_native);
 	(*env)->ReleaseStringUTFChars(env, java_str, str_native);
