@@ -163,12 +163,23 @@ public class KeyEncapsulation {
         free_KEM();
     }
 
+    /**
+     * \brief Throw IllegalStateException if dispose_KEM() has freed the native
+     * object.
+     */
+    private void check_not_disposed() throws IllegalStateException {
+        if (native_kem_handle_ == 0) {
+            throw new IllegalStateException("KeyEncapsulation has been disposed");
+        }
+    }
+
 
     /**
      * \brief Invoke native generate_keypair method using the PK and SK lengths
      * from alg_details_. Check return value and if != 0 throw Exception.
      */
     public byte[] generate_keypair() throws RuntimeException {
+        check_not_disposed();
         int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
         return this.public_key_;
@@ -179,6 +190,7 @@ public class KeyEncapsulation {
      * from alg_details_. Check return value and if != 0 throw Exception.
      */
     public byte[] generate_keypair(byte[] seed) throws RuntimeException {
+        check_not_disposed();
         if (seed.length != alg_details_.length_keypair_seed) {
             throw new RuntimeException("Incorrect seed length");
         }
@@ -192,6 +204,7 @@ public class KeyEncapsulation {
      * \brief Return seed length
      */
     public long get_keypair_seed_length() {
+        check_not_disposed();
         return alg_details_.length_keypair_seed;
     }
 
@@ -199,6 +212,7 @@ public class KeyEncapsulation {
      * \brief Return public key
      */
     public byte[] export_public_key() {
+        check_not_disposed();
         return this.public_key_;
     }
 
@@ -206,6 +220,7 @@ public class KeyEncapsulation {
     * \brief Return secret key
      */
     public byte[] export_secret_key() {
+        check_not_disposed();
         return this.secret_key_;
     }
 
@@ -216,6 +231,7 @@ public class KeyEncapsulation {
      */
     public Pair<byte[], byte[]> encap_secret(byte[] public_key)
                                                     throws RuntimeException {
+        check_not_disposed();
         if (public_key.length != alg_details_.length_public_key) {
             throw new RuntimeException("Incorrect public key length");
         }
@@ -236,6 +252,7 @@ public class KeyEncapsulation {
      * \return Shared secret
      */
     public byte[] decap_secret(byte[] ciphertext) throws RuntimeException {
+        check_not_disposed();
         if (ciphertext.length != alg_details_.length_ciphertext) {
             throw new RuntimeException("Incorrect ciphertext length");
         }
@@ -255,6 +272,7 @@ public class KeyEncapsulation {
      * initialized, initialize it and fill it using native C code.
      */
     public void print_KeyEncapsulation() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_KEM_details();
         }
@@ -267,6 +285,7 @@ public class KeyEncapsulation {
      * is not initialized, initialize it and fill it using native C code.
      */
     public void print_details() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_KEM_details();
         }

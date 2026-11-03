@@ -3,6 +3,7 @@ package org.openquantumsafe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -64,6 +65,46 @@ public class SigTest {
         System.out.println(sb.toString());
     }
     
+    /**
+     * Test that disposing of a Sig twice is harmless
+     */
+    @Test
+    public void testDisposeSigTwice() {
+        Signature signer = new Signature("ML-DSA-44");
+        signer.generate_keypair();
+
+        signer.dispose_sig();
+        signer.dispose_sig();
+    }
+
+    /**
+     * Test that a Sig cannot be used after it has been disposed of
+     */
+    @Test
+    public void testUseAfterDisposeSigExpectedException() {
+        byte[] context = "01234567890".getBytes();
+        Signature signer = new Signature("ML-DSA-44");
+        byte[] signer_public_key = signer.generate_keypair();
+        byte[] signature = signer.sign(message);
+
+        signer.dispose_sig();
+
+        assertDisposed(() -> signer.generate_keypair());
+        assertDisposed(() -> signer.sign(message));
+        assertDisposed(() -> signer.verify(message, signature, signer_public_key));
+        assertDisposed(() -> signer.sign(message, context));
+        assertDisposed(() -> signer.verify(message, signature, context, signer_public_key));
+        assertDisposed(() -> signer.export_public_key());
+        assertDisposed(() -> signer.export_secret_key());
+        assertDisposed(() -> signer.print_signature());
+        assertDisposed(() -> signer.print_details());
+    }
+
+    private static void assertDisposed(Executable executable) {
+        IllegalStateException e = Assertions.assertThrows(IllegalStateException.class, executable);
+        Assertions.assertEquals("Signature has been disposed", e.getMessage());
+    }
+
     /**
      * Test Sigs with context.
      */

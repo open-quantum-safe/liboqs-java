@@ -201,10 +201,21 @@ public class Signature {
     }
 
     /**
+     * \brief Throw IllegalStateException if dispose_sig() has freed the native
+     * object.
+     */
+    private void check_not_disposed() throws IllegalStateException {
+        if (native_sig_handle_ == 0) {
+            throw new IllegalStateException("Signature has been disposed");
+        }
+    }
+
+    /**
      * \brief Invoke native generate_keypair method using the PK and SK lengths
      * from alg_details_. Check return value and if != 0 throw RuntimeException.
      */
     public byte[] generate_keypair() throws RuntimeException {
+        check_not_disposed();
         int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
         return this.public_key_;
@@ -214,6 +225,7 @@ public class Signature {
      * \brief Return public key
      */
     public byte[] export_public_key() {
+        check_not_disposed();
         return this.public_key_;
     }
 
@@ -221,6 +233,7 @@ public class Signature {
     * \brief Return secret key
      */
     public byte[] export_secret_key() {
+        check_not_disposed();
         return this.secret_key_;
     }
 
@@ -230,6 +243,7 @@ public class Signature {
      * \return signature
      */
     public byte[] sign(byte[] message) throws RuntimeException {
+        check_not_disposed();
         if (this.secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +
@@ -256,6 +270,7 @@ public class Signature {
      */
     public boolean verify(byte[] message, byte[] signature, byte[] public_key)
                                                     throws RuntimeException {
+        check_not_disposed();
         if (public_key.length != alg_details_.length_public_key) {
             throw new RuntimeException("Incorrect public key length");
         }
@@ -273,6 +288,7 @@ public class Signature {
      * \return signature
      */
     public byte[] sign(byte[] message, byte[] ctx) throws RuntimeException {
+        check_not_disposed();
         if (this.secret_key_.length != alg_details_.length_secret_key) {
             throw new RuntimeException("Incorrect secret key length, " +
                                     "make sure you specify one in the " +
@@ -303,6 +319,7 @@ public class Signature {
      */
     public boolean verify(byte[] message, byte[] signature, byte[] ctx, byte[] public_key)
                                                     throws RuntimeException {
+        check_not_disposed();
         if (public_key.length != alg_details_.length_public_key) {
             throw new RuntimeException("Incorrect public key length");
         }
@@ -320,6 +337,7 @@ public class Signature {
      * initialized, initialize it and fill it using native C code.
      */
     public void print_signature() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_sig_details();
         }
@@ -331,6 +349,7 @@ public class Signature {
      * not initialized, initialize it and fill it using native C code.
      */
     public void print_details() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_sig_details();
         }

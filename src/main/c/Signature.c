@@ -29,7 +29,10 @@ JNIEXPORT void JNICALL Java_org_openquantumsafe_Signature_free_1sig
   (JNIEnv *env, jobject obj)
 {
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
+    if (sig == NULL) return;
     OQS_SIG_free(sig);
+    // Clear the handle so that the freed object cannot be used again
+    setHandle(env, obj, NULL, "native_sig_handle_");
 }
 
 /*
