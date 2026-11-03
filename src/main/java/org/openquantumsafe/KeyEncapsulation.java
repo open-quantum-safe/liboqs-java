@@ -164,12 +164,12 @@ public class KeyEncapsulation {
     }
 
     /**
-     * \brief Throw RuntimeException if dispose_KEM() has freed the native
+     * \brief Throw IllegalStateException if dispose_KEM() has freed the native
      * object.
      */
-    private void check_not_disposed() throws RuntimeException {
+    private void check_not_disposed() throws IllegalStateException {
         if (native_kem_handle_ == 0) {
-            throw new RuntimeException("KeyEncapsulation has been disposed");
+            throw new IllegalStateException("KeyEncapsulation has been disposed");
         }
     }
 
@@ -204,6 +204,7 @@ public class KeyEncapsulation {
      * \brief Return seed length
      */
     public long get_keypair_seed_length() {
+        check_not_disposed();
         return alg_details_.length_keypair_seed;
     }
 
@@ -211,6 +212,7 @@ public class KeyEncapsulation {
      * \brief Return public key
      */
     public byte[] export_public_key() {
+        check_not_disposed();
         return this.public_key_;
     }
 
@@ -218,6 +220,7 @@ public class KeyEncapsulation {
     * \brief Return secret key
      */
     public byte[] export_secret_key() {
+        check_not_disposed();
         return this.secret_key_;
     }
 
@@ -269,6 +272,7 @@ public class KeyEncapsulation {
      * initialized, initialize it and fill it using native C code.
      */
     public void print_KeyEncapsulation() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_KEM_details();
         }
@@ -281,6 +285,7 @@ public class KeyEncapsulation {
      * is not initialized, initialize it and fill it using native C code.
      */
     public void print_details() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_KEM_details();
         }

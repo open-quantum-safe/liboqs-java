@@ -201,12 +201,12 @@ public class Signature {
     }
 
     /**
-     * \brief Throw RuntimeException if dispose_sig() has freed the native
+     * \brief Throw IllegalStateException if dispose_sig() has freed the native
      * object.
      */
-    private void check_not_disposed() throws RuntimeException {
+    private void check_not_disposed() throws IllegalStateException {
         if (native_sig_handle_ == 0) {
-            throw new RuntimeException("Signature has been disposed");
+            throw new IllegalStateException("Signature has been disposed");
         }
     }
 
@@ -225,6 +225,7 @@ public class Signature {
      * \brief Return public key
      */
     public byte[] export_public_key() {
+        check_not_disposed();
         return this.public_key_;
     }
 
@@ -232,6 +233,7 @@ public class Signature {
     * \brief Return secret key
      */
     public byte[] export_secret_key() {
+        check_not_disposed();
         return this.secret_key_;
     }
 
@@ -335,6 +337,7 @@ public class Signature {
      * initialized, initialize it and fill it using native C code.
      */
     public void print_signature() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_sig_details();
         }
@@ -346,6 +349,7 @@ public class Signature {
      * not initialized, initialize it and fill it using native C code.
      */
     public void print_details() {
+        check_not_disposed();
         if (alg_details_ == null) {
             alg_details_ = get_sig_details();
         }

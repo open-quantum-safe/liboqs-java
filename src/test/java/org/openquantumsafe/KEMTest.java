@@ -86,10 +86,15 @@ public class KEMTest {
         assertDisposed(() -> client.generate_keypair(seed));
         assertDisposed(() -> client.encap_secret(client_public_key));
         assertDisposed(() -> client.decap_secret(ciphertext));
+        assertDisposed(() -> client.get_keypair_seed_length());
+        assertDisposed(() -> client.export_public_key());
+        assertDisposed(() -> client.export_secret_key());
+        assertDisposed(() -> client.print_KeyEncapsulation());
+        assertDisposed(() -> client.print_details());
     }
 
     private static void assertDisposed(Executable executable) {
-        RuntimeException e = Assertions.assertThrows(RuntimeException.class, executable);
+        IllegalStateException e = Assertions.assertThrows(IllegalStateException.class, executable);
         Assertions.assertEquals("KeyEncapsulation has been disposed", e.getMessage());
     }
 

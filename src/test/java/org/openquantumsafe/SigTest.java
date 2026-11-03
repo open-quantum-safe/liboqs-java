@@ -88,10 +88,14 @@ public class SigTest {
         assertDisposed(() -> signer.verify(message, signature, signer_public_key));
         assertDisposed(() -> signer.sign(message, context));
         assertDisposed(() -> signer.verify(message, signature, context, signer_public_key));
+        assertDisposed(() -> signer.export_public_key());
+        assertDisposed(() -> signer.export_secret_key());
+        assertDisposed(() -> signer.print_signature());
+        assertDisposed(() -> signer.print_details());
     }
 
     private static void assertDisposed(Executable executable) {
-        RuntimeException e = Assertions.assertThrows(RuntimeException.class, executable);
+        IllegalStateException e = Assertions.assertThrows(IllegalStateException.class, executable);
         Assertions.assertEquals("Signature has been disposed", e.getMessage());
     }
 
