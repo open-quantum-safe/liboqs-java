@@ -16,6 +16,9 @@ import java.util.stream.Stream;
 public class SigTest {
 
     private final byte[] message = "This is the message to sign".getBytes();
+    // The ML-DSA-*-extmu variants sign an externally computed 64-byte mu
+    // instead of the message itself
+    private final byte[] mu = Rand.randombytes(64);
     private static ArrayList<String> enabled_sigs;
 
     /**
@@ -45,11 +48,13 @@ public class SigTest {
         // Generate signer key pair
         byte[] signer_public_key = signer.generate_keypair();
 
+        byte[] to_sign = sig_name.endsWith("-extmu") ? mu : message;
+
         // Sign the message
-        byte[] signature = signer.sign(message);
+        byte[] signature = signer.sign(to_sign);
 
         // Verify the signature
-        boolean is_valid = verifier.verify(message, signature, signer_public_key);
+        boolean is_valid = verifier.verify(to_sign, signature, signer_public_key);
 
         assertTrue(is_valid, sig_name);
 
