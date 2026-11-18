@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 // import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -202,6 +204,38 @@ public class SigTest {
         signer.create_sig_new(null);
 
         assertTrue(signer.verify(message, signer.sign(message), signer_public_key));
+    }
+
+    /**
+     * Test that generate_keypair() produces a usable key pair when the secret
+     * key passed to the constructor has the wrong length. ML-DSA-44 secret
+     * keys are 2560 bytes long.
+     */
+    @ParameterizedTest(name = "Testing secret key length {arguments}")
+    @ValueSource(ints = {0, 32, 4096})
+    public void testGenerateKeypairWithWrongLengthSecretKey(int secret_key_len) {
+        Signature signer = new Signature("ML-DSA-44", new byte[secret_key_len]);
+        byte[] signer_public_key = signer.generate_keypair();
+
+        assertTrue(signer.verify(message, signer.sign(message), signer_public_key));
+    }
+
+    /**
+     * Test that native keypair generation refuses key buffers too short to
+     * hold the keys instead of writing past their end
+     */
+    @Test
+    public void testNativeGenerateKeypairRejectsShortBuffers() throws Exception {
+        Signature signer = new Signature("ML-DSA-44");
+        int pk_len = signer.export_public_key().length;
+        int sk_len = signer.export_secret_key().length;
+        Method generate_keypair = Signature.class.getDeclaredMethod(
+                                    "generate_keypair", byte[].class, byte[].class);
+        generate_keypair.setAccessible(true);
+
+        Assertions.assertEquals(-1, (int) generate_keypair.invoke(signer, new byte[pk_len - 1], new byte[sk_len]));
+        Assertions.assertEquals(-1, (int) generate_keypair.invoke(signer, new byte[pk_len], new byte[sk_len - 1]));
+        Assertions.assertEquals(0, (int) generate_keypair.invoke(signer, new byte[pk_len], new byte[sk_len]));
     }
 
     /**

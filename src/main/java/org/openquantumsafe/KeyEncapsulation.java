@@ -175,11 +175,23 @@ public class KeyEncapsulation {
 
 
     /**
+     * \brief Make secret_key_ the right length to hold a newly generated secret
+     * key. A secret key passed to the constructor can have any length.
+     */
+    private void ensure_secret_key_length() {
+        if (this.secret_key_.length != alg_details_.length_secret_key) {
+            Common.wipe(this.secret_key_);
+            this.secret_key_ = new byte[(int) alg_details_.length_secret_key];
+        }
+    }
+
+    /**
      * \brief Invoke native generate_keypair method using the PK and SK lengths
      * from alg_details_. Check return value and if != 0 throw Exception.
      */
     public byte[] generate_keypair() throws RuntimeException {
         check_not_disposed();
+        ensure_secret_key_length();
         int rv_ = generate_keypair(this.public_key_, this.secret_key_);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair");
         return this.public_key_;
@@ -195,6 +207,7 @@ public class KeyEncapsulation {
             throw new RuntimeException("Incorrect seed length");
         }
 
+        ensure_secret_key_length();
         int rv_ = generate_keypair_derand(this.public_key_, this.secret_key_, seed);
         if (rv_ != 0) throw new RuntimeException("Cannot generate keypair from seed");
         return this.public_key_;
