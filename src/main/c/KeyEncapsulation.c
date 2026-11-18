@@ -105,11 +105,19 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_KeyEncapsulation_get_1KEM_1de
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypair
   (JNIEnv *env, jobject obj, jbyteArray jpublic_key, jbyteArray jsecret_key)
 {
-    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
-    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
-
     // Get pointer to KEM
     OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+
+    // liboqs writes length_public_key and length_secret_key bytes into the
+    // key buffers, so refuse buffers that are too short to hold them
+    if (kem == NULL ||
+        (size_t) (*env)->GetArrayLength(env, jpublic_key) < kem->length_public_key ||
+        (size_t) (*env)->GetArrayLength(env, jsecret_key) < kem->length_secret_key) {
+        return -1;
+    }
+
+    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
+    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
 
     // Invoke liboqs KEM keypair generation function
     OQS_STATUS rv_ = OQS_KEM_keypair(kem, (uint8_t*) public_key_native, (uint8_t*) secret_key_native);
@@ -127,12 +135,22 @@ JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypa
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_KeyEncapsulation_generate_1keypair_1derand
   (JNIEnv *env, jobject obj, jbyteArray jpublic_key, jbyteArray jsecret_key, jbyteArray jseed)
 {
+    // Get pointer to KEM
+    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
+
+    // liboqs writes length_public_key and length_secret_key bytes into the
+    // key buffers and reads length_keypair_seed bytes from the seed, so refuse
+    // buffers that are too short for that
+    if (kem == NULL ||
+        (size_t) (*env)->GetArrayLength(env, jpublic_key) < kem->length_public_key ||
+        (size_t) (*env)->GetArrayLength(env, jsecret_key) < kem->length_secret_key ||
+        (size_t) (*env)->GetArrayLength(env, jseed) < kem->length_keypair_seed) {
+        return -1;
+    }
+
     jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
     jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
     jbyte *seed_native = (*env)->GetByteArrayElements(env, jseed, 0);
-
-    // Get pointer to KEM
-    OQS_KEM *kem = (OQS_KEM *) getHandle(env, obj, "native_kem_handle_");
 
     // Invoke liboqs KEM keypair generation function
     OQS_STATUS rv_ = OQS_KEM_keypair_derand(kem, (uint8_t*) public_key_native, (uint8_t*) secret_key_native, (uint8_t*) seed_native);

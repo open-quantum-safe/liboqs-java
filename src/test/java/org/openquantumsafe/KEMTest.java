@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -164,6 +166,80 @@ public class KEMTest {
 
         Pair<byte[], byte[]> server_pair = server.encap_secret(client_public_key);
         assertArrayEquals(client.decap_secret(server_pair.getLeft()), server_pair.getRight());
+    }
+
+    /**
+     * Test that generate_keypair() produces a usable key pair when the secret
+     * key passed to the constructor has the wrong length. ML-KEM-512 secret
+     * keys are 1632 bytes long.
+     */
+    @ParameterizedTest(name = "Testing secret key length {arguments}")
+    @ValueSource(ints = {0, 32, 4096})
+    public void testGenerateKeypairWithWrongLengthSecretKey(int secret_key_len) {
+        KeyEncapsulation client = new KeyEncapsulation("ML-KEM-512", new byte[secret_key_len]);
+        KeyEncapsulation server = new KeyEncapsulation("ML-KEM-512");
+        byte[] client_public_key = client.generate_keypair();
+
+        Pair<byte[], byte[]> server_pair = server.encap_secret(client_public_key);
+        assertArrayEquals(client.decap_secret(server_pair.getLeft()), server_pair.getRight());
+    }
+
+    /**
+     * Test that generate_keypair(seed) produces a usable key pair when the
+     * secret key passed to the constructor has the wrong length
+     */
+    @ParameterizedTest(name = "Testing secret key length {arguments}")
+    @ValueSource(ints = {0, 32, 4096})
+    public void testGenerateKeypairDerandWithWrongLengthSecretKey(int secret_key_len) {
+        KeyEncapsulation client = new KeyEncapsulation("ML-KEM-512", new byte[secret_key_len]);
+        KeyEncapsulation server = new KeyEncapsulation("ML-KEM-512");
+        byte[] seed = Rand.randombytes(client.get_keypair_seed_length());
+        byte[] client_public_key = client.generate_keypair(seed);
+
+        Pair<byte[], byte[]> server_pair = server.encap_secret(client_public_key);
+        assertArrayEquals(client.decap_secret(server_pair.getLeft()), server_pair.getRight());
+    }
+
+    /**
+     * Test that native keypair generation refuses key buffers too short to
+     * hold the keys instead of writing past their end
+     */
+    @Test
+    public void testNativeGenerateKeypairRejectsShortBuffers() throws Exception {
+        KeyEncapsulation kem = new KeyEncapsulation("ML-KEM-512");
+        int pk_len = kem.export_public_key().length;
+        int sk_len = kem.export_secret_key().length;
+        Method generate_keypair = KeyEncapsulation.class.getDeclaredMethod(
+                                    "generate_keypair", byte[].class, byte[].class);
+        generate_keypair.setAccessible(true);
+
+        Assertions.assertEquals(-1, (int) generate_keypair.invoke(kem, new byte[pk_len - 1], new byte[sk_len]));
+        Assertions.assertEquals(-1, (int) generate_keypair.invoke(kem, new byte[pk_len], new byte[sk_len - 1]));
+        Assertions.assertEquals(0, (int) generate_keypair.invoke(kem, new byte[pk_len], new byte[sk_len]));
+    }
+
+    /**
+     * Test that native derandomized keypair generation refuses key buffers too
+     * short to hold the keys, and a seed too short to read from
+     */
+    @Test
+    public void testNativeGenerateKeypairDerandRejectsShortBuffers() throws Exception {
+        KeyEncapsulation kem = new KeyEncapsulation("ML-KEM-512");
+        int pk_len = kem.export_public_key().length;
+        int sk_len = kem.export_secret_key().length;
+        int seed_len = (int) kem.get_keypair_seed_length();
+        Method generate_keypair_derand = KeyEncapsulation.class.getDeclaredMethod(
+                                    "generate_keypair_derand", byte[].class, byte[].class, byte[].class);
+        generate_keypair_derand.setAccessible(true);
+
+        Assertions.assertEquals(-1, (int) generate_keypair_derand.invoke(kem,
+                                    new byte[pk_len - 1], new byte[sk_len], new byte[seed_len]));
+        Assertions.assertEquals(-1, (int) generate_keypair_derand.invoke(kem,
+                                    new byte[pk_len], new byte[sk_len - 1], new byte[seed_len]));
+        Assertions.assertEquals(-1, (int) generate_keypair_derand.invoke(kem,
+                                    new byte[pk_len], new byte[sk_len], new byte[seed_len - 1]));
+        Assertions.assertEquals(0, (int) generate_keypair_derand.invoke(kem,
+                                    new byte[pk_len], new byte[sk_len], new byte[seed_len]));
     }
 
     /**

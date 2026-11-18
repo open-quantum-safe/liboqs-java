@@ -97,11 +97,19 @@ JNIEXPORT jobject JNICALL Java_org_openquantumsafe_Signature_get_1sig_1details
 JNIEXPORT jint JNICALL Java_org_openquantumsafe_Signature_generate_1keypair
   (JNIEnv *env, jobject obj, jbyteArray jpublic_key, jbyteArray jsecret_key)
 {
-    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
-    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
-
     // Get pointer to sig
     OQS_SIG *sig = (OQS_SIG *) getHandle(env, obj, "native_sig_handle_");
+
+    // liboqs writes length_public_key and length_secret_key bytes into the
+    // key buffers, so refuse buffers that are too short to hold them
+    if (sig == NULL ||
+        (size_t) (*env)->GetArrayLength(env, jpublic_key) < sig->length_public_key ||
+        (size_t) (*env)->GetArrayLength(env, jsecret_key) < sig->length_secret_key) {
+        return -1;
+    }
+
+    jbyte *public_key_native = (*env)->GetByteArrayElements(env, jpublic_key, 0);
+    jbyte *secret_key_native = (*env)->GetByteArrayElements(env, jsecret_key, 0);
 
     // Invoke liboqs sig keypair generation function
     OQS_STATUS rv_ = OQS_SIG_keypair(sig, (uint8_t*) public_key_native, (uint8_t*) secret_key_native);
